@@ -1,7 +1,7 @@
 /**
  * 
  */
-package it.beltek.ia.iotlab.edge.gateway.device;
+package it.beltekia.iotlab.edge.gateway.service;
 
 import it.beltek.ia.iotlab.edge.gateway.ConnectionState;
 import it.beltek.ia.iotlab.edge.gateway.Device;
@@ -86,7 +86,7 @@ public class PlcS7Service implements Device {
 			
 			this.connectionState = ConnectionState.Online;
 			
-			System.out.println("Online");
+			System.out.println("PLC: " + this.connectionState + " IPAddress: " + this.IPAddress);
 			
 		}
 		
@@ -94,7 +94,7 @@ public class PlcS7Service implements Device {
 			
 			this.connectionState = ConnectionState.Offline;
 			
-			System.out.println("Offline");
+			System.out.println("PLC: " + this.connectionState + " IPAddress: " + this.IPAddress);
 			
 		}
 		
@@ -104,7 +104,7 @@ public class PlcS7Service implements Device {
 			
 			e.printStackTrace();
 			
-			System.out.println("Disconnesso");
+			System.out.println("PLC: " + this.connectionState + " IPAddress: " + this.IPAddress);
 			
 		}
 		
@@ -112,7 +112,17 @@ public class PlcS7Service implements Device {
 
 	@Override
 	public void Disconnect() {
-		// TODO Auto-generated method stub
+		
+		this.s7Client.Disconnect();
+		
+		if(this.s7Client.Connected == false) {
+			
+            this.connectionState = ConnectionState.Offline;
+			
+			System.out.println("PLC: " + this.connectionState + " IPAddress: " + this.IPAddress);
+			
+			
+		}
 		
 	}
 

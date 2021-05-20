@@ -2,15 +2,17 @@ package it.beltek.ia.iotlab.edge.gateway;
 
 
 
-import it.beltek.ia.iotlab.edge.gateway.device.PlcS7Service;
+import java.util.Date;
+
 import it.beltek.ia.iotlab.edge.gateway.device.driver.s7.S7;
+import it.beltekia.iotlab.edge.gateway.service.PlcS7Service;
 
 public class Gateway {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		
-		System.out.println("Start S7Service at :");
+		System.out.println("Start S7Service at " + new Date());
 		
 		
         String IPAddress = "192.168.100.1";
