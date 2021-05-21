@@ -23,6 +23,7 @@ public class Pm3200ModbusService implements Device {
 	private int Port;
 	private int UnitId;
 	private ConnectionState connectionState;
+
 	private SchneiderPM3200 schneiderPM3200 = new SchneiderPM3200();
 	
 	private int[] readCurrent;
@@ -34,9 +35,6 @@ public class Pm3200ModbusService implements Device {
     private int[] readTangentPhi; 
     private int[] readFrequency;
     private int[] readTemperature; 
-    private float tangentPhi; 
-    private float frequency;
-    private float temperature; 
     private int[] readActivePowerImpTotal; 
     private String loadType;
 	
@@ -50,6 +48,8 @@ public class Pm3200ModbusService implements Device {
 		this.Port = Port;
 		
 		this.UnitId = UnitId;
+		
+		this.connectionState = ConnectionState.Offline;
 		
 	}
 	
@@ -620,6 +620,11 @@ public class Pm3200ModbusService implements Device {
 	public void setSchneiderPM3200(SchneiderPM3200 schneiderPM3200) {
 		this.schneiderPM3200 = schneiderPM3200;
 	}
+	
+	public ConnectionState getConnectionState() {
+		return connectionState;
+	}
+
 
 
 }
