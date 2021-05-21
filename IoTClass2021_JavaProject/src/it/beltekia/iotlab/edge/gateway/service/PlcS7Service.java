@@ -121,7 +121,6 @@ public class PlcS7Service implements Device {
 			
 			System.out.println("PLC: " + this.connectionState + " IPAddress: " + this.IPAddress);
 			
-			
 		}
 		
 	}

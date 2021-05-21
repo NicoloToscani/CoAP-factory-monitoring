@@ -1,6 +1,8 @@
 package it.beltekia.iotlab.edge.gateway.service;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import de.re.easymodbus.modbusclient.ModbusClient;
 import de.re.easymodbus.modbusclient.ModbusClient.RegisterOrder;
@@ -36,7 +38,6 @@ public class Pm3200ModbusService implements Device {
     private int[] readFrequency;
     private int[] readTemperature; 
     private int[] readActivePowerImpTotal; 
-    private String loadType;
 	
 	
 	public Pm3200ModbusService(String IPAddress, int Port) {
@@ -47,9 +48,11 @@ public class Pm3200ModbusService implements Device {
 		
 		this.Port = Port;
 		
-		this.UnitId = UnitId;
+		this.UnitId = UnitId; // if we use one gateway with Modbus RTU devices
 		
 		this.connectionState = ConnectionState.Offline;
+		
+		initMeasures();
 		
 	}
 	
@@ -116,11 +119,18 @@ public class Pm3200ModbusService implements Device {
 
 	@Override
 	public boolean IsAlive() {
-		// TODO Auto-generated method stub
+		// TODO Ping device for connection management
 		return false;
 	}
 	
+	// Read values
 	public void Read() {
+		
+		LocalDateTime currentDateTime = LocalDateTime.now();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		this.schneiderPM3200.timestamp = currentDateTime.format(formatter);
+		
+		this.schneiderPM3200.connectionState = this.connectionState;
 		
 		readHoldingRegisters_1();
 		readHoldingRegisters_2();
@@ -359,8 +369,9 @@ public class Pm3200ModbusService implements Device {
                 pf_quadrant_P2 = pf_P2_temp;
                 pf_quadrant_P3 = pf_P3_temp;
                 pf_quadrant_T = pf_T_temp;
-
-                this.loadType = "Inductive";
+                
+                this.schneiderPM3200.loadType = "Inductive";
+                
             }
 
             // Quadrant 2
@@ -370,8 +381,9 @@ public class Pm3200ModbusService implements Device {
                 pf_quadrant_P2 = pf_P2_temp;
                 pf_quadrant_P3 = pf_P3_temp;
                 pf_quadrant_T = pf_T_temp;
-
-                this.loadType = "Capacitive";
+                
+                this.schneiderPM3200.loadType = "Capacitive";
+                
             }
 
             // Quadrant 3
@@ -381,8 +393,8 @@ public class Pm3200ModbusService implements Device {
                 pf_quadrant_P2 = (-2) - pf_P2_temp;
                 pf_quadrant_P3 = (-2) - pf_P3_temp;
                 pf_quadrant_T = (-2) - pf_T_temp;
-
-                this.loadType = "Inductive";
+                
+                this.schneiderPM3200.loadType = "Inductive";
             }
 
             // Quadrant 4
@@ -393,14 +405,14 @@ public class Pm3200ModbusService implements Device {
                 pf_quadrant_P3 = (2) - pf_P3_temp;
                 pf_quadrant_T = (2) - pf_T_temp;
 
-                this.loadType = "Capacitive";
+                this.schneiderPM3200.loadType = "Capacitive";
             }
             
             this.schneiderPM3200.pf_P1 = pf_quadrant_P1;
             this.schneiderPM3200.pf_P2 = pf_quadrant_P2;
             this.schneiderPM3200.pf_P3 = pf_quadrant_P3;
             this.schneiderPM3200.pf_T = pf_quadrant_T;
-			
+            
 			
 		}
 		
@@ -623,6 +635,56 @@ public class Pm3200ModbusService implements Device {
 	
 	public ConnectionState getConnectionState() {
 		return connectionState;
+	}
+	
+	
+	private void initMeasures() {
+		
+		this.schneiderPM3200.I1 = 0.0f;
+		this.schneiderPM3200.I2 = 0.0f;
+		this.schneiderPM3200.I3 = 0.0f;
+		this.schneiderPM3200.I_Avg = 0.0f;
+		this.schneiderPM3200.L1_L2 = 0.0f;
+		this.schneiderPM3200.L2_L3 = 0.0f;
+		this.schneiderPM3200.L3_L1 = 0.0f;
+		this.schneiderPM3200.LL_Avg = 0.0f;
+		this.schneiderPM3200.L1_N = 0.0f;
+		this.schneiderPM3200.L2_N = 0.0f;
+		this.schneiderPM3200.L3_N = 0.0f;
+		this.schneiderPM3200.LN_Avg = 0.0f;
+		this.schneiderPM3200.active_power_P1 = 0.0f;
+		this.schneiderPM3200.active_power_P2 = 0.0f;
+		this.schneiderPM3200.active_power_P3 = 0.0f;
+		this.schneiderPM3200.active_power_T = 0.0f;
+		this.schneiderPM3200.reactive_power_P1 = 0.0f;
+		this.schneiderPM3200.reactive_power_P2 = 0.0f;
+		this.schneiderPM3200.reactive_power_P3 = 0.0f;
+		this.schneiderPM3200.reactive_power_T = 0.0f;
+		this.schneiderPM3200.apparent_power_P1 = 0.0f;
+		this.schneiderPM3200.apparent_power_P2 = 0.0f;
+		this.schneiderPM3200.apparent_power_P3 = 0.0f;
+		this.schneiderPM3200.apparent_power_T = 0.0f;
+		this.schneiderPM3200.pf_P1 = 0.0f;
+		this.schneiderPM3200.pf_P2 = 0.0f;
+		this.schneiderPM3200.pf_P3 = 0.0f;
+		this.schneiderPM3200.pf_T = 0.0f;
+		this.schneiderPM3200.current_unbalance_I1 = 0.0f;
+		this.schneiderPM3200.current_unbalance_I2 = 0.0f;
+		this.schneiderPM3200.current_unbalance_I3 = 0.0f;
+		this.schneiderPM3200.current_unbalance_worst = 0.0f;
+		this.schneiderPM3200.voltage_unbalance_L1L2 = 0.0f;
+		this.schneiderPM3200.voltage_unbalance_L2L3 = 0.0f;
+		this.schneiderPM3200.voltage_unbalance_L3L1 = 0.0f;
+		this.schneiderPM3200.voltage_unbalance_LL_worst = 0.0f;
+		this.schneiderPM3200.voltage_unbalance_L1N = 0.0f;
+		this.schneiderPM3200.voltage_unbalance_L2N = 0.0f;
+		this.schneiderPM3200.voltage_unbalance_L3N = 0.0f;
+		this.schneiderPM3200.voltage_unbalance_LN_worst = 0.0f;
+		this.schneiderPM3200.tangent_phi = 0.0f;
+		this.schneiderPM3200.Frequency = 0.0f;
+		this.schneiderPM3200.Temperature = 0.0f;
+		this.schneiderPM3200.Active_power_imp_total = 0.0f;
+		
 	}
 
 

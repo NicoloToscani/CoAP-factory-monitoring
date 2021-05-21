@@ -1,6 +1,14 @@
 package it.beltek.ia.iotlab.edge.gateway.device;
 
+import it.beltek.ia.iotlab.edge.gateway.ConnectionState;
+
 public class SchneiderPM3200 {
+	
+	// Measure timestamp
+    public String timestamp;
+    
+    // Connection value (measure quality)
+    public ConnectionState connectionState;
 	
 	// Current A
 	public float I1;
@@ -65,5 +73,8 @@ public class SchneiderPM3200 {
      
      // Total active imported power kWh
      public float Active_power_imp_total;
-
+     
+     // Load type 
+     public String loadType;
+     
 }

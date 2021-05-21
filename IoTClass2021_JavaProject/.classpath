@@ -9,5 +9,6 @@
 	<classpathentry kind="src" path="californium-core"/>
 	<classpathentry kind="lib" path="libs/element-connector-1.0.0-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Server/Documents/Didattica/EasyModbusJava.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Server/Documents/Didattica/gson-2.6.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -46,7 +46,6 @@ public class Pm3200Gateway {
 		
 	}
 
-	
 	/**
 	 * Run Pm3200Gateway code
 	**/

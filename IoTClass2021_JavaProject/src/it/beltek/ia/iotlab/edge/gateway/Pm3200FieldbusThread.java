@@ -25,7 +25,6 @@ public class Pm3200FieldbusThread implements Runnable {
 		
 		requestTimer.schedule(new RequestTimerTask(this), 0, 5000);  // 5 s
 		
-				
 		System.out.println("Stato connessione: " + this.pm3200Gateway.getPm3200ModbusService().getConnectionState());
 		
 		if(this.pm3200Gateway.getPm3200ModbusService().getConnectionState() == ConnectionState.Offline) {
