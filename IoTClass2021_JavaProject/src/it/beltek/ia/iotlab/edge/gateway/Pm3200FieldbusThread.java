@@ -4,13 +4,14 @@ import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class Pm3200FieldbusThread implements Runnable{
+
+public class Pm3200FieldbusThread implements Runnable {
 	
 	Pm3200Gateway pm3200Gateway;
 	
 	Timer requestTimer;
 	
-	public Pm3200FieldbusThread(Pm3200Gateway pm3200Gateway) {
+	public Pm3200FieldbusThread(Pm3200Gateway pm3200Gateway, String resourceName) {
 		
 		this.pm3200Gateway = pm3200Gateway;
 		
@@ -45,8 +46,6 @@ public class Pm3200FieldbusThread implements Runnable{
 
 		@Override
 		public void run() {
-			
-			System.out.println("Richiamato timer");
 			
 			if(this.pm3200FieldbusThread.pm3200Gateway.getPm3200ModbusService().getConnectionState() == ConnectionState.Online) {
 			

@@ -2,13 +2,26 @@ package it.beltek.ia.iotlab.edge.gateway;
 
 import java.util.Date;
 
-public class Pm3200CoAPServerThread implements Runnable{
+import org.eclipse.californium.core.CoapResource;
+import org.eclipse.californium.core.CoapServer;
+
+import it.beltek.ia.iotlab.edge.server.CoAPServer;
+
+public class Pm3200CoAPServerThread extends CoAPServer implements Runnable{
 	
 	Pm3200Gateway pm3200Gateway;
 	
-	public Pm3200CoAPServerThread(Pm3200Gateway pm3200Gateway) {
+	CoapServer coapServer;
+	
+	CoapResource coapResource;
+	
+	public Pm3200CoAPServerThread(Pm3200Gateway pm3200Gateway, CoapResource coapResource) {
 		
 		this.pm3200Gateway = pm3200Gateway;
+		
+		this.coapServer = new CoapServer();
+		
+		this.coapResource = coapResource;
 	}
 	
 	
@@ -18,9 +31,13 @@ public class Pm3200CoAPServerThread implements Runnable{
 		
 		System.out.println("pm3200CoAPServerThread start at " + new Date());
 		
+		this.coapServer.add(this.coapResource);
+		
+		this.coapServer.start();
+		
 		while(true) {
 			
-			System.out.println("Misura coap: " + this.pm3200Gateway.getPm3200ModbusService().getSchneiderPM3200().L1_L2);
+			System.out.println("Misura da strumento: " + this.pm3200Gateway.getPm3200ModbusService().getSchneiderPM3200().L1_L2);
 			
 			try {
 				Thread.sleep(3000);
