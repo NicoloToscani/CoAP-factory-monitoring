@@ -49,6 +49,7 @@ public class Pm3200FieldbusThread implements Runnable {
 			if(this.pm3200FieldbusThread.pm3200Gateway.getPm3200ModbusService().getConnectionState() == ConnectionState.Online) {
 			
 				this.pm3200FieldbusThread.pm3200Gateway.getPm3200ModbusService().Read();
+				
 			}
 			
 			else if(this.pm3200FieldbusThread.pm3200Gateway.getPm3200ModbusService().getConnectionState() == ConnectionState.Offline) {

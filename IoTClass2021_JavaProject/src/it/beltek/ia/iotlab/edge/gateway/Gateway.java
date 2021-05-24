@@ -26,15 +26,17 @@ public class Gateway {
 		
 		while(true) {
 			
-			byte[] buffer = plc.readData();
+			plc.readData();
 			
-			Boolean statoLuce1 = S7.GetBitAt(buffer, 1, 0);
+			System.out.println("Stato macchina: " + plc.getSiemensPLC().state);
 			
-			Boolean statoLuce2 = S7.GetBitAt(buffer, 1, 1);
+			//Boolean statoLuce1 = S7.GetBitAt(buffer, 1, 0);
 			
-			System.out.println("Stato luce 1: " + statoLuce1);
+			//Boolean statoLuce2 = S7.GetBitAt(buffer, 1, 1);
 			
-			System.out.println("Stato luce 2: " + statoLuce2);
+			
+			
+			//System.out.println("Stato luce 2: " + statoLuce2);
 			
 			try {
 				

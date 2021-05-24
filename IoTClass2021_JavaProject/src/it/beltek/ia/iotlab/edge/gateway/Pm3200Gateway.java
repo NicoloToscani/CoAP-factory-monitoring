@@ -9,7 +9,7 @@ import it.beltekia.iotlab.edge.gateway.service.Pm3200ModbusService;
 
 public class Pm3200Gateway {
 	
-	// Modbus server data
+	// Modbus TCP-IP server data
 	 private String IPAddress;
      private int Port;
      

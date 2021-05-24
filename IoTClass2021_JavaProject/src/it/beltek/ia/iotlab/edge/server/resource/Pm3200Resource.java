@@ -1,7 +1,5 @@
 package it.beltek.ia.iotlab.edge.server.resource;
 
-import java.io.Serializable;
-
 import org.eclipse.californium.core.CoapResource;
 import org.eclipse.californium.core.coap.CoAP.ResponseCode;
 import org.eclipse.californium.core.coap.MediaTypeRegistry;

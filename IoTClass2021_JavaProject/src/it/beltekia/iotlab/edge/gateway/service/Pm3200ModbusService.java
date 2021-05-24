@@ -26,8 +26,7 @@ public class Pm3200ModbusService implements Device {
 	private int UnitId;
 	private ConnectionState connectionState;
 
-	private SchneiderPM3200 schneiderPM3200 = new SchneiderPM3200();
-	
+	private SchneiderPM3200 schneiderPM3200;
 	private int[] readCurrent;
 	private int[] readVoltage;
 	private int[] readPower;
@@ -48,9 +47,11 @@ public class Pm3200ModbusService implements Device {
 		
 		this.Port = Port;
 		
-		this.UnitId = UnitId; // if we use one gateway with Modbus RTU devices
+		this.UnitId = UnitId; // if we use one gateway with multiple Modbus RTU devices
 		
 		this.connectionState = ConnectionState.Offline;
+		
+		schneiderPM3200 = new SchneiderPM3200();
 		
 		initMeasures();
 		
@@ -628,10 +629,6 @@ public class Pm3200ModbusService implements Device {
 		return schneiderPM3200;
 	}
 
-
-	public void setSchneiderPM3200(SchneiderPM3200 schneiderPM3200) {
-		this.schneiderPM3200 = schneiderPM3200;
-	}
 	
 	public ConnectionState getConnectionState() {
 		return connectionState;

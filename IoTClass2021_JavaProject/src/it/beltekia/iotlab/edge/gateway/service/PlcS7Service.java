@@ -3,8 +3,14 @@
  */
 package it.beltekia.iotlab.edge.gateway.service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+import de.re.easymodbus.modbusclient.ModbusClient;
 import it.beltek.ia.iotlab.edge.gateway.ConnectionState;
 import it.beltek.ia.iotlab.edge.gateway.Device;
+import it.beltek.ia.iotlab.edge.gateway.device.PLC;
+import it.beltek.ia.iotlab.edge.gateway.device.SchneiderPM3200;
 import it.beltek.ia.iotlab.edge.gateway.device.driver.s7.S7;
 import it.beltek.ia.iotlab.edge.gateway.device.driver.s7.S7Client;
 
@@ -23,6 +29,8 @@ public class PlcS7Service implements Device {
 	private int Rack;
 	private int Slot;
 	private ConnectionState connectionState;
+	
+	private PLC siemensPLC;
 
 	
 	public PlcS7Service(String IPAddress, int Rack, int Slot) {
@@ -35,6 +43,12 @@ public class PlcS7Service implements Device {
 		
 		this.Slot = Slot;
 		
+		this.siemensPLC = new PLC();
+		
+	}
+
+	public PLC getSiemensPLC() {
+		return siemensPLC;
 	}
 
 	public String getIPAddress() {
@@ -63,13 +77,14 @@ public class PlcS7Service implements Device {
 		Slot = slot;
 	}
 	
-	public byte[] readData() {
+	public void readData() {
 		
-		byte[] buffer = new byte[5]; 
+		byte[] buffer = new byte[8]; 
 		
 		this.s7Client.ReadArea(S7.S7AreaDB, 1, 0, buffer.length, buffer);
 		
-		return buffer;
+		this.siemensPLC.state = S7.GetShortAt(buffer, 0);
+		
 	}
 
 		
@@ -130,7 +145,22 @@ public class PlcS7Service implements Device {
 		// TODO Auto-generated method stub
 		return false;
 	}
-
+	
+	// Read values
+	public void Read() {
+		
+		LocalDateTime currentDateTime = LocalDateTime.now();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		this.siemensPLC.timestamp = currentDateTime.format(formatter);
+				
+		this.siemensPLC.connectionState = this.connectionState;
+				
+		readData();
+				
+		}
+			
+			
+			
 	
 
 }

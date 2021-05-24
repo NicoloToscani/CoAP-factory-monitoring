@@ -4,6 +4,7 @@ import org.eclipse.californium.core.CoapClient;
 import org.eclipse.californium.core.CoapResponse;
 import org.eclipse.californium.core.coap.Request;
 
+import it.beltek.ia.iotlab.edge.gateway.device.BannerQm42vt2;
 import it.beltek.ia.iotlab.edge.gateway.device.SchneiderPM3200;
 
 import org.eclipse.californium.core.coap.CoAP.Code;
@@ -41,14 +42,11 @@ public class CoAPClient extends CoapClient {
 			
 			 System.out.println(coapResponse.getResponseText());
 			
-			// Ottenuta la risposta mi costruisco un oggetto locale che utilizzo per elaborare i dati
-			
 			// JSON deserialization 
 			Gson pm3200Deserialize = new Gson();
 			
 			this.schneiderPM3200 = pm3200Deserialize.fromJson(coapResponse.getResponseText(), SchneiderPM3200.class);
 			
-			// Stampo rappresnetazione interna della classe serializzata
 			System.out.println("Misura serializzata: " + this.schneiderPM3200.L1_L2);
 			System.out.println("Misura serializzata carico: " + this.schneiderPM3200.loadType);
 			System.out.println("Stato connessione: " + this.schneiderPM3200.connectionState);
