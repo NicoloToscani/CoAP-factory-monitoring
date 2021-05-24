@@ -31,6 +31,8 @@ public class PlcS7Service implements Device {
 	private ConnectionState connectionState;
 	
 	private PLC siemensPLC;
+	
+	private int deviceAlarms = 10;
 
 	
 	public PlcS7Service(String IPAddress, int Rack, int Slot) {
@@ -44,6 +46,8 @@ public class PlcS7Service implements Device {
 		this.Slot = Slot;
 		
 		this.siemensPLC = new PLC();
+		
+		this.connectionState = ConnectionState.Offline;
 		
 	}
 
@@ -85,9 +89,57 @@ public class PlcS7Service implements Device {
 		
 		this.siemensPLC.state = S7.GetShortAt(buffer, 0);
 		
+		this.siemensPLC.alarmPresence = S7.GetBitAt(buffer, 2, 0);
+		
+		this.siemensPLC.alarms = new boolean[deviceAlarms];
+		
+		// Alarms
+		this.siemensPLC.alarms[0] = S7.GetBitAt(buffer, 4, 0);
+		this.siemensPLC.alarms[1] = S7.GetBitAt(buffer, 4, 1);
+		this.siemensPLC.alarms[2] = S7.GetBitAt(buffer, 4, 2);
+		this.siemensPLC.alarms[3] = S7.GetBitAt(buffer, 4, 3);
+		this.siemensPLC.alarms[4] = S7.GetBitAt(buffer, 4, 4);
+		this.siemensPLC.alarms[5] = S7.GetBitAt(buffer, 4, 5);
+		this.siemensPLC.alarms[6] = S7.GetBitAt(buffer, 4, 6);
+		this.siemensPLC.alarms[7] = S7.GetBitAt(buffer, 4, 7);
+		this.siemensPLC.alarms[8] = S7.GetBitAt(buffer, 5, 0);
+		this.siemensPLC.alarms[9] = S7.GetBitAt(buffer, 5, 1);
+	
+	}
+	
+	
+	// Write start command
+    public void writeData() {
+    	
+    	byte[] buffer = new byte[2]; 
+    	
+    	// Start cmd 
+    	S7.SetBitAt(buffer, 0, 0, this.siemensPLC.stopCommand);
+    	
+    	// Stop cmd
+    	S7.SetBitAt(buffer, 0, 1, this.siemensPLC.stopCommand);
+    	
+    	// Reset cmd
+    	S7.SetBitAt(buffer, 0, 2, this.siemensPLC.reset);
+    	
+    	this.s7Client.WriteArea(S7.S7AreaDB, 2, 0, buffer.length, buffer);    	
+
+    	
 	}
 
 		
+	public ConnectionState getConnectionState() {
+		return connectionState;
+	}
+
+	public void setConnectionState(ConnectionState connectionState) {
+		this.connectionState = connectionState;
+	}
+
+	public void setSiemensPLC(PLC siemensPLC) {
+		this.siemensPLC = siemensPLC;
+	}
+
 	@Override
 	public void Connect() {
 		
@@ -158,9 +210,15 @@ public class PlcS7Service implements Device {
 		readData();
 				
 		}
-			
-			
-			
 	
-
+	// Start cmd
+	public void Write() {
+		
+		this.siemensPLC.connectionState = this.connectionState;
+		
+		writeData();
+		
+		
+	}
+			
 }

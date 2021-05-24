@@ -26,21 +26,29 @@ public class Gateway {
 		
 		while(true) {
 			
-			plc.readData();
+			plc.Read();
+			plc.Write();
+			
+			System.out.println("Comando Reset: " + plc.getSiemensPLC().reset);
 			
 			System.out.println("Stato macchina: " + plc.getSiemensPLC().state);
+			System.out.println("Presenza allarmi: " + plc.getSiemensPLC().alarmPresence);
 			
-			//Boolean statoLuce1 = S7.GetBitAt(buffer, 1, 0);
+			System.out.println("Allarme 0: " + plc.getSiemensPLC().alarms[0]);
+			System.out.println("Allarme 1: " + plc.getSiemensPLC().alarms[1]);
+			System.out.println("Allarme 2: " + plc.getSiemensPLC().alarms[2]);
+			System.out.println("Allarme 3: " + plc.getSiemensPLC().alarms[3]);
+			System.out.println("Allarme 4: " + plc.getSiemensPLC().alarms[4]);
+			System.out.println("Allarme 5: " + plc.getSiemensPLC().alarms[5]);
+			System.out.println("Allarme 6: " + plc.getSiemensPLC().alarms[6]);
+			System.out.println("Allarme 7: " + plc.getSiemensPLC().alarms[7]);
+			System.out.println("Allarme 8: " + plc.getSiemensPLC().alarms[8]);
+			System.out.println("Allarme 9: " + plc.getSiemensPLC().alarms[9]);
 			
-			//Boolean statoLuce2 = S7.GetBitAt(buffer, 1, 1);
-			
-			
-			
-			//System.out.println("Stato luce 2: " + statoLuce2);
 			
 			try {
 				
-				Thread.sleep(1000);
+				Thread.sleep(5000);
 				
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block

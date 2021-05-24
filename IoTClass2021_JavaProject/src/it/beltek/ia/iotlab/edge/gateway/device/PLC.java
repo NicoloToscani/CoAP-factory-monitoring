@@ -14,19 +14,19 @@ public class PLC {
 	public int state;
 	
 	// Alarm presence
-	public Boolean alarmPresence;
+	public boolean alarmPresence;
 	
 	// Alarms
-	Boolean[] alarms;
+	public boolean[] alarms;
 	
 	// Start command
-	public Boolean startCommand;
+	public boolean startCommand;
 	
 	// Stop command
-	public Boolean stopCommand;
+	public boolean stopCommand;
 	
 	// Reset command
-	public Boolean reset;
+	public boolean reset;
 	
      
 }
