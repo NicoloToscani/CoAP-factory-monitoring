@@ -9,13 +9,14 @@ import org.eclipse.californium.core.server.resources.CoapExchange;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import it.beltek.ia.iotlab.edge.gateway.DriveGateway;
 import it.beltek.ia.iotlab.edge.gateway.PlcGateway;
 import it.beltek.ia.iotlab.edge.gateway.Pm3200Gateway;
 
 
-public class PlcResource extends CoapResource{
+public class DriveResource extends CoapResource{
 
-	PlcGateway plcGateway;
+	DriveGateway driveGateway;
 	
 	String name;
 	
@@ -25,13 +26,13 @@ public class PlcResource extends CoapResource{
 	
 	String postReasource;
 	
-	public PlcResource(String name, PlcGateway plcGateway) {
+	public DriveResource(String name, DriveGateway driveGateway) {
 		
 		super(name);
 		
 		System.out.println("Resource:" + name );
 		
-		this.plcGateway = plcGateway;
+		this.driveGateway = driveGateway;
 		
 		this.name = name;
 	}
@@ -81,7 +82,7 @@ public class PlcResource extends CoapResource{
 		
 		Gson plcSerialize = gsonBuilder.enableComplexMapKeySerialization().create();	
 		
-		this.measures = plcSerialize.toJson(this.plcGateway.getPlcS7Service().getSiemensPLC());
+		this.measures = plcSerialize.toJson(this.driveGateway.getG120cPnService().getClass());
 		
 		
 	}

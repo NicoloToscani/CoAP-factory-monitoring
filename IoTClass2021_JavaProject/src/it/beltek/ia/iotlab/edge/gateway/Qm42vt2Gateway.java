@@ -4,10 +4,7 @@ import java.util.Date;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-
-import it.beltek.ia.iotlab.edge.server.resource.Pm3200Resource;
 import it.beltek.ia.iotlab.edge.server.resource.Qm42vt2Resource;
-import it.beltekia.iotlab.edge.gateway.service.Pm3200ModbusService;
 import it.beltekia.iotlab.edge.gateway.service.Qm42vt2ModbusService;
 
 public class Qm42vt2Gateway {

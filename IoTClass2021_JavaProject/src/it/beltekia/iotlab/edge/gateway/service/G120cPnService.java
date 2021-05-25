@@ -9,19 +9,20 @@ import java.time.format.DateTimeFormatter;
 import de.re.easymodbus.modbusclient.ModbusClient;
 import it.beltek.ia.iotlab.edge.gateway.ConnectionState;
 import it.beltek.ia.iotlab.edge.gateway.Device;
+import it.beltek.ia.iotlab.edge.gateway.device.Drive;
 import it.beltek.ia.iotlab.edge.gateway.device.PLC;
 import it.beltek.ia.iotlab.edge.gateway.device.SchneiderPM3200;
 import it.beltek.ia.iotlab.edge.gateway.device.driver.s7.S7;
 import it.beltek.ia.iotlab.edge.gateway.device.driver.s7.S7Client;
 
 /**
- * The class {@code S7Service} manages communication with a device that implement Siemens S7 protocol. 
+ * The class {@code G120cPnService} manages communication with a drive trough PLC that implement Siemens S7 protocol. 
  * 
  * @author Nicolò Toscani
  * @version 1.0
  *
  */
-public class PlcS7Service implements Device {
+public class G120cPnService implements Device {
 	
 	private S7Client s7Client;
 	
@@ -30,12 +31,19 @@ public class PlcS7Service implements Device {
 	private int Slot;
 	private ConnectionState connectionState;
 	
-	private PLC siemensPLC;
+	private Drive drive;
 	
-	private int deviceAlarms = 10;
+	private int ID;
+	
+	public int getID() {
+		return ID;
+	}
 
-	
-	public PlcS7Service(String IPAddress, int Rack, int Slot) {
+	public void setID(int iD) {
+		ID = iD;
+	}
+
+	public G120cPnService(String IPAddress, int Rack, int Slot, int driveID) {
 		
 		this.s7Client = new S7Client();
 		
@@ -45,14 +53,17 @@ public class PlcS7Service implements Device {
 		
 		this.Slot = Slot;
 		
-		this.siemensPLC = new PLC();
+		this.drive = new Drive();
 		
 		this.connectionState = ConnectionState.Offline;
 		
+		this.ID = driveID;
+		
 	}
 
-	public PLC getSiemensPLC() {
-		return siemensPLC;
+	public Drive getDrive() {
+		
+		return drive;
 	}
 
 	public String getIPAddress() {
@@ -83,27 +94,35 @@ public class PlcS7Service implements Device {
 	
 	public void readData() {
 		
-		byte[] buffer = new byte[6]; 
+		byte[] buffer = new byte[34]; 
 		
-		this.s7Client.ReadArea(S7.S7AreaDB, 1, 0, buffer.length, buffer);
+		this.s7Client.ReadArea(S7.S7AreaDB, this.ID, 0, buffer.length, buffer);
 		
-		this.siemensPLC.state = S7.GetShortAt(buffer, 0);
+		this.drive.speedDeviationInTol = S7.GetBitAt(buffer, 12, 0);
+		this.drive.masterControlRequest = S7.GetBitAt(buffer, 12, 1);
+		this.drive.compSpeedReached = S7.GetBitAt(buffer, 12, 2);
+		this.drive.impLimitReached = S7.GetBitAt(buffer, 12, 3);
+		this.drive.holdingBrakeOpen = S7.GetBitAt(buffer, 12, 4);
+		this.drive.alarmMotorOvertemp = S7.GetBitAt(buffer, 12, 5);
+		this.drive.motorRotateClockwise = S7.GetBitAt(buffer, 12, 6);
+		this.drive.alarmInverterThermalOverload = S7.GetBitAt(buffer, 12, 7);
+		this.drive.readyToStart = S7.GetBitAt(buffer, 13, 0);
+		this.drive.ready = S7.GetBitAt(buffer, 13, 1);
+		this.drive.operationEnabled = S7.GetBitAt(buffer, 13, 2);
+		this.drive.faultActive = S7.GetBitAt(buffer, 13, 3);
+		this.drive.off2Inactive = S7.GetBitAt(buffer, 13, 4);
+		this.drive.off3Inactive = S7.GetBitAt(buffer, 13, 5);
+		this.drive.closingLookoutActive = S7.GetBitAt(buffer, 13, 6);
+		this.drive.alarmActive = S7.GetBitAt(buffer, 13, 7);
 		
-		this.siemensPLC.alarmPresence = S7.GetBitAt(buffer, 2, 0);
+		this.drive.actualSpeed = S7.GetWordAt(buffer, 24);
+		this.drive.actualCurrent = S7.GetWordAt(buffer, 26);
+		this.drive.actualTorque = S7.GetWordAt(buffer, 28);
+		this.drive.warnCode = S7.GetWordAt(buffer, 30);
+		this.drive.faultCode = S7.GetWordAt(buffer, 32);
 		
-		this.siemensPLC.alarms = new boolean[deviceAlarms];
-		
-		// Alarms
-		this.siemensPLC.alarms[0] = S7.GetBitAt(buffer, 4, 0);
-		this.siemensPLC.alarms[1] = S7.GetBitAt(buffer, 4, 1);
-		this.siemensPLC.alarms[2] = S7.GetBitAt(buffer, 4, 2);
-		this.siemensPLC.alarms[3] = S7.GetBitAt(buffer, 4, 3);
-		this.siemensPLC.alarms[4] = S7.GetBitAt(buffer, 4, 4);
-		this.siemensPLC.alarms[5] = S7.GetBitAt(buffer, 4, 5);
-		this.siemensPLC.alarms[6] = S7.GetBitAt(buffer, 4, 6);
-		this.siemensPLC.alarms[7] = S7.GetBitAt(buffer, 4, 7);
-		this.siemensPLC.alarms[8] = S7.GetBitAt(buffer, 5, 0);
-		this.siemensPLC.alarms[9] = S7.GetBitAt(buffer, 5, 1);
+		System.out.println("Lettura eseguita");
+	
 	
 	}
 	
@@ -111,18 +130,14 @@ public class PlcS7Service implements Device {
 	// Write start command
     public void writeData() {
     	
-    	byte[] buffer = new byte[2]; 
+    	byte[] buffer = new byte[4]; 
     	
-    	// Start cmd 
-    	S7.SetBitAt(buffer, 0, 0, this.siemensPLC.stopCommand);
+    	// Setpoint command frequency Hz 
+    	S7.SetFloatAt(buffer, 0, this.drive.setpoint);
     	
-    	// Stop cmd
-    	S7.SetBitAt(buffer, 0, 1, this.siemensPLC.stopCommand);
+    	this.s7Client.WriteArea(S7.S7AreaDB, this.ID, 34, buffer.length, buffer);    
     	
-    	// Reset cmd
-    	S7.SetBitAt(buffer, 0, 2, this.siemensPLC.reset);
-    	
-    	this.s7Client.WriteArea(S7.S7AreaDB, 2, 0, buffer.length, buffer);    	
+    	System.out.println("Scrittura eseguita");
 
     	
 	}
@@ -136,9 +151,7 @@ public class PlcS7Service implements Device {
 		this.connectionState = connectionState;
 	}
 
-	public void setSiemensPLC(PLC siemensPLC) {
-		this.siemensPLC = siemensPLC;
-	}
+	
 
 	@Override
 	public void Connect() {
@@ -203,9 +216,9 @@ public class PlcS7Service implements Device {
 		
 		LocalDateTime currentDateTime = LocalDateTime.now();
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-		this.siemensPLC.timestamp = currentDateTime.format(formatter);
+		this.drive.timestamp = currentDateTime.format(formatter);
 				
-		this.siemensPLC.connectionState = this.connectionState;
+		this.drive.connectionState = this.connectionState;
 				
 		readData();
 				
@@ -214,7 +227,7 @@ public class PlcS7Service implements Device {
 	// Start cmd
 	public void Write() {
 		
-		this.siemensPLC.connectionState = this.connectionState;
+		this.drive.connectionState = this.connectionState;
 		
 		writeData();
 		

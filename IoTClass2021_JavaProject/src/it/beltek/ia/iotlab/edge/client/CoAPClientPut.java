@@ -20,6 +20,9 @@ public class CoAPClientPut extends CoapClient {
 	
 	private CoapClient coapClient;
 	
+	private CoapClient coapClient2;
+	
+	
 	// String url = "coap://localhost::5683/.well-known/core";
 	private String url = "coap://localhost::5683/plc1";
 	
@@ -28,6 +31,7 @@ public class CoAPClientPut extends CoapClient {
 		this.plc = new PLC();
 		
 		this.coapClient = new CoapClient(url);
+		
 	}
 	
 	/**
@@ -37,7 +41,19 @@ public class CoAPClientPut extends CoapClient {
 		
 		while(true) {
 			
-			CoapResponse coapResponse = this.coapClient.put("Sto scrivendo", MediaTypeRegistry.TEXT_PLAIN);
+			// GET
+			Request request = new Request(Code.GET);
+			
+			CoapResponse coapResponseGet = this.coapClient.advanced(request);
+			
+			System.out.println("GET: " + coapResponseGet.getResponseText());
+			
+			// PUT
+			
+			CoapResponse coapResponsePost = this.coapClient.post("Sto scrivendo POST", MediaTypeRegistry.TEXT_PLAIN);
+			
+			CoapResponse coapResponsePut = this.coapClient.put("Sto scrivendo PUT", MediaTypeRegistry.TEXT_PLAIN);
+			
 			
 			try {
 				Thread.sleep(5000);

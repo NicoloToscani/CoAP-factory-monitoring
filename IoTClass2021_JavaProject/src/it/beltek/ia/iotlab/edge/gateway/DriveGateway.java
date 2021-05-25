@@ -4,26 +4,25 @@ import java.util.Date;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import it.beltek.ia.iotlab.edge.server.resource.DriveResource;
+import it.beltekia.iotlab.edge.gateway.service.G120cPnService;
 
-import it.beltek.ia.iotlab.edge.server.resource.PlcResource;
-import it.beltek.ia.iotlab.edge.server.resource.Pm3200Resource;
-import it.beltekia.iotlab.edge.gateway.service.PlcS7Service;
-import it.beltekia.iotlab.edge.gateway.service.Pm3200ModbusService;
-
-public class PlcGateway {
+public class DriveGateway {
 	
-	// S7 protocol server data
+	 // S7 protocol server data
 	 private String IPAddress;
      private int Rack;
      private int Slot;
      
      private String deviceName;
+     
+     private int driveId;
 	
-     private PlcS7Service plcS7Service;
+     private G120cPnService g120cPnService;
      
      private ThreadPoolExecutor pool;
      
-     private PlcResource plcResource;
+     private DriveResource driveResource;
      
      private static final int COREPOOL = 2;
      private static final int MAXPOOL = 2;
@@ -34,7 +33,7 @@ public class PlcGateway {
 	/**
 	 * Class constructor. 
 	**/
-	public PlcGateway() {
+	public DriveGateway() {
 		
 		this.IPAddress = "192.168.100.1";
 		
@@ -42,13 +41,15 @@ public class PlcGateway {
 		
 		this.Slot = 0;
 		
-		this.deviceName = "plc1";
+		this.driveId = 10; // E.g. drive 1 = 10, drive 2 = 20, drive 3 = 30
 		
-		this.plcS7Service = new PlcS7Service(IPAddress, Rack, Slot);
+		this.deviceName = "drive1";
+		
+		this.g120cPnService = new G120cPnService(IPAddress, Rack, Slot, driveId);
 		
 		this.pool = new ThreadPoolExecutor(COREPOOL, MAXPOOL, IDLETIME, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>());
 		
-		this.plcResource = new PlcResource(deviceName, this);
+		this.driveResource = new DriveResource(deviceName, this);
 		
 	}
 
@@ -57,10 +58,10 @@ public class PlcGateway {
 	**/
 	private void run() {
 		
-		System.out.println("PlcGateway start at " + new Date());
+		System.out.println("DriveGateway start at " + new Date());
 		
-		this.pool.execute(new PlcFieldbusThread(this, this.deviceName));
-		this.pool.execute(new PlcCoAPServerThread(this, plcResource));
+		this.pool.execute(new DriveFieldbusThread(this, this.deviceName));
+		this.pool.execute(new DriveCoAPServerThread(this, driveResource));
 		
 		while(this.pool.getActiveCount() > 0) {
 			
@@ -86,13 +87,13 @@ public class PlcGateway {
 	
 	public static void main(String[] args) {
 		
-		new PlcGateway().run();
+		new DriveGateway().run();
 		
 	}
 	
-	public PlcS7Service getPlcS7Service() {
+	public G120cPnService getG120cPnService() {
 		
-		return plcS7Service;
+		return g120cPnService;
 	}
 
 }
