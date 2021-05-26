@@ -9,19 +9,24 @@ import it.beltek.ia.iotlab.edge.server.CoAPServer;
 
 public class DriveCoAPServerThread extends CoAPServer implements Runnable{
 	
-	DriveGateway driveGateway;
+	private DriveGateway driveGateway;
 	
-	CoapServer coapServer;
+	private CoapServer coapServer;
 	
-	CoapResource coapResource;
+	private CoapResource coapResource;
 	
-	public DriveCoAPServerThread(DriveGateway driveGateway, CoapResource coapResource) {
+	private int coapServerPort;
+	
+	public DriveCoAPServerThread(DriveGateway driveGateway, CoapResource coapResource, int coapPort) {
+		
+		this.coapServerPort = coapPort;
 		
 		this.driveGateway = driveGateway;
 		
-		this.coapServer = new CoapServer();
+		this.coapServer = new CoapServer(this.coapServerPort);
 		
 		this.coapResource = coapResource;
+		
 	}
 	
 	

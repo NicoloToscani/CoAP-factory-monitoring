@@ -5,10 +5,10 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import it.beltek.ia.iotlab.edge.gateway.service.PlcS7Service;
+import it.beltek.ia.iotlab.edge.gateway.service.Pm3200ModbusService;
 import it.beltek.ia.iotlab.edge.server.resource.PlcResource;
 import it.beltek.ia.iotlab.edge.server.resource.Pm3200Resource;
-import it.beltekia.iotlab.edge.gateway.service.PlcS7Service;
-import it.beltekia.iotlab.edge.gateway.service.Pm3200ModbusService;
 
 public class PlcGateway {
 	
@@ -16,6 +16,8 @@ public class PlcGateway {
 	 private String IPAddress;
      private int Rack;
      private int Slot;
+     
+     private int coapServerPort;
      
      private String deviceName;
 	
@@ -44,6 +46,8 @@ public class PlcGateway {
 		
 		this.deviceName = "plc1";
 		
+		this.coapServerPort = 5683;
+		
 		this.plcS7Service = new PlcS7Service(IPAddress, Rack, Slot);
 		
 		this.pool = new ThreadPoolExecutor(COREPOOL, MAXPOOL, IDLETIME, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>());
@@ -60,7 +64,7 @@ public class PlcGateway {
 		System.out.println("PlcGateway start at " + new Date());
 		
 		this.pool.execute(new PlcFieldbusThread(this, this.deviceName));
-		this.pool.execute(new PlcCoAPServerThread(this, plcResource));
+		this.pool.execute(new PlcCoAPServerThread(this, plcResource, this.coapServerPort ));
 		
 		while(this.pool.getActiveCount() > 0) {
 			

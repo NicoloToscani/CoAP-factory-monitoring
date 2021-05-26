@@ -9,17 +9,21 @@ import it.beltek.ia.iotlab.edge.server.CoAPServer;
 
 public class PlcCoAPServerThread extends CoAPServer implements Runnable{
 	
-	PlcGateway plcGateway;
+	private PlcGateway plcGateway;
 	
-	CoapServer coapServer;
+	private CoapServer coapServer;
 	
-	CoapResource coapResource;
+	private CoapResource coapResource;
 	
-	public PlcCoAPServerThread(PlcGateway plcGateway, CoapResource coapResource) {
+	int coapServerPort;
+	
+	public PlcCoAPServerThread(PlcGateway plcGateway, CoapResource coapResource, int coapPort) {
+		
+		this.coapServerPort = coapPort;
 		
 		this.plcGateway = plcGateway;
 		
-		this.coapServer = new CoapServer();
+		this.coapServer = new CoapServer(this.coapServerPort);
 		
 		this.coapResource = coapResource;
 	}

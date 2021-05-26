@@ -5,7 +5,7 @@ package it.beltek.ia.iotlab.edge.gateway;
 import java.util.Date;
 
 import it.beltek.ia.iotlab.edge.gateway.device.driver.s7.S7;
-import it.beltekia.iotlab.edge.gateway.service.PlcS7Service;
+import it.beltek.ia.iotlab.edge.gateway.service.PlcS7Service;
 
 public class Gateway {
 

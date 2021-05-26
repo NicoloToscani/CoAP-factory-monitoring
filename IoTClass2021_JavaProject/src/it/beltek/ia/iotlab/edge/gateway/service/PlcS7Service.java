@@ -1,7 +1,7 @@
 /**
  * 
  */
-package it.beltekia.iotlab.edge.gateway.service;
+package it.beltek.ia.iotlab.edge.gateway.service;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -123,8 +123,7 @@ public class PlcS7Service implements Device {
     	S7.SetBitAt(buffer, 0, 2, this.siemensPLC.reset);
     	
     	this.s7Client.WriteArea(S7.S7AreaDB, 2, 0, buffer.length, buffer);    	
-
-    	
+  	
 	}
 
 		
@@ -217,8 +216,7 @@ public class PlcS7Service implements Device {
 		this.siemensPLC.connectionState = this.connectionState;
 		
 		writeData();
-		
-		
+			
 	}
 			
 }

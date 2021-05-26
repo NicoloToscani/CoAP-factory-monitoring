@@ -1,7 +1,7 @@
 /**
  * 
  */
-package it.beltekia.iotlab.edge.gateway.service;
+package it.beltek.ia.iotlab.edge.gateway.service;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

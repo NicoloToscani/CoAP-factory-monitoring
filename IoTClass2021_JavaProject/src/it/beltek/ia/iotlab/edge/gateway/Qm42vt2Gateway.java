@@ -4,8 +4,9 @@ import java.util.Date;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+
+import it.beltek.ia.iotlab.edge.gateway.service.Qm42vt2ModbusService;
 import it.beltek.ia.iotlab.edge.server.resource.Qm42vt2Resource;
-import it.beltekia.iotlab.edge.gateway.service.Qm42vt2ModbusService;
 
 public class Qm42vt2Gateway {
 	
@@ -14,6 +15,8 @@ public class Qm42vt2Gateway {
 	     private int Port;
 	     
 	     private String deviceName;
+	     
+	     private int coapServerPort;
 		
 	     private Qm42vt2ModbusService qm42vt2ModbusService;
 	     
@@ -37,6 +40,8 @@ public class Qm42vt2Gateway {
 	 		
 	 		this.deviceName = "vibrationSensor1";
 	 		
+	 		this.coapServerPort = 5686;
+	 		
 	 		this.qm42vt2ModbusService = new Qm42vt2ModbusService(IPAddress, Port);
 	 		
 	 		this.pool = new ThreadPoolExecutor(COREPOOL, MAXPOOL, IDLETIME, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>());
@@ -53,7 +58,7 @@ public class Qm42vt2Gateway {
 	 		System.out.println("Qm42vt2Gateway start at " + new Date());
 	 		
 	 		this.pool.execute(new Qm42vt2FieldbusThread(this, this.deviceName));
-	 		this.pool.execute(new Qm42vt2CoAPServerThread(this, qm42vt2Resource));
+	 		this.pool.execute(new Qm42vt2CoAPServerThread(this, qm42vt2Resource, this.coapServerPort));
 	 		
 	 		while(this.pool.getActiveCount() > 0) {
 	 			

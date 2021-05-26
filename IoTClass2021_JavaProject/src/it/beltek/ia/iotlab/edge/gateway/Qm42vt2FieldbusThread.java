@@ -21,7 +21,7 @@ public class Qm42vt2FieldbusThread implements Runnable {
 	@Override
 	public void run() {
 		
-		System.out.println("Pm3200FieldbusThread start at " + new Date());
+		System.out.println("Qm42vt2FieldbusThread start at " + new Date());
 		
 		requestTimer.schedule(new RequestTimerTask(this), 0, 5000);  // 5 s
 		

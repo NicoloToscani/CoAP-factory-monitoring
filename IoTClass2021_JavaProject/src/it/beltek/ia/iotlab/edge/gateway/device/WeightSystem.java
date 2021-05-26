@@ -19,7 +19,10 @@ public class WeightSystem {
     // Unit total count
     public int totalCount;
     
-    // Weight setpoint
+    // Weight setpoint (Kg)
     public float setpoint;
+    
+    // Velocity setpoint
+    public int lineVelocitySetpoint;
 	
 }

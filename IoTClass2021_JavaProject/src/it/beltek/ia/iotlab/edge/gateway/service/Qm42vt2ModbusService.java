@@ -1,4 +1,4 @@
-package it.beltekia.iotlab.edge.gateway.service;
+package it.beltek.ia.iotlab.edge.gateway.service;
 
 import java.io.IOException;
 import java.time.LocalDateTime;

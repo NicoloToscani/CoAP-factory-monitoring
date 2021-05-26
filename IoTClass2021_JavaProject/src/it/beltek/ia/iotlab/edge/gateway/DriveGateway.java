@@ -4,8 +4,9 @@ import java.util.Date;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+
+import it.beltek.ia.iotlab.edge.gateway.service.G120cPnService;
 import it.beltek.ia.iotlab.edge.server.resource.DriveResource;
-import it.beltekia.iotlab.edge.gateway.service.G120cPnService;
 
 public class DriveGateway {
 	
@@ -17,6 +18,8 @@ public class DriveGateway {
      private String deviceName;
      
      private int driveId;
+     
+     private int coapServerPort;
 	
      private G120cPnService g120cPnService;
      
@@ -45,6 +48,8 @@ public class DriveGateway {
 		
 		this.deviceName = "drive1";
 		
+		this.coapServerPort = 5684;
+		
 		this.g120cPnService = new G120cPnService(IPAddress, Rack, Slot, driveId);
 		
 		this.pool = new ThreadPoolExecutor(COREPOOL, MAXPOOL, IDLETIME, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>());
@@ -61,7 +66,7 @@ public class DriveGateway {
 		System.out.println("DriveGateway start at " + new Date());
 		
 		this.pool.execute(new DriveFieldbusThread(this, this.deviceName));
-		this.pool.execute(new DriveCoAPServerThread(this, driveResource));
+		this.pool.execute(new DriveCoAPServerThread(this, driveResource, this.coapServerPort));
 		
 		while(this.pool.getActiveCount() > 0) {
 			
