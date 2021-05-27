@@ -31,7 +31,7 @@ public class RejectFieldbusThread implements Runnable {
 		
 		requestTimer.schedule(new RequestTimerTask(this), 0, 5000);  // 5 s
 		
-		obsTimer.schedule(new ObsTimerTask(this), 0, 60000);
+		obsTimer.schedule(new ObsTimerTask(this), 0, 60000);  // 1 min
 		
 		System.out.println("Stato connessione: " + this.rejectGateway.getRejectModbusService().getWeightSystem());
 		
@@ -85,12 +85,13 @@ public class RejectFieldbusThread implements Runnable {
 			
 			// 1 minute schedule
 			
-			// Ogni minuto devo andare a calcolare la velocita della linea ed andare ad inserire ad aggiornare start e stop
 			this.rejectFieldbusThread.rejectGateway.getRejectModbusService().getWeightSystem().lineVelocity = this.rejectFieldbusThread.rejectGateway.getRejectModbusService().getWeightSystem().totalCount - this.rejectFieldbusThread.velocityStart;
 			
 			System.out.println("Line velocity: " + this.rejectFieldbusThread.rejectGateway.getRejectModbusService().getWeightSystem().lineVelocity + " unit/s");
 			
-			this.rejectFieldbusThread.velocityStart = this.rejectFieldbusThread.rejectGateway.getRejectModbusService().getWeightSystem().lineVelocity;
+			this.rejectFieldbusThread.velocityStart = this.rejectFieldbusThread.rejectGateway.getRejectModbusService().getWeightSystem().totalCount;
+			
+			System.out.println("Valore passato alla risorsa osservabile: " + this.rejectFieldbusThread.velocityStart);
 			
 			// Resourse update
 			this.rejectFieldbusThread.rejectGateway.getObsResource().setLineVelocity(this.rejectFieldbusThread.velocityStart);

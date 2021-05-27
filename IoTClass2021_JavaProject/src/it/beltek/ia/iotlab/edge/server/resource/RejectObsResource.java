@@ -40,13 +40,18 @@ public class RejectObsResource extends CoapResource{
 	}
 
 	public void setLineVelocity(int lineVelocity) {
+		
 		this.lineVelocity = lineVelocity;
+		
+		System.out.println("Valore passato alla risorsa: " + this.lineVelocity );
 	}
 
 	@Override
 	public void handleGET(CoapExchange exchange) {
 		
-		jsonDatataFormatting();
+		System.out.println("Valore risorsa: " + this.lineVelocity);
+		
+		//jsonDatataFormatting();
 		
 		//exchange.respond(ResponseCode.CONTENT, Float.toString(this.pm3200Gateway.getPm3200ModbusService().getSchneiderPM3200().L1_L2), MediaTypeRegistry.TEXT_PLAIN);
 		exchange.respond(ResponseCode.CONTENT, Integer.toString(lineVelocity), MediaTypeRegistry.TEXT_PLAIN);

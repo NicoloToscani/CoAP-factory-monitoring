@@ -43,9 +43,9 @@ public class RejectGateway {
 		
 		this.Port = 502;
 		
-		this.deviceName = "reject1";
+		this.deviceName = "reject";
 		
-		this.coapServerPort = 5686;
+		this.coapServerPort = 5687;
 		
 		this.rejectModbusService = new RejectModbusService(IPAddress, Port);
 		

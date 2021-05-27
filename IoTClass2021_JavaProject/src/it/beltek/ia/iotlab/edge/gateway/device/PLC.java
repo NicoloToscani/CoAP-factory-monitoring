@@ -1,6 +1,9 @@
 package it.beltek.ia.iotlab.edge.gateway.device;
 
+import java.util.List;
+
 import it.beltek.ia.iotlab.edge.gateway.ConnectionState;
+import it.beltek.ia.iotlab.edge.gateway.device.components.Alarm;
 
 public class PLC {
 	
@@ -11,13 +14,13 @@ public class PLC {
     public ConnectionState connectionState;
 	
 	// Machine state
-	public int state;
+	public String state;
 	
 	// Alarm presence
 	public boolean alarmPresence;
 	
 	// Alarms
-	public boolean[] alarms;
+	public List<Alarm> alarmList;
 	
 	// Start command
 	public boolean startCommand;

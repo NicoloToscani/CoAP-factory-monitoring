@@ -44,7 +44,7 @@ public class PlcGateway {
 		
 		this.Slot = 0;
 		
-		this.deviceName = "plc1";
+		this.deviceName = "plc";
 		
 		this.coapServerPort = 5683;
 		
@@ -69,8 +69,6 @@ public class PlcGateway {
 		while(this.pool.getActiveCount() > 0) {
 			
 			try {
-				
-				// Stampo i dati di energia
 				
 				System.out.println("Main");
 				

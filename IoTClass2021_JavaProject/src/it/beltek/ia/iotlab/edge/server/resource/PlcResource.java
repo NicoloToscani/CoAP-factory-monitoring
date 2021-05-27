@@ -58,8 +58,6 @@ public class PlcResource extends CoapResource{
 			
 		}
 
-	
-	
 
 	// GET
 	@Override

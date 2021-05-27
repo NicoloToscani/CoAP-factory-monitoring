@@ -35,7 +35,7 @@ public class Pm3200Resource extends CoapResource{
 		
 		jsonDatataFormatting();
 		
-		//exchange.respond(ResponseCode.CONTENT, Float.toString(this.pm3200Gateway.getPm3200ModbusService().getSchneiderPM3200().L1_L2), MediaTypeRegistry.TEXT_PLAIN);
+	    //exchange.respond(ResponseCode.CONTENT, Float.toString(this.pm3200Gateway.getPm3200ModbusService().getSchneiderPM3200().L1_L2), MediaTypeRegistry.TEXT_PLAIN);
 		exchange.respond(ResponseCode.CONTENT, this.measures, MediaTypeRegistry.APPLICATION_JSON);
 	}
 	

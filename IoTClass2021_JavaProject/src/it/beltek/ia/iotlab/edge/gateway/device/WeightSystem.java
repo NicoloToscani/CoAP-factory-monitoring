@@ -12,9 +12,11 @@ public class WeightSystem {
     
     // Actual unit weight
     public float weight;
+    public String weightUnitMeasure;
     
     // Line velocity - unit / min
-    public int lineVelocity; 
+    public int lineVelocity;
+    public String lineVelocityUnitMeasure;
     
     // Unit total count
     public int totalCount;

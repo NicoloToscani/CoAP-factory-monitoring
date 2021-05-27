@@ -3,22 +3,18 @@ package it.beltek.ia.iotlab.edge.client;
 import org.eclipse.californium.core.CoapClient;
 import org.eclipse.californium.core.CoapHandler;
 import org.eclipse.californium.core.CoapResponse;
-import org.eclipse.californium.core.coap.Request;
-
-import it.beltek.ia.iotlab.edge.gateway.device.BannerQm42vt2;
-import it.beltek.ia.iotlab.edge.gateway.device.SchneiderPM3200;
-
+import org.eclipse.californium.core.Utils;
 import org.eclipse.californium.core.coap.CoAP.Code;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import org.eclipse.californium.core.coap.Request;
+;
 
 public class CoAPClientObs extends CoapClient {
 	
 	private CoapClient coapClient;
 	
-	//String url = "coap://localhost::5686/.well-known/core";
-	private String url = "coap://localhost::5686/reject1Velocity";
+	private String url = "coap://localhost:5687/reject1";
+	
+	Request request = new Request(Code.GET);
 	
 	public CoAPClientObs() {
 		
@@ -30,35 +26,35 @@ public class CoAPClientObs extends CoapClient {
 	**/
 	private void run(){
 		
-		while(true) {
+		coapClient.observe(new CoapHandler() {
 			
-			this.coapClient.observe(new CoapHandler() {
+			@Override
+			public void onLoad(CoapResponse response) {
 				
-				@Override
-				public void onLoad(CoapResponse response) {
-					
-					System.out.println(response.getResponseText());
-					
-				}
+				System.out.println(response.getResponseText());
 				
-				@Override
-				public void onError() {
-					System.out.println("Resource observer error");					
-				}
-			});
-			
-			
-			try {
-				
-				Thread.sleep(5000);
-				
-			} catch (InterruptedException e) {
-				
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			
 			}
+			
+			@Override
+			public void onError() {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		
+		while(true) {
+		try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		
+		}
+		
+		
+		
+		
 	
 	}
 	

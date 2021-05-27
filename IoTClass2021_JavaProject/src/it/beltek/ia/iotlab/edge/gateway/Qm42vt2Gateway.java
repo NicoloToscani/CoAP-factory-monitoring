@@ -40,7 +40,7 @@ public class Qm42vt2Gateway {
 	 		
 	 		this.deviceName = "vibrationSensor1";
 	 		
-	 		this.coapServerPort = 5686;
+	 		this.coapServerPort = 5685;
 	 		
 	 		this.qm42vt2ModbusService = new Qm42vt2ModbusService(IPAddress, Port);
 	 		

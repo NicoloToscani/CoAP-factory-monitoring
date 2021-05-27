@@ -48,7 +48,7 @@ public class DriveGateway {
 		
 		this.deviceName = "drive1";
 		
-		this.coapServerPort = 5684;
+		this.coapServerPort = 5686;
 		
 		this.g120cPnService = new G120cPnService(IPAddress, Rack, Slot, driveId);
 		

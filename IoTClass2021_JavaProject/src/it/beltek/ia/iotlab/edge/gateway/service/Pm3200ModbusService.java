@@ -682,6 +682,17 @@ public class Pm3200ModbusService implements Device {
 		this.schneiderPM3200.Temperature = 0.0f;
 		this.schneiderPM3200.Active_power_imp_total = 0.0f;
 		
+		this.schneiderPM3200.currentUnitMeasure = "A";
+		this.schneiderPM3200.voltageUnitMeasure = "V";
+		this.schneiderPM3200.activePowerUnitMeasure = "kW";
+		this.schneiderPM3200.reactivePowerUnitMeasure = "kVAR";
+		this.schneiderPM3200.apparentPowerUnitMeasure = "kVA";
+		this.schneiderPM3200.currentUnbalanceUnitMeasure = "%";
+		this.schneiderPM3200.voltageUnbalanceUnitMeasure = "%";
+		this.schneiderPM3200.frequencyUnitMeasure = "Hz";
+		this.schneiderPM3200.teperatureUnitMeasure = "°C";
+		this.schneiderPM3200.totalActivePowerUnitMeasure = "kWh";
+		
 	}
 
 

@@ -39,9 +39,9 @@ public class Pm3200Gateway {
 		
 		this.Port = 502;
 		
-		this.deviceName = "powerEnergyMeter1";
+		this.deviceName = "powerEnergyMeter";
 		
-		this.coapServerPort = 5685;
+		this.coapServerPort = 5684;
 		
 		this.pm3200ModbusService = new Pm3200ModbusService(IPAddress, Port);
 		
@@ -87,8 +87,7 @@ public class Pm3200Gateway {
 	public static void main(String[] args) {
 		
 		new Pm3200Gateway().run();
-		
-		
+			
 	}
 	
 	public Pm3200ModbusService getPm3200ModbusService() {
