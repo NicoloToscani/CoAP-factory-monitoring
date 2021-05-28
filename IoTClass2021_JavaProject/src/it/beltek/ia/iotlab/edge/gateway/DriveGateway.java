@@ -46,7 +46,7 @@ public class DriveGateway {
 		
 		this.driveId = 10; // E.g. drive 1 = 10, drive 2 = 20, drive 3 = 30
 		
-		this.deviceName = "drive1";
+		this.deviceName = "drive";
 		
 		this.coapServerPort = 5686;
 		

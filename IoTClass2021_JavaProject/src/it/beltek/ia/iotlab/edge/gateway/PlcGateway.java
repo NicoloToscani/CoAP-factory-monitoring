@@ -6,9 +6,8 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import it.beltek.ia.iotlab.edge.gateway.service.PlcS7Service;
-import it.beltek.ia.iotlab.edge.gateway.service.Pm3200ModbusService;
 import it.beltek.ia.iotlab.edge.server.resource.PlcResource;
-import it.beltek.ia.iotlab.edge.server.resource.Pm3200Resource;
+
 
 public class PlcGateway {
 	

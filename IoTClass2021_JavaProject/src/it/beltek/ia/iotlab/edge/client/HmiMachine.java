@@ -27,16 +27,37 @@ public class HmiMachine{
 	private int driveNumber;
 	
     private SchneiderPM3200 schneiderPM3200;
-    private PLC plc;
+    public SchneiderPM3200 getSchneiderPM3200() {
+		return schneiderPM3200;
+	}
+
+
+	public void setSchneiderPM3200(SchneiderPM3200 schneiderPM3200) {
+		this.schneiderPM3200 = schneiderPM3200;
+	}
+
+
+
+
+	private PLC plc;
 
 	private CoapClient coapClientEnergy;
 	private CoapClient coapClientPlc;
 	private ArrayList<CoapClient> coAPCLientDrives;
 	private ArrayList<CoapClient> coAPCLientVibrations;
+	private CoapClient coapClientDrive;
+	private CoapClient coapClientVibration;
 	
 	//String url = "coap://localhost:5687/.well-known/core";
 	private String url1 = "coap://localhost:5683/plc";
 	private String url2 = "coap://localhost:5684/powerEnergyMeter";
+	private ArrayList<String> driveUrls;
+	private ArrayList<String> vibrationUrls;
+	
+	// Da cambiare
+	String driveUrl1 = "coap://localhost:5686/drive";
+	String vibrationUrl1 = "coap://localhost:5685/vibrationSensor";
+	
 	
 	
 
@@ -50,6 +71,11 @@ public class HmiMachine{
 		
 		this.coapClientEnergy = new CoapClient(url2);
 		
+		this.coapClientDrive = new CoapClient(driveUrl1);
+		
+		this.coapClientDrive = new CoapClient(vibrationUrl1);
+		
+		
 		this.driveNumber = 3; // Da caricare a runtime
 		
 		this.coAPCLientDrives = new ArrayList<>();
@@ -57,6 +83,7 @@ public class HmiMachine{
 		this.coAPCLientVibrations = new ArrayList<>();
 		
 		this.pool = new ThreadPoolExecutor(COREPOOL, MAXPOOL, IDLETIME, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>());
+		
 		
 	}
 	

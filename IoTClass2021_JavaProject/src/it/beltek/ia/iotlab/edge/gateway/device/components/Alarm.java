@@ -1,5 +1,7 @@
 package it.beltek.ia.iotlab.edge.gateway.device.components;
 
+import java.time.LocalDateTime;
+
 public class Alarm {
 	
 	int value;
@@ -8,6 +10,17 @@ public class Alarm {
 	
 	String description;
 	
+	String timestamp;
+	
+	public String getTimestamp() {
+		return timestamp;
+	}
+
+	public void setTimestamp(String timestamp) {
+		this.timestamp = timestamp;
+	}
+
+
 	public int getValue() {
 		return value;
 	}
@@ -31,5 +44,18 @@ public class Alarm {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+	
+
+	/**
+     * Two alarms are equal if their Id are same.
+     */
+   @Override
+   public boolean equals(Object obj) {
+
+	   Alarm alarm = (Alarm)obj;
+	   
+	   return (this.id == alarm.id);
+	   
+    }
 
 }

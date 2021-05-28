@@ -234,7 +234,7 @@ public class PlcS7Service implements Device {
 	
 	private void checkAlarm(byte[] buffer) {
 		
-		this.siemensPLC.alarmList.clear();
+		//this.siemensPLC.alarmList.clear();
 		
 		        // Alarm 0: Safeties not restored
 				if(S7.GetBitAt(buffer, 4, 0) == true) {
@@ -244,10 +244,36 @@ public class PlcS7Service implements Device {
 					alarm.setValue(1);
 					alarm.setDescription("Safeties not restored");
 					
-					this.siemensPLC.alarmList.add(alarm);
+					LocalDateTime currentDateTime = LocalDateTime.now();
+					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+					currentDateTime.format(formatter);
 					
-					System.out.print("Alarm_0 active");					
+					String timestamp = currentDateTime.toString();
+					alarm.setTimestamp(timestamp);
+					
+					if(!this.siemensPLC.alarmList.contains(alarm)) {
+					
+						this.siemensPLC.alarmList.add(alarm);
+					
+					}
+					
+					System.out.println("Alarm_0 active");					
+				
+				}else if (S7.GetBitAt(buffer, 4, 0) == false) {
+					
+					Alarm alarm = new Alarm();
+					alarm.setId(0);
+					alarm.setValue(0);
+					alarm.setDescription("Safeties not restored");
+					
+					if(this.siemensPLC.alarmList.contains(alarm) == true) {
+					
+					this.siemensPLC.alarmList.remove(alarm);
+					
+					}
+					
 				}
+				
 				
 				// Alarm 1: Compressed air failure
 				if(S7.GetBitAt(buffer, 4, 1) == true) {
@@ -256,12 +282,39 @@ public class PlcS7Service implements Device {
 					alarm.setId(1);
 					alarm.setValue(1);
 					alarm.setDescription("Compressed air failure");
+					
+					LocalDateTime currentDateTime = LocalDateTime.now();
+					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+					currentDateTime.format(formatter);
+					
+					String timestamp = currentDateTime.toString();
+					alarm.setTimestamp(timestamp);
+					
+					if(!this.siemensPLC.alarmList.contains(alarm)) {
+					
+						this.siemensPLC.alarmList.add(alarm);
+					
+					}
 							
-					this.siemensPLC.alarmList.add(alarm);
 					
 					System.out.print("Alarm_1 active");
 							
+				}else if (S7.GetBitAt(buffer, 4, 1) == false) {
+					
+					Alarm alarm = new Alarm();
+					alarm.setId(1);
+					alarm.setValue(0);
+					alarm.setDescription("Compressed air failure");
+					
+					if(this.siemensPLC.alarmList.contains(alarm) == true) {
+					
+					this.siemensPLC.alarmList.remove(alarm);
+					
+					}
+					
 				}
+				
+				
 				
 				// Alarm 2: Inappropriate temperature
 				if(S7.GetBitAt(buffer, 4, 2) == true) {
@@ -270,11 +323,35 @@ public class PlcS7Service implements Device {
 					alarm.setId(2);
 					alarm.setValue(1);
 					alarm.setDescription("Inappropriate temperature");
-									
-					this.siemensPLC.alarmList.add(alarm);
 					
+					LocalDateTime currentDateTime = LocalDateTime.now();
+					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+					currentDateTime.format(formatter);
+					
+					String timestamp = currentDateTime.toString();
+					alarm.setTimestamp(timestamp);
+					
+					if(!this.siemensPLC.alarmList.contains(alarm)) {
+					
+						this.siemensPLC.alarmList.add(alarm);
+					
+					}
+							
 					System.out.print("Alarm_2 active");
 									
+				}else if (S7.GetBitAt(buffer, 4, 2) == false) {
+					
+					Alarm alarm = new Alarm();
+					alarm.setId(2);
+					alarm.setValue(0);
+					alarm.setDescription("Inappropriate temperature");
+					
+					if(this.siemensPLC.alarmList.contains(alarm) == true) {
+					
+					this.siemensPLC.alarmList.remove(alarm);
+					
+					}
+					
 				}
 				
 				// Alarm 3: Lack of external consent 
@@ -284,11 +361,36 @@ public class PlcS7Service implements Device {
 					alarm.setId(3);
 					alarm.setValue(1);
 					alarm.setDescription("Lack of external consent");
+					
+					LocalDateTime currentDateTime = LocalDateTime.now();
+					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+					currentDateTime.format(formatter);
+					
+					String timestamp = currentDateTime.toString();
+					alarm.setTimestamp(timestamp);
+					
+					if(!this.siemensPLC.alarmList.contains(alarm)) {
+					
+						this.siemensPLC.alarmList.add(alarm);
+					
+					}
 											
-					this.siemensPLC.alarmList.add(alarm);
 					
 					System.out.print("Alarm_3 active");
 											
+				}else if (S7.GetBitAt(buffer, 4, 3) == false) {
+					
+					Alarm alarm = new Alarm();
+					alarm.setId(3);
+					alarm.setValue(0);
+					alarm.setDescription("Lack of external consent");
+					
+					if(this.siemensPLC.alarmList.contains(alarm) == true) {
+					
+					this.siemensPLC.alarmList.remove(alarm);
+					
+					}
+					
 				}
 				
 				// Alarm 4: Timeout feedback encoder encoder
@@ -298,10 +400,35 @@ public class PlcS7Service implements Device {
 					alarm.setId(4);
 					alarm.setValue(1);
 					alarm.setDescription("Timeout feedback encoder encoder");
+					
+					LocalDateTime currentDateTime = LocalDateTime.now();
+					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+					currentDateTime.format(formatter);
+					
+					String timestamp = currentDateTime.toString();
+					alarm.setTimestamp(timestamp);
+					
+					if(!this.siemensPLC.alarmList.contains(alarm)) {
+					
+						this.siemensPLC.alarmList.add(alarm);
+					
+					}
 													
-					this.siemensPLC.alarmList.add(alarm);
 											
 					System.out.print("Alarm_4 active");
+				}else if (S7.GetBitAt(buffer, 4, 4) == false) {
+					
+					Alarm alarm = new Alarm();
+					alarm.setId(4);
+					alarm.setValue(0);
+					alarm.setDescription("Timeout feedback encoder encoder");
+					
+					if(this.siemensPLC.alarmList.contains(alarm) == true) {
+					
+					this.siemensPLC.alarmList.remove(alarm);
+					
+					}
+					
 				}
 				
 				// Alarm 5: Timeout feedback sensor
@@ -311,10 +438,36 @@ public class PlcS7Service implements Device {
 					alarm.setId(5);
 					alarm.setValue(1);
 					alarm.setDescription("Timeout feedback sensor");
+					
+					LocalDateTime currentDateTime = LocalDateTime.now();
+					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+					currentDateTime.format(formatter);
+					
+					String timestamp = currentDateTime.toString();
+					alarm.setTimestamp(timestamp);
+					
+					if(!this.siemensPLC.alarmList.contains(alarm)) {
+					
+						this.siemensPLC.alarmList.add(alarm);
+					
+					}
 															
-					this.siemensPLC.alarmList.add(alarm);
 											
 					System.out.print("Alarm_5 active");
+					
+				}else if (S7.GetBitAt(buffer, 4, 5) == false) {
+					
+					Alarm alarm = new Alarm();
+					alarm.setId(5);
+					alarm.setValue(0);
+					alarm.setDescription("Timeout feedback sensor");
+					
+					if(this.siemensPLC.alarmList.contains(alarm) == true) {
+					
+					this.siemensPLC.alarmList.remove(alarm);
+					
+					}
+					
 				}
 				
 				// Alarm 6:  Inappropriate weight
@@ -323,11 +476,36 @@ public class PlcS7Service implements Device {
 					Alarm alarm = new Alarm();
 					alarm.setId(6);
 					alarm.setValue(1);
-					alarm.setDescription(" Inappropriate weight");
+					alarm.setDescription("Inappropriate weight");
+					
+					LocalDateTime currentDateTime = LocalDateTime.now();
+					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+					currentDateTime.format(formatter);
+					
+					String timestamp = currentDateTime.toString();
+					alarm.setTimestamp(timestamp);
+					
+					if(!this.siemensPLC.alarmList.contains(alarm)) {
+					
+						this.siemensPLC.alarmList.add(alarm);
+					
+					}
 																	
-					this.siemensPLC.alarmList.add(alarm);
 											
 					System.out.print("Alarm_6 active");
+				}else if (S7.GetBitAt(buffer, 4, 6) == false) {
+					
+					Alarm alarm = new Alarm();
+					alarm.setId(6);
+					alarm.setValue(0);
+					alarm.setDescription("Inappropriate weight");
+					
+					if(this.siemensPLC.alarmList.contains(alarm) == true) {
+					
+					this.siemensPLC.alarmList.remove(alarm);
+					
+					}
+					
 				}
 				
 				// Alarm 7: Labelling machine warning
@@ -336,11 +514,36 @@ public class PlcS7Service implements Device {
 					Alarm alarm = new Alarm();
 					alarm.setId(7);
 					alarm.setValue(1);
-					alarm.setDescription(" Labelling machine warning");
+					alarm.setDescription("Labelling machine warning");
+					
+					LocalDateTime currentDateTime = LocalDateTime.now();
+					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+					currentDateTime.format(formatter);
+					
+					String timestamp = currentDateTime.toString();
+					alarm.setTimestamp(timestamp);
+					
+					if(!this.siemensPLC.alarmList.contains(alarm)) {
+					
+						this.siemensPLC.alarmList.add(alarm);
+					
+					}
 																			
-					this.siemensPLC.alarmList.add(alarm);
 											
 					System.out.print("Alarm_7 active");
+				}else if (S7.GetBitAt(buffer, 4, 7) == false) {
+					
+					Alarm alarm = new Alarm();
+					alarm.setId(7);
+					alarm.setValue(0);
+					alarm.setDescription("Labelling machine warning");
+					
+					if(this.siemensPLC.alarmList.contains(alarm) == true) {
+					
+					this.siemensPLC.alarmList.remove(alarm);
+					
+					}
+					
 				}
 				
 				// Alarm 8: Pallet missing
@@ -350,10 +553,35 @@ public class PlcS7Service implements Device {
 					alarm.setId(8);
 					alarm.setValue(1);
 					alarm.setDescription("Pallet missing");
+					
+					LocalDateTime currentDateTime = LocalDateTime.now();
+					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+					currentDateTime.format(formatter);
+					
+					String timestamp = currentDateTime.toString();
+					alarm.setTimestamp(timestamp);
+					
+					if(!this.siemensPLC.alarmList.contains(alarm)) {
+					
+						this.siemensPLC.alarmList.add(alarm);
+					
+					}
 																					
-					this.siemensPLC.alarmList.add(alarm);
 											
 					System.out.print("Alarm_8 active");
+				}else if (S7.GetBitAt(buffer, 5, 0) == false) {
+					
+					Alarm alarm = new Alarm();
+					alarm.setId(8);
+					alarm.setValue(0);
+					alarm.setDescription("Pallet missing");
+					
+					if(this.siemensPLC.alarmList.contains(alarm) == true) {
+					
+					this.siemensPLC.alarmList.remove(alarm);
+					
+					}
+					
 				}
 				
 				// Alarm 9: Maintenance request
@@ -362,11 +590,36 @@ public class PlcS7Service implements Device {
 					Alarm alarm = new Alarm();
 					alarm.setId(9);
 					alarm.setValue(1);
-					alarm.setDescription("Maintenance request");
+					alarm.setDescription("Maintenance rquired");
+					
+					LocalDateTime currentDateTime = LocalDateTime.now();
+					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+					currentDateTime.format(formatter);
+					
+					String timestamp = currentDateTime.toString();
+					alarm.setTimestamp(timestamp);
+					
+					if(!this.siemensPLC.alarmList.contains(alarm)) {
+					
+						this.siemensPLC.alarmList.add(alarm);
+					
+					}
 																							
-					this.siemensPLC.alarmList.add(alarm);
 											
 					System.out.print("Alarm_9 active");
+				}else if (S7.GetBitAt(buffer, 5, 1) == false) {
+					
+					Alarm alarm = new Alarm();
+					alarm.setId(9);
+					alarm.setValue(0);
+					alarm.setDescription("Maintenance required");
+					
+					if(this.siemensPLC.alarmList.contains(alarm) == true) {
+					
+					this.siemensPLC.alarmList.remove(alarm);
+					
+					}
+					
 				}
 		
 	}
