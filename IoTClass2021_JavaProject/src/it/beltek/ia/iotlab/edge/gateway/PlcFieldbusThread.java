@@ -46,7 +46,6 @@ public class PlcFieldbusThread implements Runnable {
 		@Override
 		public void run() {
 			
-			System.out.println("Chiamato lettura");
 			
 			if(this.plcFieldbusThread.plcGateway.getPlcS7Service().getConnectionState() == ConnectionState.Online) {
 			
@@ -54,15 +53,11 @@ public class PlcFieldbusThread implements Runnable {
 				
 				this.plcFieldbusThread.plcGateway.getPlcS7Service().Write();
 				
-				System.out.println("Chiamato lettura interna");
-				
 			}
 			
 			else if(this.plcFieldbusThread.plcGateway.getPlcS7Service().getConnectionState() == ConnectionState.Offline) {
 				
 				this.plcFieldbusThread.plcGateway.getPlcS7Service().Connect();
-				
-				System.out.println("Chiamato connessione");
 				
 			}
 		}

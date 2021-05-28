@@ -80,9 +80,11 @@ public class DriveResource extends CoapResource{
 		// JSON serialization
 		GsonBuilder gsonBuilder = new GsonBuilder().serializeSpecialFloatingPointValues();
 		
-		Gson plcSerialize = gsonBuilder.enableComplexMapKeySerialization().create();	
+		Gson driveSerialize = gsonBuilder.enableComplexMapKeySerialization().create();	
 		
-		this.measures = plcSerialize.toJson(this.driveGateway.getG120cPnService().getClass());
+		this.measures = driveSerialize.toJson(this.driveGateway.getG120cPnService().getDrive());
+		
+		System.out.println("Drive resource: " + this.driveGateway.getG120cPnService().getDrive().actualSpeed);
 		
 		
 	}

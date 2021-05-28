@@ -46,15 +46,11 @@ public class DriveFieldbusThread implements Runnable {
 		@Override
 		public void run() {
 			
-			System.out.println("Chiamato lettura");
-			
 			if(this.driveFieldbusThread.driveGateway.getG120cPnService().getConnectionState() == ConnectionState.Online) {
 			
 				this.driveFieldbusThread.driveGateway.getG120cPnService().Read();
 				
 				this.driveFieldbusThread.driveGateway.getG120cPnService().Write();
-				
-				
 				
 			}
 			

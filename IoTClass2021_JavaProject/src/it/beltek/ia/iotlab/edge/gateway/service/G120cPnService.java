@@ -5,13 +5,9 @@ package it.beltek.ia.iotlab.edge.gateway.service;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-
-import de.re.easymodbus.modbusclient.ModbusClient;
 import it.beltek.ia.iotlab.edge.gateway.ConnectionState;
 import it.beltek.ia.iotlab.edge.gateway.Device;
 import it.beltek.ia.iotlab.edge.gateway.device.Drive;
-import it.beltek.ia.iotlab.edge.gateway.device.PLC;
-import it.beltek.ia.iotlab.edge.gateway.device.SchneiderPM3200;
 import it.beltek.ia.iotlab.edge.gateway.device.driver.s7.S7;
 import it.beltek.ia.iotlab.edge.gateway.device.driver.s7.S7Client;
 

@@ -11,6 +11,7 @@ import org.eclipse.californium.core.coap.Request;
 
 import com.google.gson.Gson;
 
+import it.beltek.ia.iotlab.edge.gateway.device.Drive;
 import it.beltek.ia.iotlab.edge.gateway.device.PLC;
 import it.beltek.ia.iotlab.edge.gateway.device.SchneiderPM3200;
 import it.beltek.ia.iotlab.edge.gateway.device.components.Alarm;
@@ -23,16 +24,14 @@ public class Hmi1ReadThread implements Runnable {
 	HmiMachine hmi1Maintenance;
 	
 	Timer requestTimer;
+
 	
-	int driveNUmber;
-	
-	public Hmi1ReadThread(HmiMachine hmi1Maintenance, int driveNumber) {
+	public Hmi1ReadThread(HmiMachine hmi1Maintenance) {
 		
 		this.hmi1Maintenance = hmi1Maintenance;
 		
 		this.requestTimer = new Timer();
 		
-		this.driveNUmber = driveNumber;
 	}
 
 	@Override
@@ -66,6 +65,8 @@ public class Hmi1ReadThread implements Runnable {
 			Gson gsonPlc = new Gson();
 			
 			this.hmi1ReadThread.hmi1Maintenance.setPlc(gsonPlc.fromJson(coapResponseGetPlc.getResponseText(), PLC.class));
+			
+			System.out.println("Machine state: " + this.hmi1ReadThread.hmi1Maintenance.getPlc().state);
 			
 			// GET Pm3200
 			Request request2 = new Request(Code.GET);
@@ -113,6 +114,20 @@ public class Hmi1ReadThread implements Runnable {
 			
 			System.out.println("---------- VIBRATION ANALYSIS ----------");
 			
+			System.out.println("---------- DRIVE  ----------");
+			
+			/*
+			// GET PLC
+            Request request3 = new Request(Code.GET);
+			
+			CoapResponse coapResponseGetDrive = this.hmi1ReadThread.hmi1Maintenance.getCoapClientDrive().advanced(request3);
+			
+			Gson gsonDrive = new Gson();
+			
+			this.hmi1ReadThread.hmi1Maintenance.setDrive(gsonDrive.fromJson(coapResponseGetDrive.getResponseText(), Drive.class));
+			System.out.println("Actual frequency: " + this.hmi1ReadThread.hmi1Maintenance.getDrive().actualSpeed + " Hz");
+						
+				*/					
 			
 			
 			List<Alarm> alarmList = this.hmi1ReadThread.hmi1Maintenance.getPlc().alarmList; 
@@ -128,8 +143,6 @@ public class Hmi1ReadThread implements Runnable {
 				
 			}
 			
-			
-
 		}
 		
 	}

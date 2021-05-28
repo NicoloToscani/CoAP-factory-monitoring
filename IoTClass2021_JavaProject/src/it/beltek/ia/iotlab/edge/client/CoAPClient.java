@@ -19,7 +19,7 @@ public class CoAPClient extends CoapClient {
 	
 	private CoapClient coapClient;
 	
-	String url = "coap://localhost::5690/.well-known/core";
+	String url = "coap://localhost:5690/.well-known/core";
 	//private String url = "coap://localhost::5685/powerEnergyMeter1";
 	
 	public CoAPClient() {

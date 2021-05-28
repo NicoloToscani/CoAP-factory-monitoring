@@ -30,7 +30,6 @@ public class Gateway {
 			plc.Write();
 			
 			System.out.println("Comando Reset: " + plc.getSiemensPLC().reset);
-			
 			System.out.println("Stato macchina: " + plc.getSiemensPLC().state);
 			System.out.println("Presenza allarmi: " + plc.getSiemensPLC().alarmPresence);
 			

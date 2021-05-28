@@ -1,17 +1,12 @@
 package it.beltek.ia.iotlab.edge.client;
 
-import java.awt.List;
 import java.util.ArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-
 import org.eclipse.californium.core.CoapClient;
-import org.eclipse.californium.core.CoapResponse;
-import org.eclipse.californium.core.coap.Request;
-import org.eclipse.californium.core.coap.CoAP.Code;
 
-import it.beltek.ia.iotlab.edge.gateway.RejectFieldbusThread;
+import it.beltek.ia.iotlab.edge.gateway.device.Drive;
 import it.beltek.ia.iotlab.edge.gateway.device.PLC;
 import it.beltek.ia.iotlab.edge.gateway.device.SchneiderPM3200;
 
@@ -26,7 +21,10 @@ public class HmiMachine{
 	
 	private int driveNumber;
 	
-    private SchneiderPM3200 schneiderPM3200;
+	private int machineNumber;
+	
+    
+	private SchneiderPM3200 schneiderPM3200;
     public SchneiderPM3200 getSchneiderPM3200() {
 		return schneiderPM3200;
 	}
@@ -36,16 +34,19 @@ public class HmiMachine{
 		this.schneiderPM3200 = schneiderPM3200;
 	}
 
-
-
-
+	
 	private PLC plc;
+	private Drive drive;
+
 
 	private CoapClient coapClientEnergy;
 	private CoapClient coapClientPlc;
 	private ArrayList<CoapClient> coAPCLientDrives;
 	private ArrayList<CoapClient> coAPCLientVibrations;
 	private CoapClient coapClientDrive;
+	
+
+
 	private CoapClient coapClientVibration;
 	
 	//String url = "coap://localhost:5687/.well-known/core";
@@ -58,12 +59,18 @@ public class HmiMachine{
 	String driveUrl1 = "coap://localhost:5686/drive";
 	String vibrationUrl1 = "coap://localhost:5685/vibrationSensor";
 	
+	//String driveUrl1 = "coap://localhost:5690/.well-known/core";
+	
 	
 	
 
 	public HmiMachine() {
 		
+		this.machineNumber = 1;
+		
 		this.schneiderPM3200 = new SchneiderPM3200();
+		
+		this.drive = new Drive();
 		
 		this.plc = new PLC();
 		
@@ -73,7 +80,7 @@ public class HmiMachine{
 		
 		this.coapClientDrive = new CoapClient(driveUrl1);
 		
-		this.coapClientDrive = new CoapClient(vibrationUrl1);
+		
 		
 		
 		this.driveNumber = 3; // Da caricare a runtime
@@ -93,8 +100,9 @@ public class HmiMachine{
 	**/
 	private void run(){
 		
-		this.pool.execute(new Hmi1ReadThread(this, this.driveNumber));
-		
+		this.pool.execute(new Hmi1ReadThread(this));
+		this.pool.execute(new Hmi1WriteThread(this));
+		 
 	}
 	
 	public int getDriveNumber() {
@@ -126,9 +134,29 @@ public class HmiMachine{
 	public void setPlc(PLC plc) {
 		this.plc = plc;
 	}
-
-
 	
+	public int getMachineNumber() {
+		return machineNumber;
+	}
+
+
+	public void setMachineNumber(int machineNumber) {
+		this.machineNumber = machineNumber;
+	}
+	
+	
+	public CoapClient getCoapClientDrive() {
+		return coapClientDrive;
+	}
+	
+	public Drive getDrive() {
+		return drive;
+	}
+	
+	public void setDrive(Drive drive) {
+		this.drive = drive;
+	}
+
 
 	public static void main(String[] args) {
 		
