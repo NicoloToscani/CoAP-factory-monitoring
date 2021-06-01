@@ -11,6 +11,7 @@ import com.google.gson.GsonBuilder;
 
 import it.beltek.ia.iotlab.edge.gateway.PlcGateway;
 import it.beltek.ia.iotlab.edge.gateway.Pm3200Gateway;
+import it.beltek.ia.iotlab.edge.gateway.device.PLC;
 
 
 public class PlcResource extends CoapResource{
@@ -36,7 +37,7 @@ public class PlcResource extends CoapResource{
 		this.name = name;
 	}
 	
-	// POST
+	
 	@Override
 	public void handlePOST(CoapExchange exchange) {
 		
@@ -48,18 +49,24 @@ public class PlcResource extends CoapResource{
 		
 	}
 	
-	// POST
-		@Override
-		public void handlePUT(CoapExchange exchange) {
+	@Override
+	public void handlePUT(CoapExchange exchange) {
 			
-			this.putResource = exchange.getRequestText();
+		this.putResource = exchange.getRequestText();
 			
-			System.out.println("Ricezione post: " + this.putResource);
-			
-		}
+		System.out.println("PLC PUT: " + this.putResource);
+		
+		Gson gson = new Gson();
+		
+		PLC plcRcv = gson.fromJson(this.putResource, PLC.class);
+		
+		this.plcGateway.getPlcS7Service().getSiemensPLC().reset = plcRcv.reset;
+		this.plcGateway.getPlcS7Service().getSiemensPLC().startCommand = plcRcv.startCommand;
+		this.plcGateway.getPlcS7Service().getSiemensPLC().stopCommand = plcRcv.stopCommand;
+		
+	}
 
 
-	// GET
 	@Override
 	public void handleGET(CoapExchange exchange) {
 		

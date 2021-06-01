@@ -111,12 +111,8 @@ public class PlcS7Service implements Device {
 		}
 		
 		this.siemensPLC.alarmPresence = S7.GetBitAt(buffer, 2, 0);
-		
-		
+			
 		checkAlarm(buffer);
-		
-		
-	
 	
 	}
 	
@@ -126,13 +122,13 @@ public class PlcS7Service implements Device {
     	
     	byte[] buffer = new byte[2]; 
     	
-    	// Start cmd 
-    	S7.SetBitAt(buffer, 0, 0, this.siemensPLC.stopCommand);
+    	// Start command
+    	S7.SetBitAt(buffer, 0, 0, this.siemensPLC.startCommand);
     	
-    	// Stop cmd
+    	// Stop command
     	S7.SetBitAt(buffer, 0, 1, this.siemensPLC.stopCommand);
     	
-    	// Reset cmd
+    	// Reset command
     	S7.SetBitAt(buffer, 0, 2, this.siemensPLC.reset);
     	
     	this.s7Client.WriteArea(S7.S7AreaDB, 2, 0, buffer.length, buffer);    	

@@ -90,7 +90,7 @@ public class G120cPnService implements Device {
 	
 	public void readData() {
 		
-		byte[] buffer = new byte[34]; 
+		byte[] buffer = new byte[50]; 
 		
 		this.s7Client.ReadArea(S7.S7AreaDB, this.ID, 0, buffer.length, buffer);
 		
@@ -111,13 +111,14 @@ public class G120cPnService implements Device {
 		this.drive.closingLookoutActive = S7.GetBitAt(buffer, 13, 6);
 		this.drive.alarmActive = S7.GetBitAt(buffer, 13, 7);
 		
-		this.drive.actualSpeed = S7.GetWordAt(buffer, 24);
-		this.drive.actualCurrent = S7.GetWordAt(buffer, 26);
-		this.drive.actualTorque = S7.GetWordAt(buffer, 28);
+		this.drive.actualSpeed = S7.GetFloatAt(buffer, 38);
+		this.drive.actualCurrent = S7.GetFloatAt(buffer, 42);
+		this.drive.actualTorque = S7.GetFloatAt(buffer, 46);
 		this.drive.warnCode = S7.GetWordAt(buffer, 30);
 		this.drive.faultCode = S7.GetWordAt(buffer, 32);
 		
 		System.out.println("Lettura eseguita");
+		System.out.println("Velocità letta: " + this.drive.actualSpeed);	
 	
 	
 	}
@@ -132,10 +133,7 @@ public class G120cPnService implements Device {
     	S7.SetFloatAt(buffer, 0, this.drive.setpoint);
     	
     	this.s7Client.WriteArea(S7.S7AreaDB, this.ID, 34, buffer.length, buffer);    
-    	
-    	System.out.println("Scrittura eseguita");
-
-    	
+    
 	}
 
 		

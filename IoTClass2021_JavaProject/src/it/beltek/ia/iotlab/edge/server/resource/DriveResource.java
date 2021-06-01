@@ -12,6 +12,8 @@ import com.google.gson.GsonBuilder;
 import it.beltek.ia.iotlab.edge.gateway.DriveGateway;
 import it.beltek.ia.iotlab.edge.gateway.PlcGateway;
 import it.beltek.ia.iotlab.edge.gateway.Pm3200Gateway;
+import it.beltek.ia.iotlab.edge.gateway.device.Drive;
+import it.beltek.ia.iotlab.edge.gateway.device.PLC;
 
 
 public class DriveResource extends CoapResource{
@@ -37,7 +39,7 @@ public class DriveResource extends CoapResource{
 		this.name = name;
 	}
 	
-	// POST
+	
 	@Override
 	public void handlePOST(CoapExchange exchange) {
 		
@@ -49,15 +51,19 @@ public class DriveResource extends CoapResource{
 		
 	}
 	
-	// POST
-		@Override
-		public void handlePUT(CoapExchange exchange) {
+	@Override
+	public void handlePUT(CoapExchange exchange) {
 			
-			this.putResource = exchange.getRequestText();
+		this.putResource = exchange.getRequestText();
+		
+        Gson gson = new Gson();
+		
+		Drive driveRcv = gson.fromJson(this.putResource, Drive.class);
+		
+		this.driveGateway.getG120cPnService().getDrive().setpoint = driveRcv.setpoint;
+		
 			
-			System.out.println("Ricezione post: " + this.putResource);
-			
-		}
+	}
 
 	
 	

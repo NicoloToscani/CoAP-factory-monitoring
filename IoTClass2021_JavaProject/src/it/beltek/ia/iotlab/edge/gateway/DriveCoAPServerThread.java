@@ -42,7 +42,7 @@ public class DriveCoAPServerThread extends CoAPServer implements Runnable{
 		
 		while(true) {
 			
-			System.out.println("Veloctità: " + this.driveGateway.getG120cPnService().getDrive().actualSpeed);
+			System.out.println("Velocità: " + this.driveGateway.getG120cPnService().getDrive().actualSpeed);
 			
 			try {
 				Thread.sleep(3000);

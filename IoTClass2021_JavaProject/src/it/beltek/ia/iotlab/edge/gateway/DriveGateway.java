@@ -59,7 +59,7 @@ public class DriveGateway {
 	}
 
 	/**
-	 * Run Pm3200Gateway code
+	 * Run DriveGateway code
 	**/
 	private void run() {
 		
@@ -71,10 +71,6 @@ public class DriveGateway {
 		while(this.pool.getActiveCount() > 0) {
 			
 			try {
-				
-				// Stampo i dati di energia
-				
-				System.out.println("Main");
 				
 				Thread.sleep(SLEEPTIME);
 				

@@ -11,13 +11,13 @@ public class Drive {
     public ConnectionState connectionState;
 	
 	// Machine state
-	public int actualSpeed;
+	public float actualSpeed;
 	
 	// Actual current
-	public int actualCurrent;
+	public float actualCurrent;
 	
 	// Actual torque
-	public int actualTorque;
+	public float actualTorque;
 
 	// Warn code
 	public int warnCode;

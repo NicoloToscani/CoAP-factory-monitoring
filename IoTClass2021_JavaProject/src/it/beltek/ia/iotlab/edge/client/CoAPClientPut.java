@@ -5,6 +5,7 @@ import org.eclipse.californium.core.CoapResponse;
 import org.eclipse.californium.core.coap.Request;
 
 import it.beltek.ia.iotlab.edge.gateway.device.BannerQm42vt2;
+import it.beltek.ia.iotlab.edge.gateway.device.Drive;
 import it.beltek.ia.iotlab.edge.gateway.device.PLC;
 import it.beltek.ia.iotlab.edge.gateway.device.SchneiderPM3200;
 
@@ -18,6 +19,8 @@ public class CoAPClientPut extends CoapClient {
 	
 	private PLC plc;
 	
+	private Drive drive;
+	
 	private CoapClient coapClient;
 	
 	private CoapClient coapClient2;
@@ -25,12 +28,16 @@ public class CoAPClientPut extends CoapClient {
 	
 	// String url = "coap://localhost::5683/.well-known/core";
 	private String url = "coap://localhost:5683/plc";
+    private String url2 = "coap://localhost:5690/drive";
+	//private String url2 = "coap://localhost:5690/.well-known/core";
 	
 	public CoAPClientPut() {
 		
 		this.plc = new PLC();
+		this.drive = new Drive();
 		
 		this.coapClient = new CoapClient(url);
+		this.coapClient2 = new CoapClient(url2);
 		
 	}
 	
@@ -41,18 +48,39 @@ public class CoAPClientPut extends CoapClient {
 		
 		while(true) {
 			
-			// GET
+			// GET plc
 			Request request = new Request(Code.GET);
 			
 			CoapResponse coapResponseGet = this.coapClient.advanced(request);
 			
 			System.out.println("GET: " + coapResponseGet.getResponseText());
 			
-			// PUT
+			// GET plc
+			Request requestGetDrive = new Request(Code.GET);
+						
+			CoapResponse coapResponseGetDrive = this.coapClient2.advanced(requestGetDrive);
+						
+		    System.out.println("GET: " + coapResponseGetDrive.getResponseText());
+			
+			// PUT drive
+			this.drive.setpoint = 25.5f;
+			Gson gsonDrive = new Gson();
+			String driveSerialize = gsonDrive.toJson(drive);
+			CoapResponse coapResponseDrivePut = this.coapClient2.put(driveSerialize, MediaTypeRegistry.APPLICATION_JSON);
+			
+			
+			// Serializzo il PLC da inviare 
+			this.plc.reset = false;
+			this.plc.startCommand = true;
+			this.plc.stopCommand = false;
+			
+			
+			Gson gson = new Gson();
+			String plcSerialize = gson.toJson(plc);
 			
 			CoapResponse coapResponsePost = this.coapClient.post("Sto scrivendo POST", MediaTypeRegistry.TEXT_PLAIN);
 			
-			CoapResponse coapResponsePut = this.coapClient.put("Sto scrivendo PUT", MediaTypeRegistry.TEXT_PLAIN);
+			CoapResponse coapResponsePut = this.coapClient.put(plcSerialize, MediaTypeRegistry.APPLICATION_JSON);
 			
 			
 			try {
