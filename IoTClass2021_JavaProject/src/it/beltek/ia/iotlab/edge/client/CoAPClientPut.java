@@ -69,9 +69,9 @@ public class CoAPClientPut extends CoapClient {
 			CoapResponse coapResponseDrivePut = this.coapClient2.put(driveSerialize, MediaTypeRegistry.APPLICATION_JSON);
 			
 			
-			// Serializzo il PLC da inviare 
+			// Serializzo il PLC da inviare , invio comandi al PLC
 			this.plc.reset = false;
-			this.plc.startCommand = true;
+			this.plc.startCommand = false;
 			this.plc.stopCommand = false;
 			
 			

@@ -60,7 +60,7 @@ public class Qm42vt2Gateway {
 	 		
 	 		this.pool = new ThreadPoolExecutor(COREPOOL, MAXPOOL, IDLETIME, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>());
 	 		
-	 		this.qm42vt2Resource = new Qm42vt2Resource(this.deviceName, this);
+	 		this.qm42vt2Resource = new Qm42vt2Resource(this.deviceName + "_" + this.lineID + "_" + this.machineID + "_" + this.motorID, this);
 	 		
 	 	}
 
