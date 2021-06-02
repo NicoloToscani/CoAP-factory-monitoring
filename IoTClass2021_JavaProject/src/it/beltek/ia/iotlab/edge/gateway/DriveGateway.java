@@ -1,5 +1,8 @@
 package it.beltek.ia.iotlab.edge.gateway;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Date;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -20,6 +23,11 @@ public class DriveGateway {
      private int driveId;
      
      private int coapServerPort;
+     
+     private int lineID;
+     
+     private int machineID;
+     
 	
      private G120cPnService g120cPnService;
      
@@ -36,7 +44,7 @@ public class DriveGateway {
 	/**
 	 * Class constructor. 
 	**/
-	public DriveGateway() {
+	public DriveGateway(int coapServerPort, String deviceName, int lineID, int machineID, int driveID) {
 		
 		this.IPAddress = "192.168.100.1";
 		
@@ -44,17 +52,21 @@ public class DriveGateway {
 		
 		this.Slot = 0;
 		
-		this.driveId = 10; // E.g. drive 1 = 10, drive 2 = 20, drive 3 = 30
+		this.driveId = driveID; // E.g. drive 1 = 10, drive 2 = 20, drive 3 = 30
 		
-		this.deviceName = "drive";
+		this.deviceName = deviceName;
 		
-		this.coapServerPort = 5690;
+		this.coapServerPort = coapServerPort;
+		
+		this.lineID = lineID;
+		
+		this.machineID = machineID;
 		
 		this.g120cPnService = new G120cPnService(IPAddress, Rack, Slot, driveId);
 		
 		this.pool = new ThreadPoolExecutor(COREPOOL, MAXPOOL, IDLETIME, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>());
 		
-		this.driveResource = new DriveResource(deviceName, this);
+		this.driveResource = new DriveResource(deviceName + "_" + lineID + "_" + machineID + "_" + driveID, this);
 		
 	}
 
@@ -88,7 +100,47 @@ public class DriveGateway {
 	
 	public static void main(String[] args) {
 		
-		new DriveGateway().run();
+		BufferedReader bufferedReaderPort = new BufferedReader(new InputStreamReader(System.in));
+		BufferedReader bufferedReaderName = new BufferedReader(new InputStreamReader(System.in));
+		BufferedReader bufferedReaderLine = new BufferedReader(new InputStreamReader(System.in));
+		BufferedReader bufferedReaderMachine = new BufferedReader(new InputStreamReader(System.in));
+		BufferedReader bufferedReaderID = new BufferedReader(new InputStreamReader(System.in));
+		
+		int coapPort = 0;
+		String deviceName = null;
+		int lineID = 0;
+		int machineID = 0;
+		int driveID = 0;
+	
+		try {
+			
+			System.out.print("Insert DRIVE server CoAP port: ");
+			coapPort = Integer.parseInt(bufferedReaderPort.readLine());
+			
+			System.out.print("Insert DRIVE server CoAP name: ");
+			deviceName = bufferedReaderName.readLine();
+			
+			System.out.print("Insert DRIVE line ID: ");
+			lineID = Integer.parseInt(bufferedReaderLine.readLine());
+			
+			System.out.print("Insert DRIVE machine ID: ");
+			machineID = Integer.parseInt(bufferedReaderMachine.readLine());
+			
+			System.out.print("Insert DRIVE ID: ");
+			driveID = Integer.parseInt(bufferedReaderID.readLine()) * 10;
+			
+			System.out.println("CoAP port: " + coapPort);
+			System.out.println("CoAP name: " + deviceName);
+			System.out.println("Line ID: " + lineID);
+			System.out.println("Machine ID: " + machineID);
+			System.out.println("Drive ID: " + driveID);
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		new DriveGateway(coapPort, deviceName, lineID, machineID, driveID).run();
 		
 	}
 	

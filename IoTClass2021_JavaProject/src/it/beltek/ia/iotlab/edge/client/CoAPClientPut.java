@@ -27,8 +27,8 @@ public class CoAPClientPut extends CoapClient {
 	
 	
 	// String url = "coap://localhost::5683/.well-known/core";
-	private String url = "coap://localhost:5683/plc";
-    private String url2 = "coap://localhost:5690/drive";
+	private String url = "coap://localhost:5683/plc_1_1";
+    private String url2 = "coap://localhost:5690/drive_1_1_10";
 	//private String url2 = "coap://localhost:5690/.well-known/core";
 	
 	public CoAPClientPut() {
