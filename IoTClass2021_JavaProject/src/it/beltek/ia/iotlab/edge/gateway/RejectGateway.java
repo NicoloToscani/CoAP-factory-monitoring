@@ -5,6 +5,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import it.beltek.ia.iotlab.edge.gateway.device.components.JsonRequest;
 import it.beltek.ia.iotlab.edge.gateway.service.Pm3200ModbusService;
 import it.beltek.ia.iotlab.edge.gateway.service.RejectModbusService;
 import it.beltek.ia.iotlab.edge.server.resource.Pm3200Resource;
@@ -28,6 +29,8 @@ public class RejectGateway {
      private RejectResource rejectResource;
      private RejectObsResource obsResource; // Ogni minuto deve andare ad aggiornare la risorsa leggendo quanti pezzi ho in quel minuto
      
+     private JsonRequest jsonRequest;
+     
      private static final int COREPOOL = 2;
      private static final int MAXPOOL = 2;
      private static final int IDLETIME = 5000;
@@ -47,11 +50,13 @@ public class RejectGateway {
 		
 		this.coapServerPort = 5687;
 		
+		this.jsonRequest = new JsonRequest();
+		
 		this.rejectModbusService = new RejectModbusService(IPAddress, Port);
 		
 		this.pool = new ThreadPoolExecutor(COREPOOL, MAXPOOL, IDLETIME, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>());
 		
-		this.rejectResource = new RejectResource(this.deviceName, this);
+		this.rejectResource = new RejectResource(this.deviceName, this, this.jsonRequest);
 		
 		this.obsResource = new RejectObsResource(deviceName + "Velocity", this);
 		

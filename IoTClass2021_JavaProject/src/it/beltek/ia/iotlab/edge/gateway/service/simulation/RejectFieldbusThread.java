@@ -25,6 +25,16 @@ public class RejectFieldbusThread implements Runnable {
 		this.requestTimer = new Timer();
 		
 		this.unitWeightRandom = new Random();
+		
+		this.rejectModbusService.getWeightSystem().setpoint = 50;
+		
+		this.rejectModbusService.getWeightSystemSimulate().setpoint = 50;
+		
+        this.rejectModbusService.getWeightSystem().lineVelocitySetpoint = 10;
+		
+		this.rejectModbusService.getWeightSystemSimulate().lineVelocitySetpoint = 10;
+	
+	
 	}
 
 	@Override
@@ -69,7 +79,9 @@ public class RejectFieldbusThread implements Runnable {
 	
 	private boolean checkUnitWeight(float unitWeight, float thr) {
 		
-		if(unitWeight <= 85) {
+		System.out.println("Peso: " + unitWeight + " Soglia: " + thr);
+		
+		if(unitWeight <= this.rejectModbusService.getWeightSystem().setpoint) {
 			
 			return true;
 		}

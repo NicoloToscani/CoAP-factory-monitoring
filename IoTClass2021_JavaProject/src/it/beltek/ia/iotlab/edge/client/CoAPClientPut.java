@@ -48,7 +48,7 @@ public class CoAPClientPut extends CoapClient {
 		
 		while(true) {
 			
-			// GET plc
+			// GET PLC
 			Request request = new Request(Code.GET);
 			
 			CoapResponse coapResponseGet = this.coapClient.advanced(request);

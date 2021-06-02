@@ -1,5 +1,7 @@
 package it.beltek.ia.iotlab.edge.server.resource;
 
+import java.awt.desktop.SystemSleepEvent;
+
 import org.eclipse.californium.core.CoapResource;
 import org.eclipse.californium.core.coap.CoAP.ResponseCode;
 import org.eclipse.californium.core.coap.MediaTypeRegistry;
@@ -10,6 +12,9 @@ import com.google.gson.GsonBuilder;
 
 import it.beltek.ia.iotlab.edge.gateway.Pm3200Gateway;
 import it.beltek.ia.iotlab.edge.gateway.RejectGateway;
+import it.beltek.ia.iotlab.edge.gateway.device.Drive;
+import it.beltek.ia.iotlab.edge.gateway.device.WeightSystem;
+import it.beltek.ia.iotlab.edge.gateway.device.components.JsonRequest;
 
 
 public class RejectResource extends CoapResource{
@@ -20,7 +25,11 @@ public class RejectResource extends CoapResource{
 	
 	String measures;
 	
-	public RejectResource(String name, RejectGateway rejectGateway) {
+	String putResource;
+	
+	JsonRequest jsonRequest;
+	
+	public RejectResource(String name, RejectGateway rejectGateway, JsonRequest jsonRequest) {
 		
 		super(name);
 		
@@ -29,6 +38,8 @@ public class RejectResource extends CoapResource{
 		this.rejectGateway = rejectGateway;
 		
 		this.name = name;
+		
+		this.jsonRequest = jsonRequest;
 	}
 
 	@Override
@@ -38,6 +49,33 @@ public class RejectResource extends CoapResource{
 		
 		//exchange.respond(ResponseCode.CONTENT, Float.toString(this.pm3200Gateway.getPm3200ModbusService().getSchneiderPM3200().L1_L2), MediaTypeRegistry.TEXT_PLAIN);
 		exchange.respond(ResponseCode.CONTENT, this.measures, MediaTypeRegistry.APPLICATION_JSON);
+	}
+	
+	@Override
+	public void handlePUT(CoapExchange exchange) {
+			
+		// Devo differenziare i valori che gli passo se setpoint peso o setpoint velocità
+		this.putResource = exchange.getRequestText();
+		
+        Gson gson = new Gson();
+		
+		JsonRequest jRequest = gson.fromJson(this.putResource, JsonRequest.class);
+		
+		// Set weight set point value
+		if(jRequest.getField().equals("setpoint")) {
+			
+			this.rejectGateway.getRejectModbusService().getWeightSystem().setpoint = Float.parseFloat(jRequest.getValue());
+			
+			System.out.println("Weight set point: " + this.rejectGateway.getRejectModbusService().getWeightSystem().setpoint);
+		}
+		
+		else if(jRequest.getField().equals("lineVelocitySetpoint")) {
+			
+			this.rejectGateway.getRejectModbusService().getWeightSystem().lineVelocitySetpoint = Integer.parseInt(jRequest.getValue());
+			
+			System.out.println("lineVelocitySetpoint: " + this.rejectGateway.getRejectModbusService().getWeightSystem().setpoint);
+		}
+					
 	}
 	
 	

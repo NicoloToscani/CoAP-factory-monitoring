@@ -24,7 +24,7 @@ public class WeightSystem {
     // Weight setpoint (Kg)
     public float setpoint;
     
-    // Velocity setpoint
+    // Velocity setpoint, Zapparoli richiede di aumentare la velocità con questo parametro.
     public int lineVelocitySetpoint;
 	
 }
