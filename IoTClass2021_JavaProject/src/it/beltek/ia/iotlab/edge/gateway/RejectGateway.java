@@ -8,6 +8,13 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import org.eclipse.californium.core.CoapClient;
+import org.eclipse.californium.core.CoapResponse;
+import org.eclipse.californium.core.coap.MediaTypeRegistry;
+
+import com.google.gson.Gson;
+
+import it.beltek.ia.iotlab.edge.database.EntityHeader;
 import it.beltek.ia.iotlab.edge.gateway.device.components.JsonRequest;
 import it.beltek.ia.iotlab.edge.gateway.service.Pm3200ModbusService;
 import it.beltek.ia.iotlab.edge.gateway.service.RejectModbusService;
@@ -40,6 +47,10 @@ public class RejectGateway {
      private static final int IDLETIME = 5000;
      private static final int SLEEPTIME = 1000;
      
+     private CoapClient repositoryCoapClient;
+     
+     private String urlRepository = "coap://localhost:5600/master_repository";
+     
 	 
 	/**
 	 * Class constructor. 
@@ -68,6 +79,8 @@ public class RejectGateway {
 		
 		this.obsResource = new RejectObsResource(deviceName + "_" + this.lineID + "_" + this.machineID + "_Velocity", this);
 		
+		this.repositoryCoapClient = new CoapClient(urlRepository);
+		
 	}
 	
 	 public RejectObsResource getObsResource() {
@@ -80,6 +93,9 @@ public class RejectGateway {
 	private void run() {
 		
 		System.out.println("RejectGateway start at " + new Date());
+		
+		// Master repository registration
+		registerEntity();
 		
 		this.pool.execute(new RejectFieldbusThread(this, this.deviceName));
 		this.pool.execute(new RejectCoAPServerThread(this, this.rejectResource, this.obsResource, this.coapServerPort));
@@ -147,6 +163,18 @@ public class RejectGateway {
 	public RejectModbusService getRejectModbusService() {
 		
 		return rejectModbusService;
+	}
+	
+	// Master repository registration
+	public void registerEntity() {
+			
+		// POST
+		EntityHeader entityHeader = new EntityHeader(this.deviceName, this.lineID, this.machineID, 0);
+			
+		Gson gsonPlcEntity = new Gson();
+		String rejectSerializeEntity = gsonPlcEntity.toJson(entityHeader);
+		CoapResponse coapResponsePlcEntity = this.repositoryCoapClient.post(rejectSerializeEntity, MediaTypeRegistry.APPLICATION_JSON);
+			
 	}
 
 }

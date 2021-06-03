@@ -8,6 +8,13 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import org.eclipse.californium.core.CoapClient;
+import org.eclipse.californium.core.CoapResponse;
+import org.eclipse.californium.core.coap.MediaTypeRegistry;
+
+import com.google.gson.Gson;
+
+import it.beltek.ia.iotlab.edge.database.EntityHeader;
 import it.beltek.ia.iotlab.edge.gateway.service.G120cPnService;
 import it.beltek.ia.iotlab.edge.server.resource.DriveResource;
 
@@ -40,6 +47,10 @@ public class DriveGateway {
      private static final int IDLETIME = 5000;
      private static final int SLEEPTIME = 1000;
      
+     private CoapClient repositoryCoapClient;
+     
+     private String urlRepository = "coap://localhost:5600/master_repository";
+     
 	 
 	/**
 	 * Class constructor. 
@@ -68,6 +79,8 @@ public class DriveGateway {
 		
 		this.driveResource = new DriveResource(deviceName + "_" + lineID + "_" + machineID + "_" + driveID, this);
 		
+		this.repositoryCoapClient = new CoapClient(urlRepository);
+		
 	}
 
 	/**
@@ -76,6 +89,9 @@ public class DriveGateway {
 	private void run() {
 		
 		System.out.println("DriveGateway start at " + new Date());
+		
+		// Master repository registration
+		registerEntity();
 		
 		this.pool.execute(new DriveFieldbusThread(this, this.deviceName));
 		this.pool.execute(new DriveCoAPServerThread(this, driveResource, this.coapServerPort));
@@ -148,5 +164,17 @@ public class DriveGateway {
 		
 		return g120cPnService;
 	}
+	
+	// Master repository registration
+		public void registerEntity() {
+					
+		    // POST
+			EntityHeader entityHeader = new EntityHeader(this.deviceName, this.lineID, this.machineID, 0);
+					
+			Gson gsonPlcEntity = new Gson();
+			String driveSerializeEntity = gsonPlcEntity.toJson(entityHeader);
+			CoapResponse coapResponsePlcEntity = this.repositoryCoapClient.post(driveSerializeEntity, MediaTypeRegistry.APPLICATION_JSON);
+					
+		}
 
 }

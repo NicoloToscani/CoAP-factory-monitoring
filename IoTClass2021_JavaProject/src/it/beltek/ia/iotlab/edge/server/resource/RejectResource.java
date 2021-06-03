@@ -27,6 +27,8 @@ public class RejectResource extends CoapResource{
 	
 	String putResource;
 	
+	String postResource;
+	
 	JsonRequest jsonRequest;
 	
 	public RejectResource(String name, RejectGateway rejectGateway, JsonRequest jsonRequest) {
@@ -76,6 +78,32 @@ public class RejectResource extends CoapResource{
 			System.out.println("lineVelocitySetpoint: " + this.rejectGateway.getRejectModbusService().getWeightSystem().setpoint);
 		}
 					
+	}
+	
+	@Override
+	public void handlePOST(CoapExchange exchange) {
+		
+		// Devo differenziare i valori che gli passo se setpoint peso o setpoint velocità
+				this.postResource = exchange.getRequestText();
+				
+		        Gson gson = new Gson();
+				
+				JsonRequest jRequest = gson.fromJson(this.postResource, JsonRequest.class);
+				
+				// Set weight set point value
+				if(jRequest.getField().equals("setpoint")) {
+					
+					this.rejectGateway.getRejectModbusService().getWeightSystem().setpoint = Float.parseFloat(jRequest.getValue());
+					
+					System.out.println("Weight set point: " + this.rejectGateway.getRejectModbusService().getWeightSystem().setpoint);
+				}
+				
+				else if(jRequest.getField().equals("lineVelocitySetpoint")) {
+					
+					this.rejectGateway.getRejectModbusService().getWeightSystem().lineVelocitySetpoint = Integer.parseInt(jRequest.getValue());
+					
+					System.out.println("lineVelocitySetpoint: " + this.rejectGateway.getRejectModbusService().getWeightSystem().setpoint);
+				}
 	}
 	
 	

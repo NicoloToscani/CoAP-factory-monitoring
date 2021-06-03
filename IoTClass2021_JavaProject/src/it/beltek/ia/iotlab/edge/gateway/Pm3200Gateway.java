@@ -8,6 +8,13 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import org.eclipse.californium.core.CoapClient;
+import org.eclipse.californium.core.CoapResponse;
+import org.eclipse.californium.core.coap.MediaTypeRegistry;
+
+import com.google.gson.Gson;
+
+import it.beltek.ia.iotlab.edge.database.EntityHeader;
 import it.beltek.ia.iotlab.edge.gateway.service.Pm3200ModbusService;
 import it.beltek.ia.iotlab.edge.server.resource.Pm3200Resource;
 
@@ -35,6 +42,10 @@ public class Pm3200Gateway {
      private static final int IDLETIME = 5000;
      private static final int SLEEPTIME = 1000;
      
+     private CoapClient repositoryCoapClient;
+     
+     private String urlRepository = "coap://localhost:5600/master_repository";
+     
 	 
 	/**
 	 * Class constructor. 
@@ -59,6 +70,8 @@ public class Pm3200Gateway {
 		
 		this.pm3200Resource = new Pm3200Resource(this.deviceName + "_" + this.lineID + "_" + this.machineID, this);
 		
+		this.repositoryCoapClient = new CoapClient(urlRepository);
+		
 	}
 
 	/**
@@ -67,6 +80,9 @@ public class Pm3200Gateway {
 	private void run() {
 		
 		System.out.println("Pm3200Gateway start at " + new Date());
+		
+		// Master repository registration
+		registerEntity();
 		
 		this.pool.execute(new Pm3200FieldbusThread(this, this.deviceName));
 		this.pool.execute(new Pm3200CoAPServerThread(this, pm3200Resource, this.coapServerPort));
@@ -138,5 +154,17 @@ public class Pm3200Gateway {
 		
 		return pm3200ModbusService;
 	}
+	
+	// Master repository registration
+	public void registerEntity() {
+				
+		// POST
+		EntityHeader entityHeader = new EntityHeader(this.deviceName, this.lineID, this.machineID, 0);
+				
+		Gson gsonPlcEntity = new Gson();
+		String energySerializeEntity = gsonPlcEntity.toJson(entityHeader);
+		CoapResponse coapResponsePlcEntity = this.repositoryCoapClient.post(energySerializeEntity, MediaTypeRegistry.APPLICATION_JSON);
+				
+		}
 
 }

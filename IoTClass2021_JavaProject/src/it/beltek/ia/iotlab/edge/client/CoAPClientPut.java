@@ -63,10 +63,10 @@ public class CoAPClientPut extends CoapClient {
 		    System.out.println("GET: " + coapResponseGetDrive.getResponseText());
 			
 			// PUT drive
-			this.drive.setpoint = 25.5f;
+			this.drive.setpoint = 25.6f;
 			Gson gsonDrive = new Gson();
 			String driveSerialize = gsonDrive.toJson(drive);
-			CoapResponse coapResponseDrivePut = this.coapClient2.put(driveSerialize, MediaTypeRegistry.APPLICATION_JSON);
+			CoapResponse coapResponseDrivePut = this.coapClient2.post(driveSerialize, MediaTypeRegistry.APPLICATION_JSON);
 			
 			
 			// Serializzo il PLC da inviare , invio comandi al PLC
@@ -78,9 +78,8 @@ public class CoAPClientPut extends CoapClient {
 			Gson gson = new Gson();
 			String plcSerialize = gson.toJson(plc);
 			
-			CoapResponse coapResponsePost = this.coapClient.post("Sto scrivendo POST", MediaTypeRegistry.TEXT_PLAIN);
-			
-			CoapResponse coapResponsePut = this.coapClient.put(plcSerialize, MediaTypeRegistry.APPLICATION_JSON);
+			//CoapResponse coapResponsePost = this.coapClient.post("Sto scrivendo POST", MediaTypeRegistry.TEXT_PLAIN);
+			CoapResponse coapResponsePut = this.coapClient.post(plcSerialize, MediaTypeRegistry.APPLICATION_JSON);
 			
 			
 			try {

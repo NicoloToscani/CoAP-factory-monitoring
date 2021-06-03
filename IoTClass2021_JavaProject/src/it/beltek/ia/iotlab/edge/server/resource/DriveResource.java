@@ -26,7 +26,7 @@ public class DriveResource extends CoapResource{
 	
 	String putResource;
 	
-	String postReasource;
+	String postResource;
 	
 	public DriveResource(String name, DriveGateway driveGateway) {
 		
@@ -43,11 +43,13 @@ public class DriveResource extends CoapResource{
 	@Override
 	public void handlePOST(CoapExchange exchange) {
 		
-		// exchange.respond(ResponseCode.CREATED, this.postReasource, MediaTypeRegistry.TEXT_PLAIN);
+        this.postResource = exchange.getRequestText();
 		
-		this.postReasource = exchange.getRequestText();
+        Gson gson = new Gson();
 		
-		System.out.println("Ricezione post: " + this.postReasource);
+		Drive driveRcv = gson.fromJson(this.postResource, Drive.class);
+		
+		this.driveGateway.getG120cPnService().getDrive().setpoint = driveRcv.setpoint;
 		
 	}
 	

@@ -8,6 +8,13 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import org.eclipse.californium.core.CoapClient;
+import org.eclipse.californium.core.CoapResponse;
+import org.eclipse.californium.core.coap.MediaTypeRegistry;
+
+import com.google.gson.Gson;
+
+import it.beltek.ia.iotlab.edge.database.EntityHeader;
 import it.beltek.ia.iotlab.edge.gateway.service.Qm42vt2ModbusService;
 import it.beltek.ia.iotlab.edge.server.resource.Qm42vt2Resource;
 
@@ -37,6 +44,10 @@ public class Qm42vt2Gateway {
 	     private static final int IDLETIME = 5000;
 	     private static final int SLEEPTIME = 1000;
 	     
+	     private CoapClient repositoryCoapClient;
+	     
+	     private String urlRepository = "coap://localhost:5600/master_repository";
+	     
 	     /**
 	 	 * Class constructor. 
 	 	**/
@@ -62,14 +73,19 @@ public class Qm42vt2Gateway {
 	 		
 	 		this.qm42vt2Resource = new Qm42vt2Resource(this.deviceName + "_" + this.lineID + "_" + this.machineID + "_" + this.motorID, this);
 	 		
+	 		this.repositoryCoapClient = new CoapClient(urlRepository);
+	 		
 	 	}
 
 	 	/**
-	 	 * Run Pm3200Gateway code
+	 	 * Run Qm42vt2Gateway code
 	 	**/
 	 	private void run() {
 	 		
 	 		System.out.println("Qm42vt2Gateway start at " + new Date());
+	 		
+	 	    // Master repository registration
+			registerEntity();
 	 		
 	 		this.pool.execute(new Qm42vt2FieldbusThread(this, this.deviceName));
 	 		this.pool.execute(new Qm42vt2CoAPServerThread(this, qm42vt2Resource, this.coapServerPort));
@@ -147,5 +163,17 @@ public class Qm42vt2Gateway {
 	 		
 	 		return qm42vt2ModbusService;
 	 	}
+	 	
+	 // Master repository registration
+		public void registerEntity() {
+				
+			// POST
+			EntityHeader entityHeader = new EntityHeader(this.deviceName, this.lineID, this.machineID, 0);
+				
+			Gson gsonPlcEntity = new Gson();
+			String vibrationSerializeEntity = gsonPlcEntity.toJson(entityHeader);
+			CoapResponse coapResponsePlcEntity = this.repositoryCoapClient.post(vibrationSerializeEntity, MediaTypeRegistry.APPLICATION_JSON);
+				
+		}
 
 }

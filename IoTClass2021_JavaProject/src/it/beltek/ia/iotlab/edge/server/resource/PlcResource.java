@@ -24,7 +24,7 @@ public class PlcResource extends CoapResource{
 	
 	String putResource;
 	
-	String postReasource;
+	String postResource;
 	
 	public PlcResource(String name, PlcGateway plcGateway) {
 		
@@ -41,11 +41,17 @@ public class PlcResource extends CoapResource{
 	@Override
 	public void handlePOST(CoapExchange exchange) {
 		
-		// exchange.respond(ResponseCode.CREATED, this.postReasource, MediaTypeRegistry.TEXT_PLAIN);
+		this.postResource = exchange.getRequestText();
 		
-		this.postReasource = exchange.getRequestText();
+		System.out.println("PLC PUT: " + this.postResource);
 		
-		System.out.println("Ricezione post: " + this.postReasource);
+		Gson gson = new Gson();
+		
+		PLC plcRcv = gson.fromJson(this.postResource, PLC.class);
+		
+		this.plcGateway.getPlcS7Service().getSiemensPLC().reset = plcRcv.reset;
+		this.plcGateway.getPlcS7Service().getSiemensPLC().startCommand = plcRcv.startCommand;
+		this.plcGateway.getPlcS7Service().getSiemensPLC().stopCommand = plcRcv.stopCommand;
 		
 	}
 	

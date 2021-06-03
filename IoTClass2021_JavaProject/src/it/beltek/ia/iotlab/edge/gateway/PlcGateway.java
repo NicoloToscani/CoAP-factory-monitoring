@@ -9,6 +9,16 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import org.eclipse.californium.core.CoapClient;
+import org.eclipse.californium.core.CoapResponse;
+import org.eclipse.californium.core.Utils;
+import org.eclipse.californium.core.coap.CoAP.Code;
+import org.eclipse.californium.core.coap.MediaTypeRegistry;
+import org.eclipse.californium.core.coap.Request;
+
+import com.google.gson.Gson;
+
+import it.beltek.ia.iotlab.edge.database.EntityHeader;
 import it.beltek.ia.iotlab.edge.gateway.service.PlcS7Service;
 import it.beltek.ia.iotlab.edge.server.resource.PlcResource;
 
@@ -38,6 +48,9 @@ public class PlcGateway {
      private static final int IDLETIME = 5000;
      private static final int SLEEPTIME = 1000;
      
+     private CoapClient repositoryCoapClient;
+     
+     private String urlRepository = "coap://localhost:5600/master_repository";
 	 
 	/**
 	 * Class constructor. 
@@ -64,6 +77,8 @@ public class PlcGateway {
 		
 		this.plcResource = new PlcResource(deviceName + "_" + this.lineID + "_" + this.machineID, this);
 		
+		this.repositoryCoapClient = new CoapClient(urlRepository);
+		
 	}
 
 	/**
@@ -72,6 +87,9 @@ public class PlcGateway {
 	private void run() {
 		
 		System.out.println("PlcGateway start at " + new Date());
+		
+		// Master repository registration
+		registerEntity();
 		
 		this.pool.execute(new PlcFieldbusThread(this, this.deviceName));
 		this.pool.execute(new PlcCoAPServerThread(this, plcResource, this.coapServerPort ));
@@ -140,6 +158,18 @@ public class PlcGateway {
 	public PlcS7Service getPlcS7Service() {
 		
 		return plcS7Service;
+	}
+	
+	// Master repository registration
+	public void registerEntity() {
+		
+		// POST
+		EntityHeader entityHeader = new EntityHeader(this.deviceName, this.lineID, this.machineID, 0);
+		
+		Gson gsonPlcEntity = new Gson();
+		String plcSerializeEntity = gsonPlcEntity.toJson(entityHeader);
+		CoapResponse coapResponsePlcEntity = this.repositoryCoapClient.post(plcSerializeEntity, MediaTypeRegistry.APPLICATION_JSON);
+		
 	}
 
 }
