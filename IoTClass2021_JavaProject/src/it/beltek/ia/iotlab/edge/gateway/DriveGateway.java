@@ -169,7 +169,7 @@ public class DriveGateway {
 		public void registerEntity() {
 					
 		    // POST
-			EntityHeader entityHeader = new EntityHeader(this.deviceName, this.lineID, this.machineID, 0);
+			EntityHeader entityHeader = new EntityHeader(this.coapServerPort, this.deviceName, this.lineID, this.machineID, this.driveId);
 					
 			Gson gsonPlcEntity = new Gson();
 			String driveSerializeEntity = gsonPlcEntity.toJson(entityHeader);

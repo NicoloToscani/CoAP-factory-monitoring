@@ -17,7 +17,11 @@ public class MasterRepository {
 	
 	private EntityHeaderResource entityHeaderResource;
 	
-	private String reasourceName = "master_repository";
+	private EntityList entityList;
+	
+	private String reasourceHeaderName = "master_repository";
+	
+	private String reasourceListName = "master_repository_list";
 	
 	
 	public MasterRepository() {
@@ -28,7 +32,9 @@ public class MasterRepository {
 		
 		this.coapServer = new CoapServer(this.coapServerPort);
 		
-		this.entityHeaderResource = new EntityHeaderResource(reasourceName, this);
+		this.entityHeaderResource = new EntityHeaderResource(reasourceHeaderName, this);
+		
+		this.entityList = new EntityList(reasourceListName, this);
 		
 	}
 	
@@ -43,7 +49,7 @@ public class MasterRepository {
 		
 		MasterRepository masterRepository = new MasterRepository();
 		
-		masterRepository.coapServer.add(masterRepository.entityHeaderResource);
+		masterRepository.coapServer.add(masterRepository.entityHeaderResource, masterRepository.entityList);
 		
 		masterRepository.coapServer.start();
 		

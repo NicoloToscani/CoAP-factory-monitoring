@@ -26,13 +26,13 @@ import org.eclipse.californium.core.coap.CoAP.Code;
 
 public class Hmi1WriteThread implements Runnable {
 	
-	HmiMachine hmi1Maintenance;
+	HmiMaintenance hmi1Maintenance;
 	
 	BufferedReader bufferedReader;
 	
 	Scanner scanner;
 	
-	public Hmi1WriteThread(HmiMachine hmi1Maintenance) {
+	public Hmi1WriteThread(HmiMaintenance hmi1Maintenance) {
 		
 		this.hmi1Maintenance = hmi1Maintenance;
 		
@@ -46,7 +46,7 @@ public class Hmi1WriteThread implements Runnable {
 	public void run() {
 		
 		System.out.println("Hmi1ReadThread start at " + new Date());
-		System.out.println("----- Machine " + this.hmi1Maintenance.getMachineNumber() + " -----");
+		System.out.println("----- Line " + this.hmi1Maintenance.getLineNumber() + " -----");
 		System.out.println("Command list: ");
 		System.out.println("0: START");
 		System.out.println("1: STOP");

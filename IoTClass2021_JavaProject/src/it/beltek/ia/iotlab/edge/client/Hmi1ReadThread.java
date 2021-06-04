@@ -21,12 +21,12 @@ import org.eclipse.californium.core.coap.CoAP.Code;
 
 public class Hmi1ReadThread implements Runnable {
 	
-	HmiMachine hmi1Maintenance;
+	HmiMaintenance hmi1Maintenance;
 	
 	Timer requestTimer;
 
 	
-	public Hmi1ReadThread(HmiMachine hmi1Maintenance) {
+	public Hmi1ReadThread(HmiMaintenance hmi1Maintenance) {
 		
 		this.hmi1Maintenance = hmi1Maintenance;
 		

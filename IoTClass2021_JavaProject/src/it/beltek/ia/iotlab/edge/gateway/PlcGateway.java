@@ -164,7 +164,7 @@ public class PlcGateway {
 	public void registerEntity() {
 		
 		// POST
-		EntityHeader entityHeader = new EntityHeader(this.deviceName, this.lineID, this.machineID, 0);
+		EntityHeader entityHeader = new EntityHeader(this.coapServerPort, this.deviceName, this.lineID, this.machineID, 0);
 		
 		Gson gsonPlcEntity = new Gson();
 		String plcSerializeEntity = gsonPlcEntity.toJson(entityHeader);

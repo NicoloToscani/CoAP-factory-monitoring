@@ -6,8 +6,12 @@ public class EntityHeader {
 	private int lineID;
 	private int machineID;
 	private int deviceID; // Drive and Motor
+	private int coapPortNumber;
+	private String coapIpAddress; // If we run in a real factory environment
 	
-	public EntityHeader(String deviceType, int lineID, int machineID, int deviceID) {
+	public EntityHeader(int CoapPortNumber, String deviceType, int lineID, int machineID, int deviceID) {
+		
+		this.coapPortNumber = CoapPortNumber;
 		
 		this.deviceType = deviceType;
 		
@@ -49,6 +53,14 @@ public class EntityHeader {
 
 	public void setDeviceID(int deviceID) {
 		this.deviceID = deviceID;
+	}
+	
+	public int getCoapPortNumber() {
+		return coapPortNumber;
+	}
+
+	public void setCoapPortNumber(int coapPortNumber) {
+		this.coapPortNumber = coapPortNumber;
 	}
 
 }
