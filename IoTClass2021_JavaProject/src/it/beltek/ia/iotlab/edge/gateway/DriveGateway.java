@@ -90,6 +90,8 @@ public class DriveGateway {
 		
 		System.out.println("DriveGateway start at " + new Date());
 		
+		System.out.println("Drive resource: " + deviceName + "_" + lineID + "_" + machineID + "_" + driveId);
+		
 		// Master repository registration
 		registerEntity();
 		
