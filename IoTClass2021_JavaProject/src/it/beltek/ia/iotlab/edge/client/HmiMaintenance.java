@@ -26,8 +26,8 @@ public class HmiMaintenance{
 	
 	private ThreadPoolExecutor pool;
 	 
-	private static final int COREPOOL = 10;
-    private static final int MAXPOOL = 10;
+	private static final int COREPOOL = 2; 
+    private static final int MAXPOOL = 2;
     private static final int IDLETIME = 5000;
     private static final int SLEEPTIME = 1000;
 	
@@ -35,40 +35,15 @@ public class HmiMaintenance{
 	private ArrayList<EntityHeader> deviceLineList;
 	private HashMap<Integer, HMIMachine> hmiMachineMap;
 	
-    
-	private SchneiderPM3200 schneiderPM3200;
-    public SchneiderPM3200 getSchneiderPM3200() {
-		return schneiderPM3200;
-	}
-
-
-	public void setSchneiderPM3200(SchneiderPM3200 schneiderPM3200) {
-		this.schneiderPM3200 = schneiderPM3200;
-	}
-
-	
-	private PLC plc;
-	private Drive drive;
-
-
-	private CoapClient coapClientEnergy;
-	private CoapClient coapClientPlc;
-	private ArrayList<CoapClient> coAPCLientDrives;
-	private ArrayList<CoapClient> coAPCLientVibrations;
-	private CoapClient coapClientDrive;
-	
 	private CoapClient coapClientDeviceList;
-	private CoapClient coapClientVibration;
+	
 	
 	//String url = "coap://localhost:5687/.well-known/core";
-	private String url1 = "coap://localhost:5683/plc";
-	private String url2 = "coap://localhost:5684/powerEnergyMeter";
-	private ArrayList<String> driveUrls;
-	private ArrayList<String> vibrationUrls;
+	//private String url1 = "coap://localhost:5683/plc";
 	
 	// Da cambiare
-	String driveUrl1 = "coap://localhost:5686/drive";
-	String vibrationUrl1 = "coap://localhost:5685/vibrationSensor";
+	//String driveUrl1 = "coap://localhost:5686/drive";
+	//String vibrationUrl1 = "coap://localhost:5685/vibrationSensor";
 	
 	// URI MasterRepository
 	private String masterRepositoryUri = "coap://localhost:5600/master_repository_list";
@@ -80,29 +55,13 @@ public class HmiMaintenance{
 		
 		this.lineNumber = 0;
 		
-		this.schneiderPM3200 = new SchneiderPM3200();
-		
-		this.drive = new Drive();
-		
-		this.plc = new PLC();
-		
-		this.coapClientPlc = new CoapClient(url1);
-		
-		this.coapClientEnergy = new CoapClient(url2);
-		
-		this.coapClientDrive = new CoapClient(driveUrl1);
-		
 		this.coapClientDeviceList = new CoapClient(masterRepositoryUri);
 		
-		this.coAPCLientDrives = new ArrayList<>();
+		 this.pool = new ThreadPoolExecutor(COREPOOL, MAXPOOL, IDLETIME, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>());
 		
-		this.coAPCLientVibrations = new ArrayList<>();
+		 this.deviceLineList = new ArrayList<>();
 		
-		this.pool = new ThreadPoolExecutor(COREPOOL, MAXPOOL, IDLETIME, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>());
-		
-		this.deviceLineList = new ArrayList<>();
-		
-		this.hmiMachineMap = new HashMap<>();
+		 this.hmiMachineMap = new HashMap<>();
 		
 	}
 	
@@ -287,38 +246,13 @@ public class HmiMaintenance{
         		
         	}
         	
+        	// Per ogni macchina avvio un thread di lettura e uno di scrittura
+        	// Per ogni HMIMachine contenuto nella mappa allora avvio un thread per la scrittura e uno per la lettura
+    		this.pool.execute(new Hmi1ReadThread(this));
+    		this.pool.execute(new Hmi1WriteThread(this));
+        	
         }
         
-        
-		this.pool.execute(new Hmi1ReadThread(this));
-		this.pool.execute(new Hmi1WriteThread(this));
-		 
-	}
-	
-	public CoapClient getCoapClientEnergy() {
-		return coapClientEnergy;
-	}
-
-
-	public ArrayList<CoapClient> getCoAPCLientDrives() {
-		return coAPCLientDrives;
-	}
-
-	public ArrayList<CoapClient> getCoAPCLientVibrations() {
-		return coAPCLientVibrations;
-	}
-	
-	public CoapClient getCoapClientPlc() {
-		return coapClientPlc;
-	}
-	
-	public PLC getPlc() {
-		return plc;
-	}
-	
-
-	public void setPlc(PLC plc) {
-		this.plc = plc;
 	}
 	
 	public int getLineNumber() {
@@ -329,17 +263,6 @@ public class HmiMaintenance{
 		this.lineNumber = lineNumber;
 	}
 	
-	public CoapClient getCoapClientDrive() {
-		return coapClientDrive;
-	}
-	
-	public Drive getDrive() {
-		return drive;
-	}
-	
-	public void setDrive(Drive drive) {
-		this.drive = drive;
-	}
 	
 	public HashMap<Integer, HMIMachine> getHmiMachineMap() {
 		return hmiMachineMap;

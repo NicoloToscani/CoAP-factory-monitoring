@@ -67,7 +67,7 @@ public class Hmi1WriteThread implements Runnable {
 				  
 				  System.out.println("START command");
 				  
-				  CoapResponse coapResponsePost = this.hmi1Maintenance.getCoapClientPlc().post("15", MediaTypeRegistry.TEXT_PLAIN);
+				 // CoapResponse coapResponsePost = this.hmi1Maintenance.getCoapClientPlc().post("15", MediaTypeRegistry.TEXT_PLAIN);
 				  
 				  
 				  
@@ -83,7 +83,7 @@ public class Hmi1WriteThread implements Runnable {
 					  System.out.println("VELOCITY: " + motorVelocity+ " MOTOR: " + deviceNumber);
 					  
 					  // Devo inviare la scrittura al relativo drive ancora da modellare
-					  CoapResponse coapResponsePost = this.hmi1Maintenance.getCoapClientDrive().post(motorVelocity, MediaTypeRegistry.TEXT_PLAIN);
+					 // CoapResponse coapResponsePost = this.hmi1Maintenance.getCoapClientDrive().post(motorVelocity, MediaTypeRegistry.TEXT_PLAIN);
 					  
 					  // Provo scrittura verso PLC
 					 // CoapResponse coapResponsePost2 = this.hmi1Maintenance.getCoapClientPlc().post("Ciao", MediaTypeRegistry.TEXT_PLAIN);

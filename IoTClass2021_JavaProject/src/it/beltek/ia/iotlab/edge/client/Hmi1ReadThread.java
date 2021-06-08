@@ -56,65 +56,99 @@ public class Hmi1ReadThread implements Runnable {
 		@Override
 		public void run() {
 			
-			// Lettura e visualizzazione dati su HMI della macchina
-			// GET PLC
-			Request request1 = new Request(Code.GET);
+			// Read 
+			Iterator <Integer> it = this.hmi1ReadThread.hmi1Maintenance.getHmiMachineMap().keySet().iterator();
+	        while(it.hasNext()) {
+	        	
+	        	int key = it.next();
+	        
+	        	HMIMachine hmiMachine = this.hmi1ReadThread.hmi1Maintenance.getHmiMachineMap().get(key);
+	        	
+	        	hmiMachine.readPLC();
+	        	hmiMachine.readEnergy();
+	        	hmiMachine.readReject();
+	        	hmiMachine.readDrives();
+	        	hmiMachine.readVibrations();
+	        	
+	        }
+	        
+	        // Display values
+	     	Iterator <Integer> itMeasure = this.hmi1ReadThread.hmi1Maintenance.getHmiMachineMap().keySet().iterator();
+	     	while(itMeasure.hasNext()) {
+	     	        	
+	     	    int key = itMeasure.next();
+	     	        
+	     	    HMIMachine hmiMachine = this.hmi1ReadThread.hmi1Maintenance.getHmiMachineMap().get(key);
+	     	    
+	     	    System.out.println("-------------- Machine " + key + " --------------------");
+	     	    
+	     	    System.out.println("---------- PLC ----------");
+	     	    System.out.println("Machine state: " + hmiMachine.getPlc().state);
+		        
+		        System.out.println("---------- ENERGY ----------");
+		        System.out.println("I1: " + hmiMachine.getPm3200().I1 + " " + hmiMachine.getPm3200().currentUnitMeasure);
+				System.out.println("I2: " + hmiMachine.getPm3200().I2 + " " + hmiMachine.getPm3200().currentUnitMeasure);
+				System.out.println("I3: " + hmiMachine.getPm3200().I3 + " " + hmiMachine.getPm3200().currentUnitMeasure);			
+				System.out.println("I_Avg: " + hmiMachine.getPm3200().I_Avg + " " + hmiMachine.getPm3200().currentUnitMeasure);
+				System.out.println("L1_L2: " + hmiMachine.getPm3200().L1_L2 + " " + hmiMachine.getPm3200().voltageUnitMeasure);
+				System.out.println("L2_L3: " + hmiMachine.getPm3200().L2_L3 + " " + hmiMachine.getPm3200().voltageUnitMeasure);
+				System.out.println("L3_L1: " + hmiMachine.getPm3200().L3_L1 + " " + hmiMachine.getPm3200().voltageUnitMeasure);
+				System.out.println("LL_Avg: " + hmiMachine.getPm3200().LL_Avg + " " + hmiMachine.getPm3200().voltageUnitMeasure);
+				System.out.println("L1_N: " + hmiMachine.getPm3200().L1_N + " " + hmiMachine.getPm3200().voltageUnitMeasure);
+				System.out.println("L1_N: " + hmiMachine.getPm3200().L1_N + " " + hmiMachine.getPm3200().voltageUnitMeasure);
+				System.out.println("L2_N: " + hmiMachine.getPm3200().L2_N + " " + hmiMachine.getPm3200().voltageUnitMeasure);
+				System.out.println("L3_N: " + hmiMachine.getPm3200().L3_N + " " + hmiMachine.getPm3200().voltageUnitMeasure);
+				System.out.println("LN_Avg: " + hmiMachine.getPm3200().LN_Avg + " " + hmiMachine.getPm3200().voltageUnitMeasure);
+				System.out.println("ActivePower_P1: " + hmiMachine.getPm3200().active_power_P1 + " " + hmiMachine.getPm3200().activePowerUnitMeasure);
+				System.out.println("ActivePower_P2: " + hmiMachine.getPm3200().active_power_P2 + " " + hmiMachine.getPm3200().activePowerUnitMeasure);
+				System.out.println("ActivePower_P3: " + hmiMachine.getPm3200().active_power_P3 + " " + hmiMachine.getPm3200().activePowerUnitMeasure);
+				System.out.println("ActivePower_T: " + hmiMachine.getPm3200().active_power_T + " " + hmiMachine.getPm3200().activePowerUnitMeasure);
+				System.out.println("ReactivePower_P1: " + hmiMachine.getPm3200().reactive_power_P1 + " " + hmiMachine.getPm3200().reactivePowerUnitMeasure);
+				System.out.println("ReactivePower_P2: " + hmiMachine.getPm3200().reactive_power_P2 + " " + hmiMachine.getPm3200().reactivePowerUnitMeasure);
+				System.out.println("ReactivePower_P3: " + hmiMachine.getPm3200().reactive_power_P3 + " " + hmiMachine.getPm3200().reactivePowerUnitMeasure);
+				System.out.println("ReactivePower_T: " + hmiMachine.getPm3200().reactive_power_T + " " + hmiMachine.getPm3200().reactivePowerUnitMeasure);
+				System.out.println("ApparentPower_P1: " + hmiMachine.getPm3200().apparent_power_P1 + " " + hmiMachine.getPm3200().apparentPowerUnitMeasure);
+				System.out.println("ApparentPower_P2: " + hmiMachine.getPm3200().apparent_power_P2 + " " + hmiMachine.getPm3200().apparentPowerUnitMeasure);
+				System.out.println("ApparentPower_P3: " + hmiMachine.getPm3200().apparent_power_P3 + " " + hmiMachine.getPm3200().apparentPowerUnitMeasure);
+				System.out.println("ApparentPower_T: " + hmiMachine.getPm3200().apparent_power_T + " " + hmiMachine.getPm3200().apparentPowerUnitMeasure);
+				System.out.println("PF_1: " + hmiMachine.getPm3200().pf_P1);
+				System.out.println("PF_2: " + hmiMachine.getPm3200().pf_P2);
+				System.out.println("PF_3: " + hmiMachine.getPm3200().pf_P3);
+				System.out.println("PF_T: " + hmiMachine.getPm3200().pf_T);
+				System.out.println("Frequency: " + hmiMachine.getPm3200().Frequency + " " + hmiMachine.getPm3200().frequencyUnitMeasure);
+				System.out.println("Temperature: " + hmiMachine.getPm3200().Temperature + " " + hmiMachine.getPm3200().teperatureUnitMeasure);
+				System.out.println("Active_power_Import_Total: " + hmiMachine.getPm3200().Active_power_imp_total + " " + hmiMachine.getPm3200().totalActivePowerUnitMeasure);
+				
+				System.out.println("---------- VIBRATION ANALYSIS ----------");
+				
+				System.out.println("---------- DRIVE  ----------");
+				
+				
+				List<Alarm> alarmList = hmiMachine.getPlc().alarmList; 
+				
+				Iterator<Alarm> iterator = alarmList.iterator();
+				
+				System.out.println("---------- ALARMS LIST ----------");
+				while(iterator.hasNext()) {
+					
+					Alarm alarm = iterator.next();
+					
+					System.out.println("Valore: " + alarm.getValue() + " ID: " + alarm.getId() + " Desc: " + alarm.getDescription() + " Timestamp: " + alarm.getTimestamp());
+					
+				}
+	     	        	
+	     	   
+	     	        	
+	     	 }
+	        
+	        
+	        
 			
-			CoapResponse coapResponseGetPlc = this.hmi1ReadThread.hmi1Maintenance.getCoapClientPlc().advanced(request1);
 			
-			Gson gsonPlc = new Gson();
-			
-			this.hmi1ReadThread.hmi1Maintenance.setPlc(gsonPlc.fromJson(coapResponseGetPlc.getResponseText(), PLC.class));
-			
-			System.out.println("Machine state: " + this.hmi1ReadThread.hmi1Maintenance.getPlc().state);
-			
-			// GET Pm3200
-			Request request2 = new Request(Code.GET);
-						
-			CoapResponse coapResponseGetEnergy = this.hmi1ReadThread.hmi1Maintenance.getCoapClientEnergy().advanced(request2);
-						
-			Gson gsonEnergy = new Gson();
-						
-			this.hmi1ReadThread.hmi1Maintenance.setSchneiderPM3200(gsonEnergy.fromJson(coapResponseGetEnergy.getResponseText(), SchneiderPM3200.class));
-			
-			System.out.println("---------- ENERGY ----------");
-			System.out.println("I1: " + this.hmi1ReadThread.hmi1Maintenance.getSchneiderPM3200().I1 + " " + this.hmi1ReadThread.hmi1Maintenance.getSchneiderPM3200().currentUnitMeasure);
-			System.out.println("I2: " + this.hmi1ReadThread.hmi1Maintenance.getSchneiderPM3200().I2 + " " + this.hmi1ReadThread.hmi1Maintenance.getSchneiderPM3200().currentUnitMeasure);
-			System.out.println("I3: " + this.hmi1ReadThread.hmi1Maintenance.getSchneiderPM3200().I3 + " " + this.hmi1ReadThread.hmi1Maintenance.getSchneiderPM3200().currentUnitMeasure);			
-			System.out.println("I_Avg: " + this.hmi1ReadThread.hmi1Maintenance.getSchneiderPM3200().I_Avg + " " + this.hmi1ReadThread.hmi1Maintenance.getSchneiderPM3200().currentUnitMeasure);
-			System.out.println("L1_L2: " + this.hmi1ReadThread.hmi1Maintenance.getSchneiderPM3200().L1_L2 + " " + this.hmi1ReadThread.hmi1Maintenance.getSchneiderPM3200().voltageUnitMeasure);
-			System.out.println("L2_L3: " + this.hmi1ReadThread.hmi1Maintenance.getSchneiderPM3200().L2_L3 + " " + this.hmi1ReadThread.hmi1Maintenance.getSchneiderPM3200().voltageUnitMeasure);
-			System.out.println("L3_L1: " + this.hmi1ReadThread.hmi1Maintenance.getSchneiderPM3200().L3_L1 + " " + this.hmi1ReadThread.hmi1Maintenance.getSchneiderPM3200().voltageUnitMeasure);
-			System.out.println("LL_Avg: " + this.hmi1ReadThread.hmi1Maintenance.getSchneiderPM3200().LL_Avg + " " + this.hmi1ReadThread.hmi1Maintenance.getSchneiderPM3200().voltageUnitMeasure);
-			System.out.println("L1_N: " + this.hmi1ReadThread.hmi1Maintenance.getSchneiderPM3200().L1_N + " " + this.hmi1ReadThread.hmi1Maintenance.getSchneiderPM3200().voltageUnitMeasure);
-			System.out.println("L1_N: " + this.hmi1ReadThread.hmi1Maintenance.getSchneiderPM3200().L1_N + " " + this.hmi1ReadThread.hmi1Maintenance.getSchneiderPM3200().voltageUnitMeasure);
-			System.out.println("L2_N: " + this.hmi1ReadThread.hmi1Maintenance.getSchneiderPM3200().L2_N + " " + this.hmi1ReadThread.hmi1Maintenance.getSchneiderPM3200().voltageUnitMeasure);
-			System.out.println("L3_N: " + this.hmi1ReadThread.hmi1Maintenance.getSchneiderPM3200().L3_N + " " + this.hmi1ReadThread.hmi1Maintenance.getSchneiderPM3200().voltageUnitMeasure);
-			System.out.println("LN_Avg: " + this.hmi1ReadThread.hmi1Maintenance.getSchneiderPM3200().LN_Avg + " " + this.hmi1ReadThread.hmi1Maintenance.getSchneiderPM3200().voltageUnitMeasure);
-			System.out.println("ActivePower_P1: " + this.hmi1ReadThread.hmi1Maintenance.getSchneiderPM3200().active_power_P1 + " " + this.hmi1ReadThread.hmi1Maintenance.getSchneiderPM3200().activePowerUnitMeasure);
-			System.out.println("ActivePower_P2: " + this.hmi1ReadThread.hmi1Maintenance.getSchneiderPM3200().active_power_P2 + " " + this.hmi1ReadThread.hmi1Maintenance.getSchneiderPM3200().activePowerUnitMeasure);
-			System.out.println("ActivePower_P3: " + this.hmi1ReadThread.hmi1Maintenance.getSchneiderPM3200().active_power_P3 + " " + this.hmi1ReadThread.hmi1Maintenance.getSchneiderPM3200().activePowerUnitMeasure);
-			System.out.println("ActivePower_T: " + this.hmi1ReadThread.hmi1Maintenance.getSchneiderPM3200().active_power_T + " " + this.hmi1ReadThread.hmi1Maintenance.getSchneiderPM3200().activePowerUnitMeasure);
-			System.out.println("ReactivePower_P1: " + this.hmi1ReadThread.hmi1Maintenance.getSchneiderPM3200().reactive_power_P1 + " " + this.hmi1ReadThread.hmi1Maintenance.getSchneiderPM3200().reactivePowerUnitMeasure);
-			System.out.println("ReactivePower_P2: " + this.hmi1ReadThread.hmi1Maintenance.getSchneiderPM3200().reactive_power_P2 + " " + this.hmi1ReadThread.hmi1Maintenance.getSchneiderPM3200().reactivePowerUnitMeasure);
-			System.out.println("ReactivePower_P3: " + this.hmi1ReadThread.hmi1Maintenance.getSchneiderPM3200().reactive_power_P3 + " " + this.hmi1ReadThread.hmi1Maintenance.getSchneiderPM3200().reactivePowerUnitMeasure);
-			System.out.println("ReactivePower_T: " + this.hmi1ReadThread.hmi1Maintenance.getSchneiderPM3200().reactive_power_T + " " + this.hmi1ReadThread.hmi1Maintenance.getSchneiderPM3200().reactivePowerUnitMeasure);
-			System.out.println("ApparentPower_P1: " + this.hmi1ReadThread.hmi1Maintenance.getSchneiderPM3200().apparent_power_P1 + " " + this.hmi1ReadThread.hmi1Maintenance.getSchneiderPM3200().apparentPowerUnitMeasure);
-			System.out.println("ApparentPower_P2: " + this.hmi1ReadThread.hmi1Maintenance.getSchneiderPM3200().apparent_power_P2 + " " + this.hmi1ReadThread.hmi1Maintenance.getSchneiderPM3200().apparentPowerUnitMeasure);
-			System.out.println("ApparentPower_P3: " + this.hmi1ReadThread.hmi1Maintenance.getSchneiderPM3200().apparent_power_P3 + " " + this.hmi1ReadThread.hmi1Maintenance.getSchneiderPM3200().apparentPowerUnitMeasure);
-			System.out.println("ApparentPower_T: " + this.hmi1ReadThread.hmi1Maintenance.getSchneiderPM3200().apparent_power_T + " " + this.hmi1ReadThread.hmi1Maintenance.getSchneiderPM3200().apparentPowerUnitMeasure);
-			System.out.println("PF_1: " + this.hmi1ReadThread.hmi1Maintenance.getSchneiderPM3200().pf_P1);
-			System.out.println("PF_2: " + this.hmi1ReadThread.hmi1Maintenance.getSchneiderPM3200().pf_P2);
-			System.out.println("PF_3: " + this.hmi1ReadThread.hmi1Maintenance.getSchneiderPM3200().pf_P3);
-			System.out.println("PF_T: " + this.hmi1ReadThread.hmi1Maintenance.getSchneiderPM3200().pf_T);
-			System.out.println("Frequency: " + this.hmi1ReadThread.hmi1Maintenance.getSchneiderPM3200().Frequency + " " + this.hmi1ReadThread.hmi1Maintenance.getSchneiderPM3200().frequencyUnitMeasure);
-			System.out.println("Temperature: " + this.hmi1ReadThread.hmi1Maintenance.getSchneiderPM3200().Temperature + " " + this.hmi1ReadThread.hmi1Maintenance.getSchneiderPM3200().teperatureUnitMeasure);
-			System.out.println("Active_power_Import_Total: " + this.hmi1ReadThread.hmi1Maintenance.getSchneiderPM3200().Active_power_imp_total + " " + this.hmi1ReadThread.hmi1Maintenance.getSchneiderPM3200().totalActivePowerUnitMeasure);
+	        
 			
 			
-			System.out.println("---------- VIBRATION ANALYSIS ----------");
-			
-			System.out.println("---------- DRIVE  ----------");
+	        
 			
 			/*
 			// GET PLC
@@ -130,18 +164,7 @@ public class Hmi1ReadThread implements Runnable {
 				*/					
 			
 			
-			List<Alarm> alarmList = this.hmi1ReadThread.hmi1Maintenance.getPlc().alarmList; 
 			
-			Iterator<Alarm> iterator = alarmList.iterator();
-			
-			System.out.println("---------- ALARMS LIST ----------");
-			while(iterator.hasNext()) {
-				
-				Alarm alarm = iterator.next();
-				
-				System.out.println("Valore: " + alarm.getValue() + " ID: " + alarm.getId() + " Desc: " + alarm.getDescription() + " Timestamp: " + alarm.getTimestamp());
-				
-			}
 			
 		}
 		
