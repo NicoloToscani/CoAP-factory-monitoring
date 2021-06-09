@@ -23,7 +23,6 @@ import it.beltek.ia.iotlab.edge.gateway.device.components.Alarm;
 
 import org.eclipse.californium.core.coap.CoAP.Code;
 
-
 public class Hmi1WriteThread implements Runnable {
 	
 	HmiMaintenance hmi1Maintenance;
@@ -45,6 +44,7 @@ public class Hmi1WriteThread implements Runnable {
 	@Override
 	public void run() {
 		
+		// Command request example: machineID_code_value_deviceID
 		System.out.println("Hmi1ReadThread start at " + new Date());
 		System.out.println("----- Line " + this.hmi1Maintenance.getLineNumber() + " -----");
 		System.out.println("Command list: ");
@@ -58,43 +58,59 @@ public class Hmi1WriteThread implements Runnable {
 			
 		  try {
 			  
-			 // String insert = this.bufferedReader.readLine();
+			  
 			  String insert = scanner.nextLine();
 			  String[] split = insert.split("_");
-			  System.out.println("Request code: " + split[0] );
 			  
-			  if(split[0].equals("0")) {
+			  int machineID = Integer.parseInt(split[0]);
+			  
+			  System.out.println("Machine ID: " + split[0] );
+			  System.out.println("Request code: " + split[1] );
+			  
+			  // START
+			  if(split[1].equals("0")) {
 				  
 				  System.out.println("START command");
 				  
 				 // CoapResponse coapResponsePost = this.hmi1Maintenance.getCoapClientPlc().post("15", MediaTypeRegistry.TEXT_PLAIN);
 				  
+			  }
+			  
+			  // STOP
+			  if(split[1].equals("1")) {
 				  
+				  System.out.println("STOP command");
+			  }
+			  
+			 // RESET
+			  if(split[1].equals("2")) {
 				  
+				  System.out.println("RESET command");
 			  }
 			    
-			  if(split[0].equals("10") || split[0].equals("20")) {
-				  
-				  if(split[0].equals("10")) {
+			  // 10_VELOCITY_MOTOR or 20_THRESOLD_MOTOR
+			  if(split[1].equals("10") || split[1].equals("20")) {
+				 
+				  // 10_VELOCITY_MOTOR
+				  if(split[1].equals("10")) {
 					  
-					  String motorVelocity = split[1];	
-					  String deviceNumber = split[2];
+					  String motorVelocity = split[2];	
+					  String deviceNumber = split[3];
 					  
-					  System.out.println("VELOCITY: " + motorVelocity+ " MOTOR: " + deviceNumber);
+					  System.out.println("VELOCITY: " + motorVelocity + " MOTOR: " + deviceNumber);
 					  
-					  // Devo inviare la scrittura al relativo drive ancora da modellare
-					 // CoapResponse coapResponsePost = this.hmi1Maintenance.getCoapClientDrive().post(motorVelocity, MediaTypeRegistry.TEXT_PLAIN);
+					  HMIMachine hmiMachine = this.hmi1Maintenance.getHmiMachineMap().get(machineID);
 					  
+					  hmiMachine.writeVelocity(motorVelocity, Integer.parseInt(deviceNumber));
 					  
-					  // Provo scrittura verso PLC
-					 // CoapResponse coapResponsePost2 = this.hmi1Maintenance.getCoapClientPlc().post("Ciao", MediaTypeRegistry.TEXT_PLAIN);
 					  
 				  }
 				  
-				  else if(split[0].equals("20")) {
+				  // 20_THRESOLD_MOTOR
+				  else if(split[1].equals("20")) {
 					  
-					  String motorThreshold = split[1];	
-					  String deviceNumber = split[2];
+					  String motorThreshold = split[2];	
+					  String deviceNumber = split[3];
 					  
 					  System.out.println("THRESHOLD: " + motorThreshold+ " MOTOR: " + deviceNumber);
 					  
@@ -118,5 +134,4 @@ public class Hmi1WriteThread implements Runnable {
 		
 	}
 	
-
 }

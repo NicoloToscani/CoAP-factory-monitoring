@@ -5,6 +5,7 @@ import java.util.Iterator;
 
 import org.eclipse.californium.core.CoapClient;
 import org.eclipse.californium.core.CoapResponse;
+import org.eclipse.californium.core.coap.MediaTypeRegistry;
 import org.eclipse.californium.core.coap.Request;
 import org.eclipse.californium.core.coap.CoAP.Code;
 
@@ -15,6 +16,7 @@ import it.beltek.ia.iotlab.edge.gateway.device.Drive;
 import it.beltek.ia.iotlab.edge.gateway.device.PLC;
 import it.beltek.ia.iotlab.edge.gateway.device.SchneiderPM3200;
 import it.beltek.ia.iotlab.edge.gateway.device.WeightSystem;
+import it.beltek.ia.iotlab.edge.gateway.device.components.JsonRequest;
 
 public class HMIMachine {
 	
@@ -337,5 +339,25 @@ public class HMIMachine {
     	
     	this.setSensors(sensors);
     }
+    
+    public void writeVelocity(String velocitySetpoint, int driveID) {
+    	
+    	JsonRequest frequencyRequest = new JsonRequest();
+    	
+    	// PUT drive velocity
+	    frequencyRequest.setField("frequencySetpoint");
+	    frequencyRequest.setValue(velocitySetpoint);
+	    
+	    int index = (driveID % 10) - 1;
+	    
+	    Gson gsonDrive = new Gson();
+	    String driveSerialize = gsonDrive.toJson(frequencyRequest);
+	    
+	    CoapResponse coapResponseDrivePut = this.getCoapCLientDrives().get(index).post(driveSerialize, MediaTypeRegistry.APPLICATION_JSON);
+	    
+    	
+    }
+    
+    
     
 }

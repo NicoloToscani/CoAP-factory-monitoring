@@ -83,7 +83,7 @@ public class RejectResource extends CoapResource{
 	@Override
 	public void handlePOST(CoapExchange exchange) {
 		
-		// Devo differenziare i valori che gli passo se setpoint peso o setpoint velocità
+		       // Devo differenziare i valori che gli passo se setpoint peso o setpoint velocità
 				this.postResource = exchange.getRequestText();
 				
 		        Gson gson = new Gson();

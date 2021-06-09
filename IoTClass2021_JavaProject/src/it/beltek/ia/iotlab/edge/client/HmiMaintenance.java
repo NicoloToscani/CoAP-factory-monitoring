@@ -249,7 +249,6 @@ public class HmiMaintenance{
         	}
         	
         	
-        	
         	// Per ogni macchina avvio un thread di lettura e uno di scrittura
         	// Per ogni HMIMachine contenuto nella mappa allora avvio un thread per la scrittura e uno per la lettura
     		this.pool.execute(new Hmi1ReadThread(this));

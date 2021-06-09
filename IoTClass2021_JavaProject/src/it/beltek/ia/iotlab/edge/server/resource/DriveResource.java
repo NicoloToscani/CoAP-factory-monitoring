@@ -14,6 +14,7 @@ import it.beltek.ia.iotlab.edge.gateway.PlcGateway;
 import it.beltek.ia.iotlab.edge.gateway.Pm3200Gateway;
 import it.beltek.ia.iotlab.edge.gateway.device.Drive;
 import it.beltek.ia.iotlab.edge.gateway.device.PLC;
+import it.beltek.ia.iotlab.edge.gateway.device.components.JsonRequest;
 
 
 public class DriveResource extends CoapResource{
@@ -43,27 +44,60 @@ public class DriveResource extends CoapResource{
 	@Override
 	public void handlePOST(CoapExchange exchange) {
 		
-        this.postResource = exchange.getRequestText();
+        // this.postResource = exchange.getRequestText();
+		
+        // Gson gson = new Gson();
+		
+		// Drive driveRcv = gson.fromJson(this.postResource, Drive.class);
+		
+		// this.driveGateway.getG120cPnService().getDrive().setpoint = driveRcv.setpoint;
+		
+		// Differenzio per future richieste
+		this.postResource = exchange.getRequestText();
 		
         Gson gson = new Gson();
 		
-		Drive driveRcv = gson.fromJson(this.postResource, Drive.class);
+		JsonRequest jRequest = gson.fromJson(this.postResource, JsonRequest.class);
 		
-		this.driveGateway.getG120cPnService().getDrive().setpoint = driveRcv.setpoint;
+		// Set weight set point value
+		if(jRequest.getField().equals("frequencySetpoint")) {
+			
+			
+			this.driveGateway.getG120cPnService().getDrive().setpoint = Float.parseFloat(jRequest.getValue());
+			
+			
+			System.out.println("Drive set point: " + this.driveGateway.getG120cPnService().getDrive().setpoint);
+		}
 		
 	}
 	
 	@Override
 	public void handlePUT(CoapExchange exchange) {
 			
-		this.putResource = exchange.getRequestText();
+		// this.putResource = exchange.getRequestText();
 		
-        Gson gson = new Gson();
+        // Gson gson = new Gson();
 		
-		Drive driveRcv = gson.fromJson(this.putResource, Drive.class);
+		// Drive driveRcv = gson.fromJson(this.putResource, Drive.class);
 		
-		this.driveGateway.getG120cPnService().getDrive().setpoint = driveRcv.setpoint;
+		// this.driveGateway.getG120cPnService().getDrive().setpoint = driveRcv.setpoint;
 		
+		// Differenzio per future richieste
+				this.putResource = exchange.getRequestText();
+				
+		        Gson gson = new Gson();
+				
+				JsonRequest jRequest = gson.fromJson(this.putResource, JsonRequest.class);
+				
+				// Set weight set point value
+				if(jRequest.getField().equals("frequencySetpoint")) {
+					
+					
+					this.driveGateway.getG120cPnService().getDrive().setpoint = Float.parseFloat(jRequest.getValue());
+					
+					
+					System.out.println("Drive set point: " + this.driveGateway.getG120cPnService().getDrive().setpoint);
+				}
 			
 	}
 

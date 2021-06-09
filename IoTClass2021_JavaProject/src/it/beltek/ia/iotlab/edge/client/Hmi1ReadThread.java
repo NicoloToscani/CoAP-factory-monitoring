@@ -33,7 +33,6 @@ public class Hmi1ReadThread implements Runnable {
 		
 		this.requestTimer = new Timer();
 		
-	
 	}
 
 	@Override
