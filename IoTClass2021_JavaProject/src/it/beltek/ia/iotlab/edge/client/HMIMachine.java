@@ -288,6 +288,8 @@ public class HMIMachine {
     
     public void readDrives() {
     	
+    	System.out.println("Chiamto lettura Drive coap");
+    	
     	Iterator<CoapClient> coapIteratorDrive = coapCLientDrives.iterator();
     		
     	ArrayList<Drive> drives = new ArrayList<>();

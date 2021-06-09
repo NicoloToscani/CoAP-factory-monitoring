@@ -11,6 +11,7 @@ import org.eclipse.californium.core.coap.Request;
 
 import com.google.gson.Gson;
 
+import it.beltek.ia.iotlab.edge.gateway.device.BannerQm42vt2;
 import it.beltek.ia.iotlab.edge.gateway.device.Drive;
 import it.beltek.ia.iotlab.edge.gateway.device.PLC;
 import it.beltek.ia.iotlab.edge.gateway.device.SchneiderPM3200;
@@ -121,8 +122,78 @@ public class Hmi1ReadThread implements Runnable {
 				System.out.println("Active_power_Import_Total: " + hmiMachine.getPm3200().Active_power_imp_total + " " + hmiMachine.getPm3200().totalActivePowerUnitMeasure);
 				
 				System.out.println("---------- VIBRATION ANALYSIS ----------");
+		
+				Iterator<BannerQm42vt2> sensorsIter = hmiMachine.getSensors().iterator();
+				
+				while(sensorsIter.hasNext()) {
+					
+					int sensorID = 10;
+					
+					BannerQm42vt2 sensor = sensorsIter.next();
+					
+					System.out.println("--- Sensor " + sensorID + " ---" );
+					
+			        System.out.println("Z-Axis RMS Velocity: " + sensor.Z_Axis_RMS_Velocity_In_Sec + " in/sec");
+			        System.out.println("Z-Axis RMS Velocity: " + sensor.Z_Axis_RMS_Velocity_Mm_Sec + " mm/sec");
+			        System.out.println("Temperature: " + sensor.Temperature_F + " °F");
+			        System.out.println("Temperature: " + sensor.Temperature_C + " °C");
+			        System.out.println("X-Axis RMS Velocity : " + sensor.X_Axis_RMS_Velocity_In_Sec + " in/sec");
+			        System.out.println("X-Axis RMS Velocity : " + sensor.X_Axis_RMS_Velocity_Mn_Sec + " mm/sec");
+			        System.out.println("Z-Axis Peak Acceleration : " + sensor.Z_Axis_Peak_Acceleration_G + " G");
+			        System.out.println("X-Axis Peak Acceleration : " + sensor.X_Axis_Peak_Acceleration_G + " G");
+			        System.out.println("Z-Axis Peak Velocity Component Frequency : " + sensor.Z_Axis_Peak_Velocity_Component_Frequency + " Hz");
+			        System.out.println("X-Axis Peak Velocity Component Frequency : " + sensor.X_Axis_Peak_Velocity_Component_Frequency + " Hz");
+			        System.out.println("Z-Axis RMS Acceleration : " + sensor.Z_Axis_RMS_Acceleration_G + " G");
+			        System.out.println("X-Axis RMS Acceleration : " + sensor.X_Axis_RMS_Acceleration_G + " G");
+			        System.out.println("Z-Axis Kurtosis : " + sensor.Z_Axis_Kurtosis);
+			        System.out.println("X-Axis Kurtosis : " + sensor.X_Axis_Kurtosis);
+			        System.out.println("Z-Axis Crest Factor : " + sensor.Z_Axis_Crest_Factor);
+			        System.out.println("X-Axis Crest Factor : " + sensor.X_Axis_Crest_Factor);
+			        System.out.println("Z-Axis Peak Velocity : " + sensor.Z_Axis_Peak_Velocity_In_Sec + " in/sec");
+			        System.out.println("Z-Axis Peak Velocity : " + sensor.Z_Axis_Peak_Velocity_Mm_Sec + " mm/sec");
+			        System.out.println("X-Axis Peak Velocity : " + sensor.X_Axis_Peak_Velocity_In_Sec + " in/sec");
+			        System.out.println("X-Axis Peak Velocity : " + sensor.X_Axis_Peak_Velocity_Mm_Sec + " mm/sec");
+			        System.out.println("Z-Axis High-Frequency RMS Acceleration : " + sensor.Z_Axis_High_Frequency_RMS_Acceleration_G + " G");
+			        System.out.println("X-Axis High-Frequency RMS Acceleration : " + sensor.X_Axis_High_Frequency_RMS_Acceleration_G + " G");
+			        
+			        sensorID = sensorID + 10; // Aggiungere un indice identificativo del sensore sul motore alla classe
+					
+				}
 				
 				System.out.println("---------- DRIVE  ----------");
+				
+				Iterator<Drive> drivesIter = hmiMachine.getDrives().iterator();
+				
+				while(drivesIter.hasNext()) {
+					
+					int driveID = 10;
+					
+					Drive drive = drivesIter.next();
+					
+					System.out.println("--- Drive " + driveID + " ---" );
+					
+					System.out.println("Actual speed: " + drive.actualSpeed + " Hz");
+					System.out.println("Actual current: " + drive.actualCurrent + " A");
+					System.out.println("Actual torque: " + drive.actualSpeed + " %");
+					System.out.println("Fault code: " + drive.faultCode);
+					System.out.println("Actual speed: " + drive.warnCode);
+					System.out.println("Thermal overload: " + drive.alarmInverterThermalOverload);
+					System.out.println("Motor overtemp: " + drive.alarmMotorOvertemp);
+					System.out.println("Closing lookout: " + drive.closingLookoutActive);
+					System.out.println("Speed reached: " + drive.compSpeedReached);
+					System.out.println("Holding breake open: " + drive.holdingBrakeOpen);
+					System.out.println("Limit reached: " + drive.impLimitReached);
+					System.out.println("Master control request: " + drive.masterControlRequest);
+					System.out.println("Rotation clockwise: " + drive.motorRotateClockwise);
+					System.out.println("OFF2: " + drive.off2Inactive);
+					System.out.println("OFF3: " + drive.off3Inactive);
+					System.out.println("Operation enabled: " + drive.operationEnabled);
+					System.out.println("Ready: " + drive.ready);
+					System.out.println("Ready to start: " + drive.readyToStart);
+					System.out.println("Speed deviation: " + drive.speedDeviationInTol);
+					
+					driveID = driveID + 10;	
+				}
 				
 				
 				List<Alarm> alarmList = hmiMachine.getPlc().alarmList; 
@@ -143,32 +214,7 @@ public class Hmi1ReadThread implements Runnable {
 				}
 	
 	     }
-	        
-	        
-	        
-			
-			
-	        
-			
-			
-	        
-			
-			/*
-			// GET PLC
-            Request request3 = new Request(Code.GET);
-			
-			CoapResponse coapResponseGetDrive = this.hmi1ReadThread.hmi1Maintenance.getCoapClientDrive().advanced(request3);
-			
-			Gson gsonDrive = new Gson();
-			
-			this.hmi1ReadThread.hmi1Maintenance.setDrive(gsonDrive.fromJson(coapResponseGetDrive.getResponseText(), Drive.class));
-			System.out.println("Actual frequency: " + this.hmi1ReadThread.hmi1Maintenance.getDrive().actualSpeed + " Hz");
-						
-				*/					
-			
-			
-			
-			
+	       
 		}
 		
 	}

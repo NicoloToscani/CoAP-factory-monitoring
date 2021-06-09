@@ -244,7 +244,7 @@ public class HmiMaintenance{
         	while(iteratorDevices.hasNext()) {
         		
         		DeviceStruct drive = iteratorDevices.next();
-        		System.out.println("Drive macchina: "+ key + " nameReject: " + drive.deviceName);
+        		System.out.println("Drive macchina: "+ key + " nameDrive: " + drive.deviceName);
         		
         	}
         	
