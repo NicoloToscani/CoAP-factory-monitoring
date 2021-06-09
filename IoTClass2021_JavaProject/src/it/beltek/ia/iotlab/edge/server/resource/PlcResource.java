@@ -76,6 +76,8 @@ public class PlcResource extends CoapResource{
 	@Override
 	public void handleGET(CoapExchange exchange) {
 		
+		System.out.println("GET PLC RISORSA");
+		
 		jsonDatataFormatting();
 		
 		exchange.respond(ResponseCode.CONTENT, this.measures, MediaTypeRegistry.APPLICATION_JSON);

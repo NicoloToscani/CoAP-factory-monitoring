@@ -32,6 +32,7 @@ public class Hmi1ReadThread implements Runnable {
 		
 		this.requestTimer = new Timer();
 		
+	
 	}
 
 	@Override
@@ -126,20 +127,22 @@ public class Hmi1ReadThread implements Runnable {
 				
 				List<Alarm> alarmList = hmiMachine.getPlc().alarmList; 
 				
-				Iterator<Alarm> iterator = alarmList.iterator();
+				if(alarmList.size() != 0) {
 				
-				System.out.println("---------- ALARMS LIST ----------");
-				while(iterator.hasNext()) {
+					Iterator<Alarm> iterator = alarmList.iterator();
 					
-					Alarm alarm = iterator.next();
-					
-					System.out.println("Valore: " + alarm.getValue() + " ID: " + alarm.getId() + " Desc: " + alarm.getDescription() + " Timestamp: " + alarm.getTimestamp());
+					System.out.println("---------- ALARMS LIST ----------");
+					while(iterator.hasNext()) {
+						
+						Alarm alarm = iterator.next();
+						
+						System.out.println("Valore: " + alarm.getValue() + " ID: " + alarm.getId() + " Desc: " + alarm.getDescription() + " Timestamp: " + alarm.getTimestamp());
+						
+					}
 					
 				}
-	     	        	
-	     	   
-	     	        	
-	     	 }
+	
+	     }
 	        
 	        
 	        

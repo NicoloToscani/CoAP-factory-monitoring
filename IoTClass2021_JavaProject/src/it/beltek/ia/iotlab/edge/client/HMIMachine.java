@@ -197,6 +197,8 @@ public class HMIMachine {
 	public void clientBind() {
 		
 		String uriPlc = "coap://localhost:" + this.plcDevice.devicePort + "/" + this.plcDevice.deviceName;
+		
+		System.out.println("URI PLC: " + uriPlc);
         
 		this.coapClientPlc = new CoapClient(uriPlc);
 		
@@ -252,6 +254,8 @@ public class HMIMachine {
 		Gson gsonPlc = new Gson();
 		
 		this.setPlc(gsonPlc.fromJson(coapResponseGetPlc.getResponseText(), PLC.class));
+		
+		System.out.println("Read: " + this.getPlc().state);
 	
 	}
 	

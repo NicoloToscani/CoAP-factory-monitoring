@@ -231,6 +231,8 @@ public class HmiMaintenance{
         	
         	HMIMachine hmiMachine = hmiMachineMap.get(key);
         	
+        	hmiMachine.clientBind();
+        	
         	System.out.println("PLC macchina: "+ key + " namePLC: " + hmiMachine.getPlcDevice().deviceName);
         	System.out.println("Energy macchina: "+ key + " nameEnergy: " + hmiMachine.getEnergyDevice().deviceName);
         	System.out.println("Reject macchina: "+ key + " nameReject: " + hmiMachine.getDischargeDevice().deviceName);
@@ -245,6 +247,8 @@ public class HmiMaintenance{
         		System.out.println("Drive macchina: "+ key + " nameReject: " + drive.deviceName);
         		
         	}
+        	
+        	
         	
         	// Per ogni macchina avvio un thread di lettura e uno di scrittura
         	// Per ogni HMIMachine contenuto nella mappa allora avvio un thread per la scrittura e uno per la lettura
