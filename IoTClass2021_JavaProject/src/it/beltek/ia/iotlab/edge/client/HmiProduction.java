@@ -22,7 +22,7 @@ import it.beltek.ia.iotlab.edge.gateway.device.Drive;
 import it.beltek.ia.iotlab.edge.gateway.device.PLC;
 import it.beltek.ia.iotlab.edge.gateway.device.SchneiderPM3200;
 
-public class HmiMaintenance{
+public class HmiProduction{
 	
 	private ThreadPoolExecutor pool;
 	 
@@ -37,13 +37,21 @@ public class HmiMaintenance{
 	
 	private CoapClient coapClientDeviceList;
 	
+	
+	//String url = "coap://localhost:5687/.well-known/core";
+	//private String url1 = "coap://localhost:5683/plc";
+	
+	// Da cambiare
+	//String driveUrl1 = "coap://localhost:5686/drive";
+	//String vibrationUrl1 = "coap://localhost:5685/vibrationSensor";
+	
 	// URI MasterRepository
 	private String masterRepositoryUri = "coap://localhost:5600/master_repository_list";
 	
 	private EntityHeader[] entities;
 	
 	
-	public HmiMaintenance() {
+	public HmiProduction() {
 		
 		this.lineNumber = 0;
 		
@@ -240,22 +248,11 @@ public class HmiMaintenance{
         		
         	}
         	
-        	// Machine sensors
-        	ArrayList<DeviceStruct> sensors = hmiMachine.getSensorDevices();
-        	Iterator<DeviceStruct> iteratorSensors = sensors.iterator();
-        	
-        	while(iteratorDevices.hasNext()) {
-        		
-        		DeviceStruct sensor = iteratorSensors.next();
-        		System.out.println("Sensor machine: "+ key + " nameSensor: " + sensor.deviceName);
-        		
-        	}
-        	
         	
         	// Per ogni macchina avvio un thread di lettura e uno di scrittura
         	// Per ogni HMIMachine contenuto nella mappa allora avvio un thread per la scrittura e uno per la lettura
-    		this.pool.execute(new Hmi1ReadThread(this));
-    		this.pool.execute(new Hmi1WriteThread(this));
+    		this.pool.execute(new Hmi2ReadThread(this));
+    		this.pool.execute(new Hmi2WriteThread(this));
         	
         }
         
@@ -276,7 +273,7 @@ public class HmiMaintenance{
 
 	public static void main(String[] args) {
 		
-		new HmiMaintenance().run();
+		new HmiProduction().run();
 
 	}
 

@@ -1,4 +1,4 @@
-package it.beltek.ia.iotlab.edge.client;
+package it.beltek.ia.iotlab.edge.gateway.moniline;
 
 import java.awt.List;
 import java.io.BufferedReader;
@@ -17,12 +17,16 @@ import org.eclipse.californium.core.coap.CoAP.Code;
 
 import com.google.gson.Gson;
 
+import it.beltek.ia.iotlab.edge.client.DeviceStruct;
+import it.beltek.ia.iotlab.edge.client.HMIMachine;
 import it.beltek.ia.iotlab.edge.database.EntityHeader;
 import it.beltek.ia.iotlab.edge.gateway.device.Drive;
 import it.beltek.ia.iotlab.edge.gateway.device.PLC;
 import it.beltek.ia.iotlab.edge.gateway.device.SchneiderPM3200;
+import it.beltek.ia.iotlab.edge.gateway.moniline.resource.EnergyAverage;
+import it.beltek.ia.iotlab.edge.gateway.moniline.resource.PlcAverage;
 
-public class HmiMaintenance{
+public class MonilineGateway{
 	
 	private ThreadPoolExecutor pool;
 	 
@@ -36,14 +40,17 @@ public class HmiMaintenance{
 	private HashMap<Integer, HMIMachine> hmiMachineMap;
 	
 	private CoapClient coapClientDeviceList;
-	
+		
 	// URI MasterRepository
 	private String masterRepositoryUri = "coap://localhost:5600/master_repository_list";
 	
 	private EntityHeader[] entities;
 	
-	
-	public HmiMaintenance() {
+	// Average values
+	private EnergyAverage energyAverage;
+	private ArrayList<PlcAverage> plcAverageList;
+
+	public MonilineGateway() {
 		
 		this.lineNumber = 0;
 		
@@ -54,19 +61,23 @@ public class HmiMaintenance{
 		 this.deviceLineList = new ArrayList<>();
 		
 		 this.hmiMachineMap = new HashMap<>();
+		 
+		 this.energyAverage = new EnergyAverage();
+		 
+		 this.plcAverageList = new ArrayList<>();
 		
 	}
 	
 	
 	/**
-	 * HMI_1: Maintenance supervisor
+	 * MONILINE gateway
 	**/
 	private void run(){
 		
-		// HMI1 ID - Line identifier
+		// MONILINE ID - Line identifier
 		BufferedReader bufferedReaderHmiId = new BufferedReader(new InputStreamReader(System.in));
 			
-		System.out.print("Insert HMI_1 line ID: ");
+		System.out.print("Insert MONILINE line ID: ");
 			
 		try {
 				
@@ -78,7 +89,7 @@ public class HmiMaintenance{
 			
 		}
 			
-		System.out.println("HMI ID: " + this.lineNumber);
+		System.out.println("MONILINE ID: " + this.lineNumber);
 			
 		// Get device list from MasterRepository
 		Request request = new Request(Code.GET);
@@ -225,9 +236,9 @@ public class HmiMaintenance{
         	
         	hmiMachine.clientBind();
         	
-        	System.out.println("PLC macchina: "+ key + " namePLC: " + hmiMachine.getPlcDevice().deviceName);
-        	System.out.println("Energy macchina: "+ key + " nameEnergy: " + hmiMachine.getEnergyDevice().deviceName);
-        	System.out.println("Reject macchina: "+ key + " nameReject: " + hmiMachine.getDischargeDevice().deviceName);
+        	System.out.println("PLC machine: "+ key + " namePLC: " + hmiMachine.getPlcDevice().deviceName);
+        	System.out.println("Energy machine: "+ key + " nameEnergy: " + hmiMachine.getEnergyDevice().deviceName);
+        	System.out.println("Reject machine: "+ key + " nameReject: " + hmiMachine.getDischargeDevice().deviceName);
         	
         	// Machine drives
         	ArrayList<DeviceStruct> drives = hmiMachine.getDriveDevices();
@@ -251,11 +262,8 @@ public class HmiMaintenance{
         		
         	}
         	
-        	
-        	// Per ogni macchina avvio un thread di lettura e uno di scrittura
-        	// Per ogni HMIMachine contenuto nella mappa allora avvio un thread per la scrittura e uno per la lettura
-    		this.pool.execute(new Hmi1ReadThread(this));
-    		this.pool.execute(new Hmi1WriteThread(this));
+    		this.pool.execute(new MonilineGatewayReadThread(this));
+    		this.pool.execute(new MonilineGatewayReadThread(this));
         	
         }
         
@@ -276,8 +284,20 @@ public class HmiMaintenance{
 
 	public static void main(String[] args) {
 		
-		new HmiMaintenance().run();
+		new MonilineGateway().run();
 
+	}
+	
+	public EnergyAverage getEnergyAverage() {
+		return energyAverage;
+	}
+	
+	public ArrayList<PlcAverage> getPlcAverageList() {
+		return plcAverageList;
+	}
+	
+	public void setPlcAverageList(ArrayList<PlcAverage> plcAverageList) {
+		this.plcAverageList = plcAverageList;
 	}
 
 }
