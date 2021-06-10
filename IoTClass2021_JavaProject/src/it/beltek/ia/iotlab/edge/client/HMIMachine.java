@@ -354,10 +354,61 @@ public class HMIMachine {
 	    String driveSerialize = gsonDrive.toJson(frequencyRequest);
 	    
 	    CoapResponse coapResponseDrivePut = this.getCoapCLientDrives().get(index).post(driveSerialize, MediaTypeRegistry.APPLICATION_JSON);
-	    
-    	
+	    	
     }
     
     
+    public void writePlc(String commandType) {
+    	
+    	// Command reset
+    	this.plc.reset = false;
+		this.plc.startCommand = false;
+		this.plc.stopCommand = false;
+    	
+    	
+    	// START machine command
+    	if(commandType.equals("0")) {
+    		
+			this.plc.reset = false;
+			this.plc.startCommand = true;
+			this.plc.stopCommand = false;
+			
+			Gson gson = new Gson();
+			String plcSerialize = gson.toJson(plc);
+			
+			CoapResponse coapResponsePost = this.coapClientPlc.post(plcSerialize, MediaTypeRegistry.APPLICATION_JSON);
+    		
+    	}
+    	
+    	// STOP machine command
+    	if(commandType.equals("1")) {
+    		
+			this.plc.reset = false;
+			this.plc.startCommand = false;
+			this.plc.stopCommand = true;
+			
+			Gson gson = new Gson();
+			String plcSerialize = gson.toJson(plc);
+			
+			CoapResponse coapResponsePost = this.coapClientPlc.post(plcSerialize, MediaTypeRegistry.APPLICATION_JSON);
+    		
+    	}
+    	
+    	// STOP machine command
+    	if(commandType.equals("2")) {
+    		
+			this.plc.reset = true;
+			this.plc.startCommand = false;
+			this.plc.stopCommand = false;
+			
+			Gson gson = new Gson();
+			String plcSerialize = gson.toJson(plc);
+			
+			CoapResponse coapResponsePost = this.coapClientPlc.post(plcSerialize, MediaTypeRegistry.APPLICATION_JSON);
+    		
+    	}
+    	
+    	
+    }
     
 }

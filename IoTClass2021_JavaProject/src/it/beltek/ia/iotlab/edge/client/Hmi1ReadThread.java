@@ -163,9 +163,9 @@ public class Hmi1ReadThread implements Runnable {
 				
 				Iterator<Drive> drivesIter = hmiMachine.getDrives().iterator();
 				
+				int driveID = 10;
+				
 				while(drivesIter.hasNext()) {
-					
-					int driveID = 10;
 					
 					Drive drive = drivesIter.next();
 					
@@ -191,7 +191,7 @@ public class Hmi1ReadThread implements Runnable {
 					System.out.println("Ready to start: " + drive.readyToStart);
 					System.out.println("Speed deviation: " + drive.speedDeviationInTol);
 					
-					driveID = driveID + 10;	
+					driveID = driveID + 10;
 				}
 				
 				

@@ -44,6 +44,8 @@ public class DriveResource extends CoapResource{
 	@Override
 	public void handlePOST(CoapExchange exchange) {
 		
+		System.out.println("Drive POST");
+		
         // this.postResource = exchange.getRequestText();
 		
         // Gson gson = new Gson();
@@ -100,9 +102,6 @@ public class DriveResource extends CoapResource{
 				}
 			
 	}
-
-	
-	
 
 	// GET
 	@Override

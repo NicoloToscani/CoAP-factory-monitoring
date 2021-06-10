@@ -58,7 +58,6 @@ public class Hmi1WriteThread implements Runnable {
 			
 		  try {
 			  
-			  
 			  String insert = scanner.nextLine();
 			  String[] split = insert.split("_");
 			  
@@ -67,25 +66,40 @@ public class Hmi1WriteThread implements Runnable {
 			  System.out.println("Machine ID: " + split[0] );
 			  System.out.println("Request code: " + split[1] );
 			  
+			  System.out.println("Prova volori lettura");
+			  System.out.println("0: " + split[0]);
+			  System.out.println("1: " + split[1]);
+			  
+			  
 			  // START
 			  if(split[1].equals("0")) {
 				  
 				  System.out.println("START command");
 				  
-				 // CoapResponse coapResponsePost = this.hmi1Maintenance.getCoapClientPlc().post("15", MediaTypeRegistry.TEXT_PLAIN);
+				  HMIMachine hmiMachine = this.hmi1Maintenance.getHmiMachineMap().get(machineID);
 				  
+				  hmiMachine.writePlc(split[1]);
+				 			 
 			  }
 			  
 			  // STOP
 			  if(split[1].equals("1")) {
 				  
 				  System.out.println("STOP command");
+				  
+                  HMIMachine hmiMachine = this.hmi1Maintenance.getHmiMachineMap().get(machineID);
+				  
+				  hmiMachine.writePlc(split[1]);
 			  }
 			  
 			 // RESET
 			  if(split[1].equals("2")) {
 				  
 				  System.out.println("RESET command");
+				  
+                  HMIMachine hmiMachine = this.hmi1Maintenance.getHmiMachineMap().get(machineID);
+				  
+				  hmiMachine.writePlc(split[1]);
 			  }
 			    
 			  // 10_VELOCITY_MOTOR or 20_THRESOLD_MOTOR

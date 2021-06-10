@@ -43,7 +43,7 @@ public class PlcResource extends CoapResource{
 		
 		this.postResource = exchange.getRequestText();
 		
-		System.out.println("PLC PUT: " + this.postResource);
+		System.out.println("PLC POST: " + this.postResource);
 		
 		Gson gson = new Gson();
 		
