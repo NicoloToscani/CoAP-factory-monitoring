@@ -36,8 +36,6 @@ public class MonilineGatewayReadThread implements Runnable {
 		
 		this.requestTimer = new Timer();
 		
-		
-		
 	}
 
 	private void initValues() {
@@ -64,10 +62,23 @@ public class MonilineGatewayReadThread implements Runnable {
      	   
      	    this.monilineGateway.getEnergyAverage().totalActivePowerUnitMeasure = hmiMachine.getPm3200().totalActivePowerUnitMeasure;
      	    
+     	    this.monilineGateway.getEnergyAverage().I_Avg = 0;
      	    
-     	    
-     	    
-     	    
+     	    this.monilineGateway.getEnergyAverage().LL_Avg = 0;
+     	   
+     	    this.monilineGateway.getEnergyAverage().LN_Avg = 0;
+     	  
+     	    this.monilineGateway.getEnergyAverage().active_power_T = 0;
+     	 
+     	    this.monilineGateway.getEnergyAverage().reactive_power_T = 0;
+     	 
+     	    this.monilineGateway.getEnergyAverage().apparent_power_T = 0;
+     	
+     	    this.monilineGateway.getEnergyAverage().pf_T = 0;
+     	
+     	    this.monilineGateway.getEnergyAverage().Frequency = 0;
+     	
+     	    this.monilineGateway.getEnergyAverage().Active_power_imp_total = 0;
      	    
      	}
 		
@@ -134,38 +145,32 @@ public class MonilineGatewayReadThread implements Runnable {
 	     	    
 	     	    
 		        // Energy average increment values
-	     	    this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().I_Avg = 0;
+	     	   
 		        this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().I_Avg = this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().I_Avg + hmiMachine.getPm3200().I_Avg;
-		        this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().LL_Avg = 0;
 		        this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().LL_Avg = this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().LL_Avg + hmiMachine.getPm3200().LL_Avg;
-		        this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().LN_Avg = 0;
 		        this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().LN_Avg = this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().LN_Avg + hmiMachine.getPm3200().LN_Avg;
-		        this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().active_power_T = 0;
 		        this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().active_power_T = this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().active_power_T + hmiMachine.getPm3200().active_power_T;
-		        this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().reactive_power_T = 0;
 		        this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().reactive_power_T = this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().reactive_power_T + hmiMachine.getPm3200().reactive_power_T;
-		        this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().apparent_power_T = 0;
 		        this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().apparent_power_T = this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().apparent_power_T + hmiMachine.getPm3200().apparent_power_T;
-		        this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().pf_T = 0;
 		        this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().pf_T = this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().pf_T + hmiMachine.getPm3200().pf_T;
-		        this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().Frequency = 0;
 		        this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().Frequency = this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().Frequency + hmiMachine.getPm3200().Frequency;
-		        this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().Active_power_imp_total = 0;
 		        this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().Active_power_imp_total = this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().Active_power_imp_total + hmiMachine.getPm3200().Active_power_imp_total;
 		        
 	     }
 	     	
+	     	System.out.println("Map size: " + this.monilineGatewayReadThread.monilineGateway.getHmiMachineMap().size());
+	     	
 	     	System.out.println("---------- ENERGY AVERAGE ----------");
 			
-			this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().I_Avg = this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().I_Avg / (this.monilineGatewayReadThread.monilineGateway.getHmiMachineMap().size() - 1);
-			this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().LL_Avg = this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().LL_Avg / (this.monilineGatewayReadThread.monilineGateway.getHmiMachineMap().size() - 1);  
-			this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().LN_Avg = this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().LN_Avg / (this.monilineGatewayReadThread.monilineGateway.getHmiMachineMap().size() - 1);
-			this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().active_power_T = this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().active_power_T / (this.monilineGatewayReadThread.monilineGateway.getHmiMachineMap().size() - 1);
-			this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().reactive_power_T = this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().reactive_power_T / (this.monilineGatewayReadThread.monilineGateway.getHmiMachineMap().size() - 1);
-			this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().apparent_power_T = this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().apparent_power_T / (this.monilineGatewayReadThread.monilineGateway.getHmiMachineMap().size() - 1);
-			this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().pf_T = this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().pf_T / (this.monilineGatewayReadThread.monilineGateway.getHmiMachineMap().size() - 1);
-			this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().Frequency = this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().Frequency / (this.monilineGatewayReadThread.monilineGateway.getHmiMachineMap().size() - 1);
-			this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().Active_power_imp_total = this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().Active_power_imp_total / (this.monilineGatewayReadThread.monilineGateway.getHmiMachineMap().size() - 1);
+			this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().I_Avg = this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().I_Avg / (this.monilineGatewayReadThread.monilineGateway.getHmiMachineMap().size());
+			this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().LL_Avg = this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().LL_Avg / (this.monilineGatewayReadThread.monilineGateway.getHmiMachineMap().size());  
+			this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().LN_Avg = this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().LN_Avg / (this.monilineGatewayReadThread.monilineGateway.getHmiMachineMap().size());
+			this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().active_power_T = this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().active_power_T / (this.monilineGatewayReadThread.monilineGateway.getHmiMachineMap().size());
+			this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().reactive_power_T = this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().reactive_power_T / (this.monilineGatewayReadThread.monilineGateway.getHmiMachineMap().size());
+			this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().apparent_power_T = this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().apparent_power_T / (this.monilineGatewayReadThread.monilineGateway.getHmiMachineMap().size());
+			this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().pf_T = this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().pf_T / (this.monilineGatewayReadThread.monilineGateway.getHmiMachineMap().size());
+			this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().Frequency = this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().Frequency / (this.monilineGatewayReadThread.monilineGateway.getHmiMachineMap().size());
+			this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().Active_power_imp_total = this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().Active_power_imp_total / (this.monilineGatewayReadThread.monilineGateway.getHmiMachineMap().size());
 		
 			System.out.println("I_Avg: " + this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().I_Avg + " " + this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().currentUnitMeasure);
 			System.out.println("LL_Avg: " + this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().LL_Avg + " " + this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().voltageUnitMeasure);

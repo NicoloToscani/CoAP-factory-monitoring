@@ -5,4 +5,5 @@ public class PlcAverage {
 	// Machine state
 	public String state;
 
+
 }

@@ -30,4 +30,6 @@ public class EnergyAverage {
 	     public float Active_power_imp_total;
 	     public String totalActivePowerUnitMeasure;
 	     
+	     public int lineID;
+	     
 }

@@ -12,7 +12,7 @@ import it.beltek.ia.iotlab.edge.gateway.Pm3200Gateway;
 import it.beltek.ia.iotlab.edge.gateway.moniline.MonilineGateway;
 
 
-public class EnergyAverageResource extends CoapResource{
+public class MachinesStateAverageResource extends CoapResource{
 
 	MonilineGateway monilineGateway;
 	
@@ -22,7 +22,7 @@ public class EnergyAverageResource extends CoapResource{
 	
 	String lineID;
 	
-	public EnergyAverageResource(String name, MonilineGateway monilineGateway, String lineID) {
+	public MachinesStateAverageResource(String name, MonilineGateway monilineGateway, String lineID) {
 		
 		super(name);
 		
@@ -54,7 +54,8 @@ public class EnergyAverageResource extends CoapResource{
 		
 		Gson energyAverageSerialize = gsonBuilder.enableComplexMapKeySerialization().create();	
 		
-		this.measures = energyAverageSerialize.toJson(this.monilineGateway.getClass());
+		// Da cambiare
+		this.measures = energyAverageSerialize.toJson(this.monilineGateway.getEnergyAverage());
 		
 		
 	}

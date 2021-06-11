@@ -11,7 +11,9 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import org.eclipse.californium.core.CoapClient;
+
 import org.eclipse.californium.core.CoapResponse;
+import org.eclipse.californium.core.coap.MediaTypeRegistry;
 import org.eclipse.californium.core.coap.Request;
 import org.eclipse.californium.core.coap.CoAP.Code;
 
@@ -20,10 +22,10 @@ import com.google.gson.Gson;
 import it.beltek.ia.iotlab.edge.client.DeviceStruct;
 import it.beltek.ia.iotlab.edge.client.HMIMachine;
 import it.beltek.ia.iotlab.edge.database.EntityHeader;
-import it.beltek.ia.iotlab.edge.gateway.device.Drive;
-import it.beltek.ia.iotlab.edge.gateway.device.PLC;
-import it.beltek.ia.iotlab.edge.gateway.device.SchneiderPM3200;
+
 import it.beltek.ia.iotlab.edge.gateway.moniline.resource.EnergyAverage;
+import it.beltek.ia.iotlab.edge.gateway.moniline.resource.EnergyAverageResource;
+import it.beltek.ia.iotlab.edge.gateway.moniline.resource.MachinesStateAverageResource;
 import it.beltek.ia.iotlab.edge.gateway.moniline.resource.PlcAverage;
 
 public class MonilineGateway{
@@ -36,10 +38,15 @@ public class MonilineGateway{
     private static final int SLEEPTIME = 1000;
 	
 	private int lineNumber;
+	private int coapServerPort;
+	
 	private ArrayList<EntityHeader> deviceLineList;
 	private HashMap<Integer, HMIMachine> hmiMachineMap;
 	
 	private CoapClient coapClientDeviceList;
+	
+    private CoapClient repositoryCoapClient;
+    private String urlRepository = "coap://localhost:5600/master_repository";
 		
 	// URI MasterRepository
 	private String masterRepositoryUri = "coap://localhost:5600/master_repository_list";
@@ -49,12 +56,20 @@ public class MonilineGateway{
 	// Average values
 	private EnergyAverage energyAverage;
 	private ArrayList<PlcAverage> plcAverageList;
+	
+	// Resources
+	private EnergyAverageResource energyAverageResource;
+	private MachinesStateAverageResource machinesStateAverageResource;
 
-	public MonilineGateway() {
+	public MonilineGateway(int coapServerPort, int lineID) {
 		
-		this.lineNumber = 0;
+		this.lineNumber = lineID;
+		
+		this.coapServerPort = coapServerPort;
 		
 		this.coapClientDeviceList = new CoapClient(masterRepositoryUri);
+		
+		this.repositoryCoapClient = new CoapClient(urlRepository);
 		
 		 this.pool = new ThreadPoolExecutor(COREPOOL, MAXPOOL, IDLETIME, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>());
 		
@@ -65,7 +80,10 @@ public class MonilineGateway{
 		 this.energyAverage = new EnergyAverage();
 		 
 		 this.plcAverageList = new ArrayList<>();
+		 
+		 this.energyAverageResource = new EnergyAverageResource("energy_average_" + this.lineNumber, this, String.valueOf(lineID));
 		
+		 this.machinesStateAverageResource = new MachinesStateAverageResource("machines_state_average_" + this.lineNumber, this, String.valueOf(lineID));
 	}
 	
 	
@@ -74,22 +92,10 @@ public class MonilineGateway{
 	**/
 	private void run(){
 		
-		// MONILINE ID - Line identifier
-		BufferedReader bufferedReaderHmiId = new BufferedReader(new InputStreamReader(System.in));
-			
-		System.out.print("Insert MONILINE line ID: ");
-			
-		try {
-				
-			this.lineNumber = Integer.parseInt(bufferedReaderHmiId.readLine());
-			
-		} catch (IOException e) {
-					
-			e.printStackTrace();
-			
-		}
-			
 		System.out.println("MONILINE ID: " + this.lineNumber);
+		System.out.println("MONILINE COAP SERVER PORT: " + this.coapServerPort);
+		registerEntity();
+		
 			
 		// Get device list from MasterRepository
 		Request request = new Request(Code.GET);
@@ -125,7 +131,6 @@ public class MonilineGateway{
 		    if(entityHeader.getLineID() == this.lineNumber) {
 		    	
 		    	this.deviceLineList.add(entityHeader);
-		    	
 		    }
 			
 		}
@@ -263,7 +268,7 @@ public class MonilineGateway{
         	}
         	
     		this.pool.execute(new MonilineGatewayReadThread(this));
-    		this.pool.execute(new MonilineGatewayReadThread(this));
+    		this.pool.execute(new MonilineGatewayCoAPServerThread(this, energyAverageResource, machinesStateAverageResource, this.coapServerPort));
         	
         }
         
@@ -284,7 +289,27 @@ public class MonilineGateway{
 
 	public static void main(String[] args) {
 		
-		new MonilineGateway().run();
+		BufferedReader bufferedReaderPort = new BufferedReader(new InputStreamReader(System.in));
+		BufferedReader bufferedReaderHmiId = new BufferedReader(new InputStreamReader(System.in));
+	
+		int coapPort = 0;
+		int lineNumber = 0;
+		
+        try {
+			
+			System.out.print("Insert MONILINE server CoAP port: ");
+			coapPort = Integer.parseInt(bufferedReaderPort.readLine());
+			
+			System.out.print("Insert MONILINE line ID: ");
+			lineNumber = Integer.parseInt(bufferedReaderHmiId.readLine());
+		
+			
+        } catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		new MonilineGateway(coapPort, lineNumber).run();
 
 	}
 	
@@ -298,6 +323,17 @@ public class MonilineGateway{
 	
 	public void setPlcAverageList(ArrayList<PlcAverage> plcAverageList) {
 		this.plcAverageList = plcAverageList;
+	}
+	
+	// Master repository registration
+	public void registerEntity() {
+			
+		// POST
+		EntityHeader entityHeader = new EntityHeader(this.coapServerPort, "moniline", this.lineNumber, 0, 0);
+		Gson gsonMonilineEntity = new Gson();
+		String monilineSerializeEntity = gsonMonilineEntity.toJson(entityHeader);
+		CoapResponse coapResponseMonilineEntity = this.repositoryCoapClient.post(monilineSerializeEntity, MediaTypeRegistry.APPLICATION_JSON);
+			
 	}
 
 }
