@@ -71,6 +71,7 @@ public class Hmi2WriteThread implements Runnable {
 			  System.out.println("1: " + split[1]);
 			  
 			  
+			  /*
 			  // START
 			  if(split[1].equals("0")) {
 				  
@@ -137,6 +138,8 @@ public class Hmi2WriteThread implements Runnable {
 				  }
 				  
 			  }
+			  
+			  */
 		
 			
 		  }catch (Exception e) {

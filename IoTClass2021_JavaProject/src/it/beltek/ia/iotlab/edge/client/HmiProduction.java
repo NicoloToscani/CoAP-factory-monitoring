@@ -33,23 +33,14 @@ public class HmiProduction{
 	
 	private int lineNumber;
 	private ArrayList<EntityHeader> deviceLineList;
-	private HashMap<Integer, HMIMachine> hmiMachineMap;
+	private HashMap<Integer, HMIMoniline> hmiMonilineMap;
 	
 	private CoapClient coapClientDeviceList;
-	
-	
-	//String url = "coap://localhost:5687/.well-known/core";
-	//private String url1 = "coap://localhost:5683/plc";
-	
-	// Da cambiare
-	//String driveUrl1 = "coap://localhost:5686/drive";
-	//String vibrationUrl1 = "coap://localhost:5685/vibrationSensor";
 	
 	// URI MasterRepository
 	private String masterRepositoryUri = "coap://localhost:5600/master_repository_list";
 	
 	private EntityHeader[] entities;
-	
 	
 	public HmiProduction() {
 		
@@ -61,33 +52,16 @@ public class HmiProduction{
 		
 		 this.deviceLineList = new ArrayList<>();
 		
-		 this.hmiMachineMap = new HashMap<>();
+		 this.hmiMonilineMap = new HashMap<>();
 		
 	}
 	
 	
 	/**
-	 * HMI_1: Maintenance supervisor
+	 * HMI_2: Production supervisor
 	**/
 	private void run(){
 		
-		// HMI1 ID - Line identifier
-		BufferedReader bufferedReaderHmiId = new BufferedReader(new InputStreamReader(System.in));
-			
-		System.out.print("Insert HMI_1 line ID: ");
-			
-		try {
-				
-			this.lineNumber = Integer.parseInt(bufferedReaderHmiId.readLine());
-			
-		} catch (IOException e) {
-					
-			e.printStackTrace();
-			
-		}
-			
-		System.out.println("HMI ID: " + this.lineNumber);
-			
 		// Get device list from MasterRepository
 		Request request = new Request(Code.GET);
 		
@@ -115,139 +89,70 @@ public class HmiProduction{
 		    System.out.println("Coap server Port: " + entityHeader.getCoapPortNumber());
 		    System.out.println("Device type: " + entityHeader.getDeviceType());
 		    System.out.println("Line ID: " + entityHeader.getLineID());
-		    System.out.println("Machine ID: " + entityHeader.getMachineID());
-		    System.out.println("Device ID: " + entityHeader.getDeviceID());
+		   
+		    this.deviceLineList.add(entityHeader);
 		    
-		    // Add line ID device into a line list
-		    if(entityHeader.getLineID() == this.lineNumber) {
-		    	
-		    	this.deviceLineList.add(entityHeader);
-		    	
-		    }
-			
 		}
 		
-		System.out.println("Device line " + this.lineNumber + " : " + this.deviceLineList.size());
+		System.out.println("Dimensione lista: " + this.deviceLineList.size());
 		
-		// HMIMachine list compose with PLC, each machine have n.1 PLC
+		// HMIProduction list compose with MONILINE
 		Iterator deviceListIterator = this.deviceLineList.iterator();
 		
 		while(deviceListIterator.hasNext()) {
 			
 			EntityHeader entityHeader = (EntityHeader)deviceListIterator.next();
 			
-			if(entityHeader.getDeviceType().equals("plc")) {
+			if(entityHeader.getDeviceType().equals("moniline")) {
 				
-				HMIMachine hmiMachine = new HMIMachine();
+				HMIMoniline hmiMoniline = new HMIMoniline();
 				
-				DeviceStruct plcDeviceStruct = new DeviceStruct();
+				DeviceStruct monilineDeviceStruct = new DeviceStruct();
 				
-				plcDeviceStruct.deviceName = entityHeader.getDeviceType() + "_" + entityHeader.getLineID() + "_" + entityHeader.getMachineID();
+				DeviceStruct energyAverageDeviceStruct = new DeviceStruct();
 				
-				plcDeviceStruct.devicePort = entityHeader.getCoapPortNumber();
+				DeviceStruct plcAverageDeviceStruct = new DeviceStruct();
 				
-				hmiMachine.setPlcDevice(plcDeviceStruct);
+				monilineDeviceStruct.deviceName = entityHeader.getDeviceType() + "_" + entityHeader.getLineID();
 				
-				this.hmiMachineMap.put(entityHeader.getMachineID(), hmiMachine);  // Build HashMap with PLC device
+				monilineDeviceStruct.devicePort = entityHeader.getCoapPortNumber();
+				
+				energyAverageDeviceStruct.deviceName = "energy_average_" + entityHeader.getLineID();
+				
+				energyAverageDeviceStruct.devicePort = entityHeader.getCoapPortNumber();
+				
+				plcAverageDeviceStruct.deviceName = "machine_state_average_" + entityHeader.getLineID();
+				
+				plcAverageDeviceStruct.devicePort = entityHeader.getCoapPortNumber();
+				
+				hmiMoniline.setMonilineDevice(monilineDeviceStruct);
+				
+				hmiMoniline.setPlcAverageDevice(plcAverageDeviceStruct);
+				
+				hmiMoniline.setEnergyAverageDevice(energyAverageDeviceStruct);
+				
+				this.hmiMonilineMap.put(entityHeader.getLineID(), hmiMoniline);  // Build HashMap with MONILINE device
 				
 			}
 			
 		}
 		
-		// Energy consumption device machine id
-		Iterator listIterator = this.deviceLineList.iterator();
 		
-        while(listIterator.hasNext()) {
-			
-			EntityHeader entityHeader = (EntityHeader)listIterator.next();
-			
-			// Energy device
-			if(entityHeader.getDeviceType().equals("energy")) {
-				
-				DeviceStruct energyDeviceStruct = new DeviceStruct();
-				
-				energyDeviceStruct.deviceName = entityHeader.getDeviceType() + "_" + entityHeader.getLineID() + "_" + entityHeader.getMachineID();
-				
-				energyDeviceStruct.devicePort = entityHeader.getCoapPortNumber();
-				
-				HMIMachine hmiMachine = hmiMachineMap.get(entityHeader.getMachineID());
-				
-				hmiMachine.setEnergyDevice(energyDeviceStruct);
-				
-			}
-			
-			// Discharge system
-            if(entityHeader.getDeviceType().equals("reject")) {
-				
-				DeviceStruct rejectDeviceStruct = new DeviceStruct();
-				
-				rejectDeviceStruct.deviceName = entityHeader.getDeviceType() + "_" + entityHeader.getLineID() + "_" + entityHeader.getMachineID();
-				
-				rejectDeviceStruct.devicePort = entityHeader.getCoapPortNumber();
-				
-				HMIMachine hmiMachine = hmiMachineMap.get(entityHeader.getMachineID());
-				
-				hmiMachine.setDischargeDevice(rejectDeviceStruct);
-				
-			}
-            
-            // Drives
-            if(entityHeader.getDeviceType().equals("drive")) {
-				
-				DeviceStruct driveDeviceStruct = new DeviceStruct();
-				
-				driveDeviceStruct.deviceName = entityHeader.getDeviceType() + "_" + entityHeader.getLineID() + "_" + entityHeader.getMachineID() + "_" + entityHeader.getDeviceID();
-				
-				driveDeviceStruct.devicePort = entityHeader.getCoapPortNumber();
-				
-				HMIMachine hmiMachine = hmiMachineMap.get(entityHeader.getMachineID());
-				
-				hmiMachine.getDriveDevices().add(driveDeviceStruct);
-			}
-            
-            // Vibration sensors
-            if(entityHeader.getDeviceType().equals("vibration")) {
-				
-				DeviceStruct vibrationDeviceStruct = new DeviceStruct();
-				
-				vibrationDeviceStruct.deviceName = entityHeader.getDeviceType() + "_" + entityHeader.getLineID() + "_" + entityHeader.getMachineID() + "_" + entityHeader.getDeviceID();
-				
-				vibrationDeviceStruct.devicePort = entityHeader.getCoapPortNumber();
-				
-				HMIMachine hmiMachine = hmiMachineMap.get(entityHeader.getMachineID());
-				
-				hmiMachine.getSensorDevices().add(vibrationDeviceStruct);
-			}
-            
-		}
+		System.out.println("Dimensione mappa: " + this.hmiMonilineMap.size());
+		
+	
         
         // Stampo Map che identifica tutte le macchine della linea in esame
-        Iterator <Integer> it = hmiMachineMap.keySet().iterator();
+        Iterator <Integer> it = hmiMonilineMap.keySet().iterator();
         while(it.hasNext()) {
         	
         	int key = it.next();
         	
-        	System.out.println("-------------- Machine " + key + " --------------------");
+        	System.out.println("-------------- Line " + key + " --------------------");
         	
-        	HMIMachine hmiMachine = hmiMachineMap.get(key);
+        	HMIMoniline hmiMoniline = hmiMonilineMap.get(key);
         	
-        	hmiMachine.clientBind();
-        	
-        	System.out.println("PLC macchina: "+ key + " namePLC: " + hmiMachine.getPlcDevice().deviceName);
-        	System.out.println("Energy macchina: "+ key + " nameEnergy: " + hmiMachine.getEnergyDevice().deviceName);
-        	System.out.println("Reject macchina: "+ key + " nameReject: " + hmiMachine.getDischargeDevice().deviceName);
-        	
-        	// Machine drives
-        	ArrayList<DeviceStruct> drives = hmiMachine.getDriveDevices();
-        	Iterator<DeviceStruct> iteratorDevices = drives.iterator();
-        	
-        	while(iteratorDevices.hasNext()) {
-        		
-        		DeviceStruct drive = iteratorDevices.next();
-        		System.out.println("Drive macchina: "+ key + " nameDrive: " + drive.deviceName);
-        		
-        	}
-        	
+        	hmiMoniline.clientBind();
         	
         	// Per ogni macchina avvio un thread di lettura e uno di scrittura
         	// Per ogni HMIMachine contenuto nella mappa allora avvio un thread per la scrittura e uno per la lettura
@@ -267,8 +172,8 @@ public class HmiProduction{
 	}
 	
 	
-	public HashMap<Integer, HMIMachine> getHmiMachineMap() {
-		return hmiMachineMap;
+	public HashMap<Integer, HMIMoniline> getHmiMonilineMap() {
+		return hmiMonilineMap;
 	}
 
 	public static void main(String[] args) {

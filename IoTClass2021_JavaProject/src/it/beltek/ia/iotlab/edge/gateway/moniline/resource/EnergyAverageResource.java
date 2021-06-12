@@ -54,7 +54,9 @@ public class EnergyAverageResource extends CoapResource{
 		
 		Gson energyAverageSerialize = gsonBuilder.enableComplexMapKeySerialization().create();	
 		
-		this.measures = energyAverageSerialize.toJson(this.monilineGateway.getClass());
+		this.measures = energyAverageSerialize.toJson(this.monilineGateway.getEnergyAverage());
+		
+		System.out.print("Chaimata get risorsa media energia: " + this.measures);
 		
 		
 	}

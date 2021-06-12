@@ -52,10 +52,11 @@ public class MachinesStateAverageResource extends CoapResource{
 		// JSON serialization
 		GsonBuilder gsonBuilder = new GsonBuilder().serializeSpecialFloatingPointValues();
 		
-		Gson energyAverageSerialize = gsonBuilder.enableComplexMapKeySerialization().create();	
+		Gson plcAverageSerialize = gsonBuilder.enableComplexMapKeySerialization().create();	
 		
-		// Da cambiare
-		this.measures = energyAverageSerialize.toJson(this.monilineGateway.getEnergyAverage());
+		this.measures = plcAverageSerialize.toJson(this.monilineGateway.getPlcAverageList());
+		
+		System.out.print("Chaimata get risorsa media PLC: " + this.measures);
 		
 		
 	}

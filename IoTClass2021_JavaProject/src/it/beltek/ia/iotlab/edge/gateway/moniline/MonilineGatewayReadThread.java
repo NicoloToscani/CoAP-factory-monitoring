@@ -145,7 +145,6 @@ public class MonilineGatewayReadThread implements Runnable {
 	     	    
 	     	    
 		        // Energy average increment values
-	     	   
 		        this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().I_Avg = this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().I_Avg + hmiMachine.getPm3200().I_Avg;
 		        this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().LL_Avg = this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().LL_Avg + hmiMachine.getPm3200().LL_Avg;
 		        this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().LN_Avg = this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().LN_Avg + hmiMachine.getPm3200().LN_Avg;
