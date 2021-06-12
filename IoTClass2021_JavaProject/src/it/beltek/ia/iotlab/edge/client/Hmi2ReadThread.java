@@ -64,8 +64,8 @@ public class Hmi2ReadThread implements Runnable {
 	        
 	        	HMIMoniline hmiMoniline = this.hmi2ReadThread.hmiProduction.getHmiMonilineMap().get(key);
 	        	
-	        hmiMoniline.readEnergyAverage();
-	        hmiMoniline.readPlcAverage();
+	            hmiMoniline.readEnergyAverage();
+	            hmiMoniline.readPlcAverage();
 	        	
 	        }
 	        
@@ -79,6 +79,18 @@ public class Hmi2ReadThread implements Runnable {
 	     	    
 	     	    System.out.println("-------------- Line " + key + " --------------------");
 	     	    
+	     	    int plcListSize = hmiMoniline.getPlcAverage().size();
+	     	    
+	     	    for(int i = 0; i < plcListSize; i++) {
+	     	    	
+	     	    	System.out.println("---------- PLC's ----------");
+					System.out.println("PLC lineID: " + hmiMoniline.getPlcAverage().get(i).lineID);
+					System.out.println("PLC machineID: " + hmiMoniline.getPlcAverage().get(i).machineID);
+					System.out.println("PLC state: " + hmiMoniline.getPlcAverage().get(i).state);
+	     	    		
+	     	    }
+	     	   
+	     	    
 		        System.out.println("---------- ENERGY ----------");
 		        System.out.println("LL_Avg: " + hmiMoniline.getEnergyAverage().LL_Avg + " " + hmiMoniline.getEnergyAverage().voltageUnitMeasure);
 		        System.out.println("I_Avg: " + hmiMoniline.getEnergyAverage().I_Avg + " " + hmiMoniline.getEnergyAverage().currentUnitMeasure);
@@ -90,10 +102,7 @@ public class Hmi2ReadThread implements Runnable {
 				System.out.println("Frequency: " + hmiMoniline.getEnergyAverage().Frequency + " " + hmiMoniline.getEnergyAverage().frequencyUnitMeasure);
 				System.out.println("Active_power_Import_Total: " + hmiMoniline.getEnergyAverage().Active_power_imp_total + " " + hmiMoniline.getEnergyAverage().totalActivePowerUnitMeasure);
 				
-				System.out.println("");
-				System.out.println("PLC lineID: " + hmiMoniline.getPlcAverage().get(key-1).lineID);
-				System.out.println("PLC machineID: " + hmiMoniline.getPlcAverage().get(key-1).machineID);
-				System.out.println("PLC state: " + hmiMoniline.getPlcAverage().get(key-1).state);
+				
 	     }
 	       
 		}

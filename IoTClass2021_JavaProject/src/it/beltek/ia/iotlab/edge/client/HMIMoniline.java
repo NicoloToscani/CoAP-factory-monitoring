@@ -133,11 +133,14 @@ public class HMIMoniline {
 					
 		Gson gsonEnergyAverage = new Gson();
 		
+		System.out.println("Valore oggetto energia lettura: " + coapResponseEnergyAverage.getResponseText());
+		
 		this.setEnergyAverage(gsonEnergyAverage.fromJson(coapResponseEnergyAverage.getResponseText(), EnergyAverage.class));
 	
 	}
 	
-    public void readPlcAverage() {
+    @SuppressWarnings("unchecked")
+	public void readPlcAverage() {
     	
     	System.out.println("Chiamato readPLCAverage");
 		

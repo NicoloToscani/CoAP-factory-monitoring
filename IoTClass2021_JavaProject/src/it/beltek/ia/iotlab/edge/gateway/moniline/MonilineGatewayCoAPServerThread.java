@@ -36,7 +36,7 @@ public class MonilineGatewayCoAPServerThread extends CoAPServer implements Runna
 		
 		this.machineStateEnergyReasource = machinesStateAverageResource;
 		
-		this.endpoints = (java.util.List<Endpoint>) coapServer.getEndpoints();
+		//this.endpoints = (java.util.List<Endpoint>) coapServer.getEndpoints();
 		
 		
 	}

@@ -266,11 +266,11 @@ public class MonilineGateway{
         		System.out.println("Sensor machine: "+ key + " nameSensor: " + sensor.deviceName);
         		
         	}
-        	
-    		this.pool.execute(new MonilineGatewayReadThread(this));
-    		this.pool.execute(new MonilineGatewayCoAPServerThread(this, energyAverageResource, machinesStateAverageResource, this.coapServerPort));
-        	
+                	
         }
+        
+        this.pool.execute(new MonilineGatewayReadThread(this));
+		this.pool.execute(new MonilineGatewayCoAPServerThread(this, energyAverageResource, machinesStateAverageResource, this.coapServerPort));
         
 	}
 	
