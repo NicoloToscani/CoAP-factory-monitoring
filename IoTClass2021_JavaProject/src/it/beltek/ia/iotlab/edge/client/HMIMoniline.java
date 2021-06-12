@@ -11,6 +11,7 @@ import org.eclipse.californium.core.coap.Request;
 import org.eclipse.californium.core.coap.CoAP.Code;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import it.beltek.ia.iotlab.edge.gateway.device.BannerQm42vt2;
 import it.beltek.ia.iotlab.edge.gateway.device.Drive;
@@ -33,7 +34,7 @@ public class HMIMoniline {
 	
 	// Devices
 	private EnergyAverage energyAverage;
-	private String plcAverage;
+	private List<PlcAverage> plcAverage;
 
 	
 	public HMIMoniline() {
@@ -59,7 +60,7 @@ public class HMIMoniline {
 	}
 
 
-	public String getPlcAverage() {
+	public List<PlcAverage> getPlcAverage() {
 		return plcAverage;
 	}
 
@@ -67,7 +68,7 @@ public class HMIMoniline {
 		this.energyAverage = energyAverage;
 	}
 
-	public void setPlcAverage(String plcAverage) {
+	public void setPlcAverage(List<PlcAverage> plcAverage) {
 		this.plcAverage = plcAverage;
 	}
 	
@@ -147,7 +148,7 @@ public class HMIMoniline {
 					
 		Gson gsonPlcAverage = new Gson();
 		
-		this.setPlcAverage(gsonPlcAverage.fromJson(coapResponseGetPlcAverage.getResponseText(), String.class));
+		this.setPlcAverage((List<PlcAverage>) gsonPlcAverage.fromJson(coapResponseGetPlcAverage.getResponseText(), new TypeToken<List<PlcAverage>>(){}.getType()));
 	
 	}
     

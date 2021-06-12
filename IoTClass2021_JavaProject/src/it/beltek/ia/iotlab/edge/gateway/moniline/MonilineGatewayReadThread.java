@@ -141,6 +141,8 @@ public class MonilineGatewayReadThread implements Runnable {
 	     	    // PLC state 
 	     	    PlcAverage plcAverage = new PlcAverage();
 	     	    plcAverage.state = hmiMachine.getPlc().state;
+	     	    plcAverage.machineID = key;
+	     	    plcAverage.lineID = this.monilineGatewayReadThread.monilineGateway.getLineNumber();
 	     	    this.monilineGatewayReadThread.monilineGateway.getPlcAverageList().add(plcAverage);
 	     	    
 	     	    

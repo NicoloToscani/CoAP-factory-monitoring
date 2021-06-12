@@ -90,8 +90,10 @@ public class Hmi2ReadThread implements Runnable {
 				System.out.println("Frequency: " + hmiMoniline.getEnergyAverage().Frequency + " " + hmiMoniline.getEnergyAverage().frequencyUnitMeasure);
 				System.out.println("Active_power_Import_Total: " + hmiMoniline.getEnergyAverage().Active_power_imp_total + " " + hmiMoniline.getEnergyAverage().totalActivePowerUnitMeasure);
 				
-				System.out.println("PLC: " + hmiMoniline.getPlcAverage());
-				
+				System.out.println("");
+				System.out.println("PLC lineID: " + hmiMoniline.getPlcAverage().get(key-1).lineID);
+				System.out.println("PLC machineID: " + hmiMoniline.getPlcAverage().get(key-1).machineID);
+				System.out.println("PLC state: " + hmiMoniline.getPlcAverage().get(key-1).state);
 	     }
 	       
 		}

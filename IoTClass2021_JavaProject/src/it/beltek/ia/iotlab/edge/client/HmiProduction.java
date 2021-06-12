@@ -121,7 +121,7 @@ public class HmiProduction{
 				
 				energyAverageDeviceStruct.devicePort = entityHeader.getCoapPortNumber();
 				
-				plcAverageDeviceStruct.deviceName = "machine_state_average_" + entityHeader.getLineID();
+				plcAverageDeviceStruct.deviceName = "machines_state_average_" + entityHeader.getLineID();
 				
 				plcAverageDeviceStruct.devicePort = entityHeader.getCoapPortNumber();
 				
