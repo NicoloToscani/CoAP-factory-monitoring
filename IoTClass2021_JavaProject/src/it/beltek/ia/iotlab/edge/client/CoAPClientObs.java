@@ -1,5 +1,7 @@
 package it.beltek.ia.iotlab.edge.client;
 
+import java.util.Date;
+
 import org.eclipse.californium.core.CoapClient;
 import org.eclipse.californium.core.CoapHandler;
 import org.eclipse.californium.core.CoapResponse;
@@ -12,7 +14,7 @@ public class CoAPClientObs extends CoapClient {
 	
 	private CoapClient coapClient;
 	
-	private String url = "coap://localhost:5687/reject1";
+	private String url = "coap://localhost:5662/reject_1_1_Velocity";
 	
 	Request request = new Request(Code.GET);
 	
@@ -31,29 +33,26 @@ public class CoAPClientObs extends CoapClient {
 			@Override
 			public void onLoad(CoapResponse response) {
 				
-				System.out.println(response.getResponseText());
+				System.out.println("Line velocity: " + response.getResponseText() + new Date());
 				
 			}
 			
 			@Override
 			public void onError() {
-				// TODO Auto-generated method stub
+				System.out.print("reject velocity error");
 				
 			}
 		});
 		
 		while(true) {
 		try {
-			Thread.sleep(3000);
+			Thread.sleep(10000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 		}
-		
-		
-		
 		
 	
 	}

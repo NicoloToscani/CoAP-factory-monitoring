@@ -38,7 +38,7 @@ public class Hmi2ReadThread implements Runnable {
 	@Override
 	public void run() {
 		
-		System.out.println("Hmi1ReadThread start at " + new Date());
+		System.out.println("Hmi2ReadThread start at " + new Date());
 		
 		requestTimer.schedule(new RequestTimerTask(this), 0, 5000);  // 5 s
 		
@@ -110,21 +110,6 @@ public class Hmi2ReadThread implements Runnable {
 	}
 	
 	
-	private class ObsTimerTask extends TimerTask{
-		
-		Hmi2ReadThread rejectFieldbusThread;
-		
-		public ObsTimerTask(Hmi2ReadThread rejectFieldbusThread) {
-			
-			this.rejectFieldbusThread = rejectFieldbusThread;
-		}
 
-		@Override
-		public void run() {
-			
-			
-		}
-		
-	}
 
 }

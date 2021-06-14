@@ -26,14 +26,16 @@ public class HmiProduction{
 	
 	private ThreadPoolExecutor pool;
 	 
-	private static final int COREPOOL = 2; 
-    private static final int MAXPOOL = 2;
+	private static final int COREPOOL = 10; 
+    private static final int MAXPOOL = 10;
     private static final int IDLETIME = 5000;
     private static final int SLEEPTIME = 1000;
 	
 	private int lineNumber;
 	private ArrayList<EntityHeader> deviceLineList;
 	private HashMap<Integer, HMIMoniline> hmiMonilineMap;
+	private ArrayList<HMIReject> hmiRejectsList;
+	
 	
 	private CoapClient coapClientDeviceList;
 	
@@ -53,6 +55,8 @@ public class HmiProduction{
 		 this.deviceLineList = new ArrayList<>();
 		
 		 this.hmiMonilineMap = new HashMap<>();
+		 
+		 this.hmiRejectsList = new ArrayList<>();
 		
 	}
 	
@@ -103,6 +107,7 @@ public class HmiProduction{
 			
 			EntityHeader entityHeader = (EntityHeader)deviceListIterator.next();
 			
+			// Moniline device
 			if(entityHeader.getDeviceType().equals("moniline")) {
 				
 				HMIMoniline hmiMoniline = new HMIMoniline();
@@ -135,6 +140,23 @@ public class HmiProduction{
 				
 			}
 			
+			// Reject device
+			if(entityHeader.getDeviceType().equals("reject")) {
+				
+				HMIReject hmiReject = new HMIReject();
+				
+				DeviceStruct rejectDeviceStruct = new DeviceStruct();
+				
+				rejectDeviceStruct.deviceName = entityHeader.getDeviceType() + "_" + entityHeader.getLineID() + "_" + entityHeader.getMachineID();
+				
+				rejectDeviceStruct.devicePort = entityHeader.getCoapPortNumber();
+				
+				hmiReject.setRejectDevice(rejectDeviceStruct);
+				
+				this.hmiRejectsList.add(hmiReject);
+				
+			}
+			
 		}
 		
 		
@@ -154,12 +176,33 @@ public class HmiProduction{
         	
         	hmiMoniline.clientBind();
         	
-        	// Per ogni macchina avvio un thread di lettura e uno di scrittura
-        	// Per ogni HMIMachine contenuto nella mappa allora avvio un thread per la scrittura e uno per la lettura
     		this.pool.execute(new Hmi2ReadThread(this));
     		this.pool.execute(new Hmi2WriteThread(this));
         	
         }
+        
+        // Reject network devices
+        Iterator<HMIReject> hmiIterator = this.hmiRejectsList.iterator();
+        
+        System.out.println("Reject list: " + this.hmiRejectsList.size());
+        
+        int count = 0;
+        while(hmiIterator.hasNext()) {
+        	
+        	HMIReject hmiReject = hmiIterator.next();
+        	
+        	hmiReject.clientBind();
+        	
+        	// Run multi-thread rejects resource observing
+            //Hmi2ReadObserveThread(this, hmiReject).run();
+        	this.pool.execute(new Hmi2ReadObserveThread(this, hmiReject));
+            
+            System.out.println(hmiReject.getRejectDevice().deviceName);
+            
+            count++;
+        }
+        
+        System.out.println("Conteggio chiamate: " +  count);
         
 	}
 	

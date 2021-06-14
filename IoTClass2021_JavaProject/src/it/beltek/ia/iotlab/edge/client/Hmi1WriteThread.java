@@ -45,7 +45,7 @@ public class Hmi1WriteThread implements Runnable {
 	public void run() {
 		
 		// Command request example: machineID_code_value_deviceID
-		System.out.println("Hmi1ReadThread start at " + new Date());
+		System.out.println("Hmi1WriteThread start at " + new Date());
 		System.out.println("----- Line " + this.hmi1Maintenance.getLineNumber() + " -----");
 		System.out.println("Command list: ");
 		System.out.println("0: START");

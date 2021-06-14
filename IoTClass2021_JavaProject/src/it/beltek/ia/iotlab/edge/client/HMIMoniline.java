@@ -27,14 +27,17 @@ public class HMIMoniline {
 	private DeviceStruct energyAverageDevice;
 	private DeviceStruct plcAverageDevice;
 	private DeviceStruct monilineDevice;
+	
 
 	// Coap clients
 	private CoapClient coapClientEnergyAverage;
 	private CoapClient coapClientPlcAverage;
 	
+	
 	// Devices
 	private EnergyAverage energyAverage;
 	private List<PlcAverage> plcAverage;
+	
 
 	
 	public HMIMoniline() {

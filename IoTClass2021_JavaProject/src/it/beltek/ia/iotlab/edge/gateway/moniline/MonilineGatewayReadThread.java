@@ -204,21 +204,6 @@ public class MonilineGatewayReadThread implements Runnable {
 	}
 	
 	
-	private class ObsTimerTask extends TimerTask{
-		
-		MonilineGatewayReadThread rejectFieldbusThread;
-		
-		public ObsTimerTask(MonilineGatewayReadThread rejectFieldbusThread) {
-			
-			this.rejectFieldbusThread = rejectFieldbusThread;
-		}
-
-		@Override
-		public void run() {
-			
-			
-		}
-		
-	}
+	
 
 }
