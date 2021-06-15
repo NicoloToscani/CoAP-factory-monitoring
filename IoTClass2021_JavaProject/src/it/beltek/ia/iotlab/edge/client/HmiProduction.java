@@ -159,11 +159,8 @@ public class HmiProduction{
 			
 		}
 		
-		
 		System.out.println("Dimensione mappa: " + this.hmiMonilineMap.size());
 		
-	
-        
         // Stampo Map che identifica tutte le macchine della linea in esame
         Iterator <Integer> it = hmiMonilineMap.keySet().iterator();
         while(it.hasNext()) {
@@ -186,7 +183,6 @@ public class HmiProduction{
         
         System.out.println("Reject list: " + this.hmiRejectsList.size());
         
-        int count = 0;
         while(hmiIterator.hasNext()) {
         	
         	HMIReject hmiReject = hmiIterator.next();
@@ -199,10 +195,7 @@ public class HmiProduction{
             
             System.out.println(hmiReject.getRejectDevice().deviceName);
             
-            count++;
         }
-        
-        System.out.println("Conteggio chiamate: " +  count);
         
 	}
 	

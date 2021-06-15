@@ -76,10 +76,6 @@ public class Hmi2ReadObserveThread implements Runnable {
 			
 		}
 		
-		
-		
-		
 	}
 	
-
 }

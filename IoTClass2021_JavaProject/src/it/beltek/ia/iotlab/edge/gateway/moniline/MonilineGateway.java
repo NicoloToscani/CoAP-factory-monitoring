@@ -1,6 +1,5 @@
 package it.beltek.ia.iotlab.edge.gateway.moniline;
 
-import java.awt.List;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -25,6 +24,8 @@ import it.beltek.ia.iotlab.edge.database.EntityHeader;
 
 import it.beltek.ia.iotlab.edge.gateway.moniline.resource.EnergyAverage;
 import it.beltek.ia.iotlab.edge.gateway.moniline.resource.EnergyAverageResource;
+import it.beltek.ia.iotlab.edge.gateway.moniline.resource.LineVelocityAverage;
+import it.beltek.ia.iotlab.edge.gateway.moniline.resource.LineVelocityAverageResource;
 import it.beltek.ia.iotlab.edge.gateway.moniline.resource.MachinesStateAverageResource;
 import it.beltek.ia.iotlab.edge.gateway.moniline.resource.PlcAverage;
 
@@ -46,7 +47,7 @@ public class MonilineGateway{
 	private CoapClient coapClientDeviceList;
 	
     private CoapClient repositoryCoapClient;
-    private String urlRepository = "coap://localhost:5600/master_repository";
+	private String urlRepository = "coap://localhost:5600/master_repository";
 		
 	// URI MasterRepository
 	private String masterRepositoryUri = "coap://localhost:5600/master_repository_list";
@@ -56,10 +57,12 @@ public class MonilineGateway{
 	// Average values
 	private EnergyAverage energyAverage;
 	private ArrayList<PlcAverage> plcAverageList;
+	private LineVelocityAverage lineVelocityAverage;
 	
 	// Resources
 	private EnergyAverageResource energyAverageResource;
 	private MachinesStateAverageResource machinesStateAverageResource;
+	private LineVelocityAverageResource lineVelocityAverageResource;
 
 	public MonilineGateway(int coapServerPort, int lineID) {
 		
@@ -81,9 +84,14 @@ public class MonilineGateway{
 		 
 		 this.plcAverageList = new ArrayList<>();
 		 
+		 this.lineVelocityAverage = new LineVelocityAverage();
+		 
 		 this.energyAverageResource = new EnergyAverageResource("energy_average_" + this.lineNumber, this, String.valueOf(lineID));
 		
 		 this.machinesStateAverageResource = new MachinesStateAverageResource("machines_state_average_" + this.lineNumber, this, String.valueOf(lineID));
+		 
+		 this.lineVelocityAverageResource = new LineVelocityAverageResource("line_velocity_average_" + this.lineNumber, this, String.valueOf(lineID));
+		 
 	}
 	
 	
@@ -270,7 +278,7 @@ public class MonilineGateway{
         }
         
         this.pool.execute(new MonilineGatewayReadThread(this));
-		this.pool.execute(new MonilineGatewayCoAPServerThread(this, energyAverageResource, machinesStateAverageResource, this.coapServerPort));
+		this.pool.execute(new MonilineGatewayCoAPServerThread(this, energyAverageResource, machinesStateAverageResource, lineVelocityAverageResource, this.coapServerPort));
         
 	}
 	
@@ -323,6 +331,10 @@ public class MonilineGateway{
 	
 	public void setPlcAverageList(ArrayList<PlcAverage> plcAverageList) {
 		this.plcAverageList = plcAverageList;
+	}
+	
+	 public LineVelocityAverage getLineVelocityAverage() {
+			return lineVelocityAverage;
 	}
 	
 	// Master repository registration

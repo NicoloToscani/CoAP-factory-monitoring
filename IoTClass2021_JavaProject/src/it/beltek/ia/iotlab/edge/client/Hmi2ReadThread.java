@@ -66,6 +66,7 @@ public class Hmi2ReadThread implements Runnable {
 	        	
 	            hmiMoniline.readEnergyAverage();
 	            hmiMoniline.readPlcAverage();
+	            hmiMoniline.readLineVelocityAverage();
 	        	
 	        }
 	        
@@ -102,6 +103,9 @@ public class Hmi2ReadThread implements Runnable {
 				System.out.println("Frequency: " + hmiMoniline.getEnergyAverage().Frequency + " " + hmiMoniline.getEnergyAverage().frequencyUnitMeasure);
 				System.out.println("Active_power_Import_Total: " + hmiMoniline.getEnergyAverage().Active_power_imp_total + " " + hmiMoniline.getEnergyAverage().totalActivePowerUnitMeasure);
 				
+				
+				System.out.println("---------- LINE VELOCITY ----------");
+				System.out.println("Line velocity average: " + hmiMoniline.getLineVelocityAverage().lineVelocityAverage + " unit/min");
 				
 	     }
 	       

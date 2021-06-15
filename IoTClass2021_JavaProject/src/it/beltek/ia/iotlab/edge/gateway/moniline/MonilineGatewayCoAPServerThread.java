@@ -1,6 +1,5 @@
 package it.beltek.ia.iotlab.edge.gateway.moniline;
 
-import java.awt.List;
 import java.util.Date;
 import java.util.Iterator;
 
@@ -20,11 +19,13 @@ public class MonilineGatewayCoAPServerThread extends CoAPServer implements Runna
 	
 	private CoapResource machineStateEnergyReasource;
 	
+	private CoapResource lineVelocityAverageResource;
+	
 	private int coapServerPort;
 	
 	java.util.List<Endpoint> endpoints;
 	
-	public MonilineGatewayCoAPServerThread(MonilineGateway monilineGateway, CoapResource energyAverageResource, CoapResource machinesStateAverageResource, int coapServerPort) {
+	public MonilineGatewayCoAPServerThread(MonilineGateway monilineGateway, CoapResource energyAverageResource, CoapResource machinesStateAverageResource, CoapResource lineVelocityAverageResource, int coapServerPort) {
 		
 		this.monilineGateway = monilineGateway;
 		
@@ -36,19 +37,20 @@ public class MonilineGatewayCoAPServerThread extends CoAPServer implements Runna
 		
 		this.machineStateEnergyReasource = machinesStateAverageResource;
 		
+		this.lineVelocityAverageResource = lineVelocityAverageResource;
+		
 		//this.endpoints = (java.util.List<Endpoint>) coapServer.getEndpoints();
 		
 		
 	}
 	
 	
-
 	@Override
 	public void run() {
 		
 		System.out.println("monileGatewayCoAPServerThread start at " + new Date());
 		
-		this.coapServer.add(this.energyAverageresource, this.machineStateEnergyReasource);
+		this.coapServer.add(this.energyAverageresource, this.machineStateEnergyReasource, this.lineVelocityAverageResource);
 		
 		this.coapServer.start();
 		

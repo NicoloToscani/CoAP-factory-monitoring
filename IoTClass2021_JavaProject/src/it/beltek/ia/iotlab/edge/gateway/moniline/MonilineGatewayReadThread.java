@@ -157,7 +157,11 @@ public class MonilineGatewayReadThread implements Runnable {
 		        this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().Frequency = this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().Frequency + hmiMachine.getPm3200().Frequency;
 		        this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().Active_power_imp_total = this.monilineGatewayReadThread.monilineGateway.getEnergyAverage().Active_power_imp_total + hmiMachine.getPm3200().Active_power_imp_total;
 		        
-	     }
+		        
+		        // Line velocity average values
+		        this.monilineGatewayReadThread.monilineGateway.getLineVelocityAverage().lineVelocityAverage = this.monilineGatewayReadThread.monilineGateway.getLineVelocityAverage().lineVelocityAverage + hmiMachine.getWeightSystem().lineVelocity;  
+	
+	     	}
 	     	
 	     	System.out.println("Map size: " + this.monilineGatewayReadThread.monilineGateway.getHmiMachineMap().size());
 	     	
@@ -199,6 +203,14 @@ public class MonilineGatewayReadThread implements Runnable {
 				indexPlcAverage++;
 				
 			}
+			
+			
+            System.out.println("---------- LINE VELOCITY AVERAGE ----------");
+			
+			this.monilineGatewayReadThread.monilineGateway.getLineVelocityAverage().lineVelocityAverage = this.monilineGatewayReadThread.monilineGateway.getLineVelocityAverage().lineVelocityAverage / (this.monilineGatewayReadThread.monilineGateway.getHmiMachineMap().size());
+			
+			System.out.println("Line velocity average: " + this.monilineGatewayReadThread.monilineGateway.getLineVelocityAverage().lineVelocityAverage + "unit/min");
+			
 		}
 
 	}
