@@ -353,7 +353,7 @@ public class HMIMachine {
 	    Gson gsonDrive = new Gson();
 	    String driveSerialize = gsonDrive.toJson(frequencyRequest);
 	    
-	    CoapResponse coapResponseDrivePut = this.getCoapCLientDrives().get(index).post(driveSerialize, MediaTypeRegistry.APPLICATION_JSON);
+	    CoapResponse coapResponseDrivePost = this.getCoapCLientDrives().get(index).post(driveSerialize, MediaTypeRegistry.APPLICATION_JSON);
 	    	
     }
     

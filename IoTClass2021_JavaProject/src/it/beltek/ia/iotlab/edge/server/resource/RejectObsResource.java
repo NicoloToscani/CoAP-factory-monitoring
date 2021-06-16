@@ -10,6 +10,7 @@ import com.google.gson.GsonBuilder;
 
 import it.beltek.ia.iotlab.edge.gateway.Pm3200Gateway;
 import it.beltek.ia.iotlab.edge.gateway.RejectGateway;
+import it.beltek.ia.iotlab.edge.gateway.device.components.JsonRequest;
 
 
 public class RejectObsResource extends CoapResource{
@@ -21,6 +22,10 @@ public class RejectObsResource extends CoapResource{
 	String measures;
 	
 	private int lineVelocity;
+	
+    String postResource;
+	
+	JsonRequest jsonRequest; 
 	
 	
 
@@ -54,6 +59,33 @@ public class RejectObsResource extends CoapResource{
 		System.out.println("Valore risorsa della risorsa: " + this.lineVelocity);
 		
 		exchange.respond(ResponseCode.CONTENT, Integer.toString(lineVelocity), MediaTypeRegistry.TEXT_PLAIN);
+	}
+	
+	
+	@Override
+	public void handlePOST(CoapExchange exchange) {
+		
+		       // Devo differenziare i valori che gli passo se setpoint peso o setpoint velocità
+				this.postResource = exchange.getRequestText();
+				
+		        Gson gson = new Gson();
+				
+				JsonRequest jRequest = gson.fromJson(this.postResource, JsonRequest.class);
+				
+				// Set weight set point value
+				if(jRequest.getField().equals("setpoint")) {
+					
+					this.rejectGateway.getRejectModbusService().getWeightSystem().setpoint = Float.parseFloat(jRequest.getValue());
+					
+					System.out.println("Weight set point: " + this.rejectGateway.getRejectModbusService().getWeightSystem().setpoint);
+				}
+				
+				else if(jRequest.getField().equals("lineVelocitySetpoint")) {
+					
+					this.rejectGateway.getRejectModbusService().getWeightSystem().lineVelocitySetpoint = Integer.parseInt(jRequest.getValue());
+					
+					System.out.println("lineVelocitySetpoint: " + this.rejectGateway.getRejectModbusService().getWeightSystem().setpoint);
+				}
 	}
 	
 	

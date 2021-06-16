@@ -55,6 +55,7 @@ public class RejectCoAPServerThread extends CoAPServer implements Runnable{
 		while(true) {
 			
 			System.out.println("Totale pezzi prodotti: " + this.rejectGateway.getRejectModbusService().getWeightSystem().totalCount);
+			System.out.println("Set point velocità lineai: " + this.rejectGateway.getRejectModbusService().getWeightSystem().lineVelocitySetpoint);
 			
 			try {
 				Thread.sleep(3000);

@@ -28,6 +28,7 @@ public class HMIReject {
 
 	// Coap client
 	private CoapClient coapClientReject;
+
 	
 	// Device
 	private WeightSystem weightSystemReject;
@@ -85,4 +86,36 @@ public class HMIReject {
 	}
 	
 	
+	public void writeLineVelocitySetpoint(String lineVelocitySetpoint) {
+		
+        JsonRequest lineVelocityRequest = new JsonRequest();
+    	
+    	// PUT drive velocity
+        lineVelocityRequest.setField("lineVelocitySetpoint");
+        lineVelocityRequest.setValue(lineVelocitySetpoint);
+	    
+	    Gson gsonDrive = new Gson();
+	    String lineVelocitySerialize = gsonDrive.toJson(lineVelocityRequest);
+	    
+	    CoapResponse coapResponseLineVelocityPost = this.getCoapClientReject().post(lineVelocitySerialize, MediaTypeRegistry.APPLICATION_JSON);
+		
+	}
+	
+    public void writeThrSetpoint(String thrSetpoint) {
+    	
+        JsonRequest thrSetpointRequest = new JsonRequest();
+    	
+    	// PUT drive velocity
+        thrSetpointRequest.setField("setpoint");
+        thrSetpointRequest.setValue(thrSetpoint);
+	    
+	    Gson gsonDrive = new Gson();
+	    String thrSetpointSerialize = gsonDrive.toJson(thrSetpointRequest);
+	    
+	    CoapResponse coapResponseThrSetpointPost = this.getCoapClientReject().post(thrSetpointSerialize, MediaTypeRegistry.APPLICATION_JSON);
+		
+	}
+	
 }
+	
+	

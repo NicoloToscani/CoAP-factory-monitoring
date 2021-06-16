@@ -52,6 +52,8 @@ public class HMIMoniline {
 		this.energyAverage = new EnergyAverage();
 		
 		this.lineVelocityAverage = new LineVelocityAverage();
+		
+		this.lineVelocityAverageDevice = new DeviceStruct();
 				
 	}
 		

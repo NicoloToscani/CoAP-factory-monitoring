@@ -37,6 +37,8 @@ public class HmiProduction{
 	private ArrayList<HMIReject> hmiRejectsList;
 	
 	
+	
+
 	private CoapClient coapClientDeviceList;
 	
 	// URI MasterRepository
@@ -210,6 +212,10 @@ public class HmiProduction{
 	
 	public HashMap<Integer, HMIMoniline> getHmiMonilineMap() {
 		return hmiMonilineMap;
+	}
+	
+	public ArrayList<HMIReject> getHmiRejectsList() {
+		return hmiRejectsList;
 	}
 
 	public static void main(String[] args) {
