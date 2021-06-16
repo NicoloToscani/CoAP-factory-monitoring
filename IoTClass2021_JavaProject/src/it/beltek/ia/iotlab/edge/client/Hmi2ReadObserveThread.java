@@ -54,7 +54,8 @@ public class Hmi2ReadObserveThread implements Runnable {
 			@Override
 			public void onLoad(CoapResponse response) {
 				System.out.println("--- Resource update ---");
-				System.out.println("Line velocity " + hmiReject.getRejectDevice().deviceName + " : " + response.getResponseText() + " unit/min" );
+				System.out.println("Line velocity: " + hmiReject.getRejectDevice().deviceName + " : " + response.getResponseText() + " unit/min" );
+				
 				
 			}
 			

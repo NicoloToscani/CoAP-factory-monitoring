@@ -87,12 +87,12 @@ public class RejectFieldbusThread implements Runnable {
 			
 			this.rejectFieldbusThread.rejectGateway.getRejectModbusService().getWeightSystem().lineVelocity = this.rejectFieldbusThread.rejectGateway.getRejectModbusService().getWeightSystem().totalCount - this.rejectFieldbusThread.velocityStart;
 			
-			System.out.println("Line velocity: " + this.rejectFieldbusThread.rejectGateway.getRejectModbusService().getWeightSystemSimulate().lineVelocity + " unit/s");
+			System.out.println("Line velocity: " + this.rejectFieldbusThread.rejectGateway.getRejectModbusService().getWeightSystemSimulate().lineVelocity + " unit/min");
 			
 			this.rejectFieldbusThread.velocityStart = this.rejectFieldbusThread.rejectGateway.getRejectModbusService().getWeightSystemSimulate().totalCount;
 			
 			// Resourse update
-			this.rejectFieldbusThread.rejectGateway.getObsResource().setLineVelocity(this.rejectFieldbusThread.velocityStart);
+			this.rejectFieldbusThread.rejectGateway.getObsResource().setLineVelocity(this.rejectFieldbusThread.rejectGateway.getRejectModbusService().getWeightSystem().lineVelocity);
 			this.rejectFieldbusThread.rejectGateway.getObsResource().changed();
 			
 			

@@ -52,13 +52,16 @@ public class RejectObsResource extends CoapResource{
 	}
 
 	
-	// Ottengo la risorsa osservabile passondogli il valore quando il thread del server lo aggiorna ogni minuto
+	
 	@Override
 	public void handleGET(CoapExchange exchange) {
 		
 		System.out.println("Valore risorsa della risorsa: " + this.lineVelocity);
 		
+		// Single resource, if we want get total count change with JSON formatting object
 		exchange.respond(ResponseCode.CONTENT, Integer.toString(lineVelocity), MediaTypeRegistry.TEXT_PLAIN);
+		
+	
 	}
 	
 	

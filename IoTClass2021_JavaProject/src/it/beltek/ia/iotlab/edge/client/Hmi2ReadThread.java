@@ -107,6 +107,7 @@ public class Hmi2ReadThread implements Runnable {
 				System.out.println("---------- LINE VELOCITY ----------");
 				System.out.println("Line velocity average: " + hmiMoniline.getLineVelocityAverage().lineVelocityAverage + " unit/min");
 				
+				
 	     }
 	       
 		}

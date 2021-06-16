@@ -260,7 +260,7 @@ public class MonilineGateway{
         	while(iteratorDevices.hasNext()) {
         		
         		DeviceStruct drive = iteratorDevices.next();
-        		System.out.println("Drive macchina: "+ key + " nameDrive: " + drive.deviceName);
+        		System.out.println("Drive machine: "+ key + " nameDrive: " + drive.deviceName);
         		
         	}
         	

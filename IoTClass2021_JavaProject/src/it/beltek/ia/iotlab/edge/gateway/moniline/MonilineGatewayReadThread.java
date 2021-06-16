@@ -80,6 +80,9 @@ public class MonilineGatewayReadThread implements Runnable {
      	
      	    this.monilineGateway.getEnergyAverage().Active_power_imp_total = 0;
      	    
+     	    this.monilineGateway.getLineVelocityAverage().lineVelocityAverage = 0;
+     	    
+     	    
      	}
 		
 	}
@@ -209,7 +212,7 @@ public class MonilineGatewayReadThread implements Runnable {
 			
 			this.monilineGatewayReadThread.monilineGateway.getLineVelocityAverage().lineVelocityAverage = this.monilineGatewayReadThread.monilineGateway.getLineVelocityAverage().lineVelocityAverage / (this.monilineGatewayReadThread.monilineGateway.getHmiMachineMap().size());
 			
-			System.out.println("Line velocity average: " + this.monilineGatewayReadThread.monilineGateway.getLineVelocityAverage().lineVelocityAverage + "unit/min");
+			System.out.println("Line velocity average: " + this.monilineGatewayReadThread.monilineGateway.getLineVelocityAverage().lineVelocityAverage + " unit/min");
 			
 		}
 

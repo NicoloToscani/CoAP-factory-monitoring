@@ -279,18 +279,18 @@ public class HMIMachine {
 		// GET Reject
 		Request request = new Request(Code.GET);
 					
-		CoapResponse coapResponseGetReject = this.coapClientEnergy.advanced(request);
+		CoapResponse coapResponseGetReject = this.coapClientReject.advanced(request);
 					
 		Gson gsonReject = new Gson();
 		
 		this.setWeightSystem(gsonReject.fromJson(coapResponseGetReject.getResponseText(), WeightSystem.class));
+		
+		// System.out.println("Risposta readReject: " + coapResponseGetReject.getResponseText());
 	
 	}
     
     
     public void readDrives() {
-    	
-    	System.out.println("Chiamto lettura Drive coap");
     	
     	Iterator<CoapClient> coapIteratorDrive = coapCLientDrives.iterator();
     		

@@ -13,7 +13,7 @@ public class CoAPClientPm extends CoapClient {
 	private CoapClient coapClient;
 	
 	//String url = "coap://localhost:5562/.well-known/core";
-	private String url = "coap://localhost:5562/reject_1_1_Velocity";
+	private String url = "coap://localhost:5570/line_velocity_average_1";
 	
 	public CoAPClientPm() {
 		

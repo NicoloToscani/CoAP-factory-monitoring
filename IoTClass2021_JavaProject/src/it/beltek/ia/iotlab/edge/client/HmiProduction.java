@@ -120,6 +120,8 @@ public class HmiProduction{
 				
 				DeviceStruct plcAverageDeviceStruct = new DeviceStruct();
 				
+				DeviceStruct lineVelocityDeviceStruct = new DeviceStruct();
+				
 				monilineDeviceStruct.deviceName = entityHeader.getDeviceType() + "_" + entityHeader.getLineID();
 				
 				monilineDeviceStruct.devicePort = entityHeader.getCoapPortNumber();
@@ -132,11 +134,17 @@ public class HmiProduction{
 				
 				plcAverageDeviceStruct.devicePort = entityHeader.getCoapPortNumber();
 				
+				lineVelocityDeviceStruct.deviceName = "line_velocity_average_" + entityHeader.getLineID();
+				
+				lineVelocityDeviceStruct.devicePort = entityHeader.getCoapPortNumber();
+				
 				hmiMoniline.setMonilineDevice(monilineDeviceStruct);
 				
 				hmiMoniline.setPlcAverageDevice(plcAverageDeviceStruct);
 				
 				hmiMoniline.setEnergyAverageDevice(energyAverageDeviceStruct);
+				
+				hmiMoniline.setLineVelocityAverageDevice(lineVelocityDeviceStruct);
 				
 				this.hmiMonilineMap.put(entityHeader.getLineID(), hmiMoniline);  // Build HashMap with MONILINE device
 				
@@ -158,7 +166,6 @@ public class HmiProduction{
 				this.hmiRejectsList.add(hmiReject);
 				
 			}
-			
 		}
 		
 		System.out.println("Dimensione mappa: " + this.hmiMonilineMap.size());

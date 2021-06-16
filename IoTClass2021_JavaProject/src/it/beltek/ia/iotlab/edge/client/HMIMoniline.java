@@ -157,9 +157,7 @@ public class HMIMoniline {
 		
 		System.out.println("URI LineVelocityAverage: " + uriLineVelocityAverage);
 		
-		
-		
-      
+		this.copClientLineVelocityAverage = new CoapClient(uriLineVelocityAverage);
 	}
 	
 	public void readEnergyAverage() {
