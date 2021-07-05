@@ -5,4 +5,4 @@ Industrial object modelling using CoAP protocol and Californium framework
 ![factory-scenario](Factory_Scenario.png)
 
 ### Factory modelling
-![factory-modelling](Factory_Scenario.png)
+![factory-modelling](Factory_Modelling.png)
