@@ -2,4 +2,4 @@
 Industrial object modelling using CoAP protocol and Californium framework
 
 ### Meter data 
-![data-config](docs/data-config.png)
+![factory-scenario](docs/Factory_Scenario.png
