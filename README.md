@@ -5,7 +5,7 @@ Industrial object modelling using CoAP protocol and Californium framework
 
 ### Overview
 
-* Production monitoring in a manufacturing plant from different company levels
+- Production monitoring in a manufacturing plant from different company levels
 * Data distribution inside the plant using CoAP protocol for future data analysis and predictive maintenance
 * Model different data acquisition devices for hiding low level field communication protocol implementation details
 
