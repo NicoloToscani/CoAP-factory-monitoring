@@ -35,7 +35,7 @@ Compose different machines and lines running a process contained in `it.beltek.i
 Specify `portNumber` and `lineID`.
 
 ### HMI1 - HMIMaintenance
-* Run HmiMaintenance.java in `it.beltek.ia.iotlab.edge.client` for each line.
+* Run **HmiMaintenance.java** in `it.beltek.ia.iotlab.edge.client` for each line.
 * Specify `lineID`.
 
 ### HMI2 - HMIProduction
