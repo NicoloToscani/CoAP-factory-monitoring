@@ -19,6 +19,13 @@ The mains goals of this project are:
 The possible uses of this application are shown below:
 
 ### Run Master Repository
-* Run MasterRepository.java in `it.beltek.ia.iotlab.edge.database `
+* Run MasterRepository.java in `it.beltek.ia.iotlab.edge.database`
+### Run Device Gateway
+Compose different machines and lines running a process contained in `it.beltek.ia.iotlab.edge.gateway`
+* PlcGateway.java
+* Pm3200Gateway.java
+* RejectGateway.java
+* DriveGateway.java: run a process for each motor drive and specify also the drive numbers (Drive ID)
+* Qm42vt2Gateway.java: run a process for each motor sensor and specify also the sensor numbers (Drive ID)
 
 
