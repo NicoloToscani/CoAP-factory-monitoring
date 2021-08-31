@@ -19,6 +19,6 @@ The mains goals of this project are:
 The possible uses of this application are shown below:
 
 ### Run Master Repository
-* Run MasterRepository.java in it.beltek.ia.iotlab.edge.database
+* Run MasterRepository.java in `it.beltek.ia.iotlab.edge.database `
 
 
