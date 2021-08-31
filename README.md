@@ -28,4 +28,6 @@ Compose different machines and lines running a process contained in `it.beltek.i
 * DriveGateway.java: run a process for each motor drive and specify also the drive numbers (Drive ID)
 * Qm42vt2Gateway.java: run a process for each motor sensor and specify also the sensor numbers (Drive ID)
 
+`config.properties` files contains possibile real system configuration (port, device name, line ID, machine ID, device ID).
+
 
