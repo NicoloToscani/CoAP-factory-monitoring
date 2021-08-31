@@ -10,7 +10,7 @@ The mains goals of this project are:
 - Model different data acquisition devices for hiding low level field communication protocol implementation details
 
 ### Factory scenario
-![factory-scenario]()
+![factory-scenario](Factory_Scenario.png)
 
 ### Factory modelling
 ![factory-modelling](Factory_Modelling.png)
