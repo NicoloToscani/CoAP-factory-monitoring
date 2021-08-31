@@ -41,8 +41,8 @@ Specify `portNumber` and `lineID`.
 ### HMI2 - HMIProduction
 * Run **HmiProduction.java** in `it.beltek.ia.iotlab.edge.client`.
 
-### How send command
-It's possibile send commands to device using this syntax into console:
+### How send commands
+It's possibile to send commands to device using this syntax into console:
 * **HMIMaintenance** console: `machineID_code_velocity_deviceID` (for example, to set 50 Hz speed of motor n.1 in machine n.1, send the following command:
 * 1_10_50_1)
 * **HMIProduction** console: `lineID_machineID_code_value` (for example, to set 10 units/min production line velocity on machine n.1 in line n.1 , send the following command: 1_1_0_10)
