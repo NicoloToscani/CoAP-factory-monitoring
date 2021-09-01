@@ -50,6 +50,10 @@ It's possibile to send commands to device using this syntax into console:
 * 1_10_50_1)
 * **HMIProduction** console: `lineID_machineID_code_value` (for example, to set 10 units/min production line velocity on machine n.1 in line n.1 , send the following command: 1_1_0_10)
 
+### Fieldbus protocol
+The following libraries are used for estabilish communication with field devices:
+* [Easymodbus](http://easymodbustcp.net/en/) for `ModbusTCP/IP` communication 
+* 
 ### Contribution
 
 Thanks for your interest in contributing. Anybody is free to report bugs, unclear documentation, and other problems regarding this repository in the Issues section.
