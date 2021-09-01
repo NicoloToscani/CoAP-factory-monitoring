@@ -9,6 +9,7 @@ The mains goals of this project are:
 - Data distribution inside the plant using CoAP protocol for future data analysis and predictive maintenance
 - Model different data acquisition devices for hiding low level field communication protocol implementation details
 
+You can find a complete scenario description in this [document](https://github.com/NicoloToscani/CoAP-factory-monitoring/blob/master/Factory_Monitoring_Scenario.pdf)
 
 
 ### Factory scenario
