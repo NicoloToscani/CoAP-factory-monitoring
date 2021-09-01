@@ -52,8 +52,8 @@ It's possibile to send commands to device using this syntax into console:
 
 ### Fieldbus protocol
 The following libraries are used for estabilish communication with field devices:
-* [Easymodbus](http://easymodbustcp.net/en/) for `ModbusTCP/IP` communication 
-* 
+* [Easymodbus](http://easymodbustcp.net/en/) for `ModbusTCP/IP` protocol 
+* [Moka7](http://snap7.sourceforge.net/moka7.html) for `S7Protocol` protocol 
 ### Contribution
 
 Thanks for your interest in contributing. Anybody is free to report bugs, unclear documentation, and other problems regarding this repository in the Issues section.
