@@ -1,5 +1,5 @@
 # CoAP-factory-monitoring
-Industrial object modelling using CoAP protocol and Californium framework
+Industrial devices modelling using CoAP protocol and Californium framework
 
 ## Description
 CoAP-factory-monitoring implements a possible [IIoT](https://en.wikipedia.org/wiki/Industrial_internet_of_things) scenario for factory data exchange in an [Industry 4.0](https://en.wikipedia.org/wiki/Fourth_Industrial_Revolution) perspective with [CoAP](https://en.wikipedia.org/wiki/Fourth_Industrial_Revolution) protocol using [Californium](https://www.eclipse.org/californium/) framework.
